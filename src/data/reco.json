@@ -1,0 +1,102 @@
+{
+  "trafico": {
+    "title": "Problema de Tráfico",
+    "description": "Tu tienda necesita más visitantes. El problema principal es la falta de tráfico cualificado.",
+    "actions": [
+      {
+        "title": "Optimiza tu SEO local",
+        "description": "Mejora tu visibilidad en Google My Business y optimiza para búsquedas locales relevantes."
+      },
+      {
+        "title": "Lanza campañas de Facebook Ads",
+        "description": "Crea anuncios dirigidos a tu audiencia ideal con presupuesto mínimo de $20/día."
+      },
+      {
+        "title": "Implementa Google Ads",
+        "description": "Usa palabras clave comerciales para captar tráfico con intención de compra."
+      }
+    ],
+    "priority": "Alta",
+    "timeline": "2-4 semanas"
+  },
+  "oferta_web": {
+    "title": "Problema de Oferta & Web",
+    "description": "Tienes visitantes pero no se convierten en carritos. Revisa tu oferta y experiencia web.",
+    "actions": [
+      {
+        "title": "Mejora tu propuesta de valor",
+        "description": "Haz más clara tu propuesta única y los beneficios de tu producto."
+      },
+      {
+        "title": "Optimiza las imágenes de producto",
+        "description": "Usa fotos profesionales, múltiples ángulos y zoom para mostrar calidad."
+      },
+      {
+        "title": "Añade testimonios y reseñas",
+        "description": "Incluye reseñas reales y testimonios para generar confianza."
+      }
+    ],
+    "priority": "Alta",
+    "timeline": "1-2 semanas"
+  },
+  "checkout": {
+    "title": "Problema de Checkout",
+    "description": "Los visitantes agregan al carrito pero no completan la compra. Optimiza tu proceso de checkout.",
+    "actions": [
+      {
+        "title": "Simplifica el proceso de checkout",
+        "description": "Reduce los pasos necesarios y elimina campos innecesarios."
+      },
+      {
+        "title": "Añade opciones de pago",
+        "description": "Incluye PayPal, transferencia bancaria y cuotas sin interés."
+      },
+      {
+        "title": "Muestra seguridad y garantías",
+        "description": "Incluye badges de seguridad, garantía de devolución y políticas claras."
+      }
+    ],
+    "priority": "Alta",
+    "timeline": "1 semana"
+  },
+  "ok_sample_low": {
+    "title": "Muestra Insuficiente",
+    "description": "Tus métricas parecen buenas pero la muestra es muy pequeña. Necesitas más datos para un diagnóstico preciso.",
+    "actions": [
+      {
+        "title": "Aumenta el tráfico",
+        "description": "Implementa estrategias de marketing para atraer más visitantes y obtener datos más confiables."
+      },
+      {
+        "title": "Monitorea por más tiempo",
+        "description": "Recopila datos durante al menos 30 días para tener una muestra representativa."
+      },
+      {
+        "title": "Analiza por segmentos",
+        "description": "Revisa las métricas por fuente de tráfico, dispositivo y hora del día."
+      }
+    ],
+    "priority": "Media",
+    "timeline": "2-4 semanas"
+  },
+  "saludable": {
+    "title": "Tienda Saludable",
+    "description": "¡Excelente! Tu tienda tiene métricas saludables. Sigue optimizando para crecer más.",
+    "actions": [
+      {
+        "title": "Escala el tráfico",
+        "description": "Aumenta el presupuesto en canales que ya funcionan bien."
+      },
+      {
+        "title": "Optimiza la experiencia",
+        "description": "Mejora continuamente la experiencia del usuario y la velocidad del sitio."
+      },
+      {
+        "title": "Expande la oferta",
+        "description": "Considera añadir productos complementarios o variaciones."
+      }
+    ],
+    "priority": "Baja",
+    "timeline": "Ongoing"
+  }
+}
