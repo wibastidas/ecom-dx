@@ -38,11 +38,8 @@ export default function Home() {
               </svg>
             </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 leading-tight">
-                  Diagnóstico
+                  {t('app.title')}
                 </h1>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-600 mb-6 leading-tight">
-                  E-commerce
-                </h2>
                 <p className="hero-subtitle mb-4" dangerouslySetInnerHTML={{ __html: t('app.subtitle') }}>
                 </p>
                 <p className="hero-description">

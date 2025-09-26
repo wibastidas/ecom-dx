@@ -5,9 +5,9 @@
     "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable."
   },
   "labels": {
-    "visits": "Visitas únicas (personas que entraron a tu web)",
-    "carts": "Carritos iniciados (personas que pusieron algo en el carrito)",
-    "orders": "Compras completadas (pedidos pagados)",
+    "visits": "Visitas únicas",
+    "carts": "Carritos iniciados",
+    "orders": "Compras completadas",
     "sales": "Ventas totales (USD)",
     "adspend": "Gasto en publicidad (USD)",
     "ordersCount": "Número de pedidos"

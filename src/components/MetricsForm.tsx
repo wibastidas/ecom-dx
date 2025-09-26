@@ -77,15 +77,15 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
     if (!isTouched) return { status: 'neutral', message: '' }
     
     if (value <= 0) {
-      return { status: 'error', message: 'Ingresá un número mayor a 0' }
+      return { status: 'error', message: t('validation.required') }
     }
     
     if (field === 'carts' && value > visits) {
-      return { status: 'error', message: 'Los carritos no pueden ser más que las visitas' }
+      return { status: 'error', message: t('validation.cartsGtVisits') }
     }
     
     if (field === 'purchases' && value > carts) {
-      return { status: 'error', message: 'Las compras no pueden ser más que los carritos' }
+      return { status: 'error', message: t('validation.ordersGtCarts') }
     }
     
     return { status: 'success', message: '' }
@@ -114,10 +114,6 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
   })
   
 
-  // Calculate metrics in real-time
-  const cv = visits ? (carts / visits) * 100 : 0
-  const cc = carts ? (purchases / carts) * 100 : 0
-  const tc = visits ? (purchases / visits) * 100 : 0
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -266,32 +262,6 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
           </div>
         </div>
 
-        {/* Real-time metrics preview */}
-        {visits > 0 && (
-          <div className="metric-card">
-            <h4 className="text-sm font-semibold text-gray-800 mb-3">Métricas calculadas:</h4>
-            <div className="grid grid-cols-3 gap-4 text-sm">
-              <div className="flex flex-col items-center">
-                <Tooltip content={t('tooltips.ATC')}>
-                  <span className="text-gray-500 cursor-help">ATC ⓘ:</span>
-                </Tooltip>
-                <span className="ml-1 font-bold text-blue-600">{cv.toFixed(1)}%</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Tooltip content={t('tooltips.CB')}>
-                  <span className="text-gray-500 cursor-help">CB ⓘ:</span>
-                </Tooltip>
-                <span className="ml-1 font-bold text-green-600">{cc.toFixed(1)}%</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Tooltip content={t('tooltips.CR')}>
-                  <span className="text-gray-500 cursor-help">CR ⓘ:</span>
-                </Tooltip>
-                <span className="ml-1 font-bold text-purple-600">{tc.toFixed(1)}%</span>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Acordeón opcional - Mejorar precisión */}
         <div className="space-y-4">
