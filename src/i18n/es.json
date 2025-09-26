@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "Diagnóstico E-commerce",
+    "subtitle": "Descubrí dónde se pierde tu venta en <strong>2 minutos</strong>",
+    "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable."
+  },
+  "labels": {
+    "visits": "Visitas únicas",
+    "carts": "Carritos iniciados", 
+    "orders": "Compras completadas",
+    "sales": "Ventas totales (USD)",
+    "adspend": "Gasto en publicidad (USD)",
+    "ordersCount": "Número de pedidos"
+  },
+  "descriptions": {
+    "visits": "Personas que entraron a tu web",
+    "carts": "Personas que pusieron algo en el carrito",
+    "orders": "Pedidos pagados y completados",
+    "sales": "Ingresos totales en USD",
+    "adspend": "Dinero invertido en publicidad",
+    "ordersCount": "Cantidad total de pedidos"
+  },
+  "tooltips": {
+    "ATC": "ATC (Agregar al Carrito): % de personas que agregan al carrito.",
+    "CB": "Cart→Buy (Carrito a Compra): % de carritos que terminan en compra.",
+    "CR": "CR (Conversión Total): % de visitas que terminan en compra.",
+    "AOV": "AOV (Ticket Promedio): ventas / pedidos.",
+    "ROAS": "ROAS (Retorno de Ads): ventas atribuidas / gasto en ads.",
+    "CAC": "CAC (Costo por Cliente): gasto en ads / pedidos."
+  },
+  "buttons": {
+    "getDiag": "Obtener diagnóstico",
+    "calcFinance": "Calcular finanzas rápidas",
+    "loginSave": "Iniciar sesión y guardar",
+    "newDiag": "Hacer nuevo diagnóstico",
+    "seeDetails": "Ver recomendaciones detalladas"
+  },
+  "sections": {
+    "basicMetrics": "Métricas básicas",
+    "improvePrecision": "Mejorá la precisión (opcional)",
+    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles."
+  },
+  "notes": {
+    "fast": "⚡ Instantáneo · 📊 Tasas clave · 🎯 Recomendaciones",
+    "financeNote": "Estimaciones sin atribución por canal. Úsalas como guía."
+  },
+  "validation": {
+    "required": "Ingresá un número.",
+    "numeric": "Usá solo números (sin puntos ni comas).",
+    "cartsGtVisits": "Carritos no puede ser mayor a visitas.",
+    "ordersGtCarts": "Compras no puede ser mayor a carritos.",
+    "outlier": "Valores inusuales: revisá si estás usando el mes actual."
+  },
+  "results": {
+    "title": "Tu cuello principal: {{bottleneck}}",
+    "subtitle": "Tu tienda {{message}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
+    "kpis": "ATC (Agregar al Carrito): {{atc}}% · Cart→Buy (Carrito a Compra): {{cb}}% · CR (Conversión Total): {{cr}}%",
+    "reference": "ATC ≥ 3% · Cart→Buy ≥ 30% · CR 2–3% (orientativo por rubro)"
+  },
+  "bottlenecks": {
+    "traffic": "tráfico",
+    "conversion": "conversión", 
+    "cart_abandonment": "abandono de carrito"
+  },
+  "messages": {
+    "traffic": "necesita más visitantes",
+    "conversion": "convierte bien pero pocos llegan al carrito",
+    "cart_abandonment": "tiene muchos carritos pero pocos se completan"
+  }
+}
