@@ -1,24 +1,16 @@
 {
   "app": {
     "title": "Diagnóstico E-commerce",
-    "subtitle": "Descubrí dónde se pierde tu venta en <strong>2 minutos</strong>",
+    "subtitle": "Tus números son síntomas. Las palabras correctas los cambian.",
     "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable."
   },
   "labels": {
-    "visits": "Visitas únicas",
-    "carts": "Carritos iniciados", 
-    "orders": "Compras completadas",
+    "visits": "Visitas únicas (personas que entraron a tu web)",
+    "carts": "Carritos iniciados (personas que pusieron algo en el carrito)",
+    "orders": "Compras completadas (pedidos pagados)",
     "sales": "Ventas totales (USD)",
     "adspend": "Gasto en publicidad (USD)",
     "ordersCount": "Número de pedidos"
-  },
-  "descriptions": {
-    "visits": "Personas que entraron a tu web",
-    "carts": "Personas que pusieron algo en el carrito",
-    "orders": "Pedidos pagados y completados",
-    "sales": "Ingresos totales en USD",
-    "adspend": "Dinero invertido en publicidad",
-    "ordersCount": "Cantidad total de pedidos"
   },
   "tooltips": {
     "ATC": "ATC (Agregar al Carrito): % de personas que agregan al carrito.",
@@ -28,6 +20,19 @@
     "ROAS": "ROAS (Retorno de Ads): ventas atribuidas / gasto en ads.",
     "CAC": "CAC (Costo por Cliente): gasto en ads / pedidos."
   },
+  "sections": {
+    "basicMetrics": "Métricas básicas",
+    "improvePrecision": "Mejorá la precisión (opcional)",
+    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles."
+  },
+  "descriptions": {
+    "visits": "Personas que entraron a tu web",
+    "carts": "Personas que pusieron algo en el carrito",
+    "orders": "Pedidos pagados y completados",
+    "sales": "Ingresos totales en USD",
+    "adspend": "Dinero invertido en publicidad",
+    "ordersCount": "Cantidad total de pedidos"
+  },
   "buttons": {
     "getDiag": "Obtener diagnóstico",
     "calcFinance": "Calcular finanzas rápidas",
@@ -35,14 +40,10 @@
     "newDiag": "Hacer nuevo diagnóstico",
     "seeDetails": "Ver recomendaciones detalladas"
   },
-  "sections": {
-    "basicMetrics": "Métricas básicas",
-    "improvePrecision": "Mejorá la precisión (opcional)",
-    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles."
-  },
   "notes": {
     "fast": "⚡ Instantáneo · 📊 Tasas clave · 🎯 Recomendaciones",
-    "financeNote": "Estimaciones sin atribución por canal. Úsalas como guía."
+    "financeNote": "Estimaciones sin atribución por canal. Úsalas como guía.",
+    "refs": "Referencias orientativas: ATC ≥ 3% · Cart→Buy ≥ 30% · CR 2–3% (según rubro)"
   },
   "validation": {
     "required": "Ingresá un número.",
@@ -51,20 +52,28 @@
     "ordersGtCarts": "Compras no puede ser mayor a carritos.",
     "outlier": "Valores inusuales: revisá si estás usando el mes actual."
   },
-  "results": {
-    "title": "Tu cuello principal: {{bottleneck}}",
-    "subtitle": "Tu tienda {{message}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
-    "kpis": "ATC (Agregar al Carrito): {{atc}}% · Cart→Buy (Carrito a Compra): {{cb}}% · CR (Conversión Total): {{cr}}%",
-    "reference": "ATC ≥ 3% · Cart→Buy ≥ 30% · CR 2–3% (orientativo por rubro)"
+  "coach": {
+    "title": "Cómo leer tus números",
+    "a": "ATC (Agregar al Carrito) = ¿interesa lo que prometés?",
+    "b": "Cart→Buy (Carrito a Compra) = ¿confían para pagar?",
+    "c": "CR (Conversión Total) = ¿convencés de punta a punta?",
+    "foot": "Los números dicen dónde. Tus palabras corrigen el por qué."
   },
-  "bottlenecks": {
-    "traffic": "tráfico",
-    "conversion": "conversión", 
-    "cart_abandonment": "abandono de carrito"
+  "result": {
+    "bottleneck": "Tu cuello principal: {{bottleneck}}",
+    "sub": "Tu tienda {{msg}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
+    "commTitle": "Interpretación de comunicación",
+    "commLead": "Lo que te dicen tus números sobre tus palabras.",
+    "commATC": "ATC bajo → No lo están entendiendo/queriendo: falta propuesta clara, beneficios en su lenguaje y prueba social visible.",
+    "commCB": "Cart→Buy bajo → No te creen o se traban: dudas de logística/seguridad o fricción en formularios.",
+    "commTraffic": "Tasas sanas pero pocas visitas → Tu mensaje no llega afuera: probá 3 ángulos (dolor/beneficio/prueba).",
+    "commScale": "Todo sano → Escalá manteniendo la promesa central."
   },
-  "messages": {
-    "traffic": "necesita más visitantes",
-    "conversion": "convierte bien pero pocos llegan al carrito",
-    "cart_abandonment": "tiene muchos carritos pero pocos se completan"
+  "cta": {
+    "mcTraffic": "Encender tráfico con criterio (90' – USD 27)",
+    "mcPdp": "Armar mi PDP 80/20 (90' – USD 27)",
+    "mcCheckout": "Checkout sin fricción (90' – USD 27)",
+    "mcScale": "Escalar con calma (90' – USD 27)",
+    "sub": "Acceso inmediato. 90 minutos. Sin tecnicismos."
   }
 }
