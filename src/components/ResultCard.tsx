@@ -114,22 +114,22 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
         </div>
 
         {/* KPIs con tooltips */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-1 mb-8">
+          <div className="text-center p-4 bg-blue-50 rounded-lg min-w-0">
               <Tooltip content={t('tooltips.ATC')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2">ATC ⓘ</div>
+              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">ATC ⓘ</div>
               </Tooltip>
             <div className="text-2xl font-bold text-blue-600">{(result.atc * 100).toFixed(1)}%</div>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
+          <div className="text-center p-4 bg-green-50 rounded-lg min-w-0">
               <Tooltip content={t('tooltips.CB')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2">Cart→Buy ⓘ</div>
+              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">Cart→Buy ⓘ</div>
               </Tooltip>
             <div className="text-2xl font-bold text-green-600">{(result.cb * 100).toFixed(1)}%</div>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
+          <div className="text-center p-4  bg-purple-50 rounded-lg min-w-0">
               <Tooltip content={t('tooltips.CR')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2">CR ⓘ</div>
+              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">CR ⓘ</div>
               </Tooltip>
             <div className="text-2xl font-bold text-purple-600">{(result.cr * 100).toFixed(1)}%</div>
           </div>
