@@ -11,19 +11,23 @@ export default function Home() {
   const [result, setResult] = useState<DiagnosisResult | null>(null)
   const { t } = useTranslations()
 
-  const handleDiagnosis = (visits: number, carts: number, purchases: number) => {
-    console.log('🔍 Diagnóstico iniciado:', { visits, carts, purchases })
-    const diagnosis = diagnose(visits, carts, purchases)
+  const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => {
+    console.log('🔍 Diagnóstico iniciado:', { visits, carts, purchases, sales, adspend, ordersCount })
+    const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
     console.log('📊 Resultado del diagnóstico:', diagnosis)
     setResult(diagnosis)
     
     // Track the diagnosis result view
     track('diag_result_view', { 
       diagnosis: diagnosis.dx,
-      cv: diagnosis.cv,
-      cc: diagnosis.cc,
-      tc: diagnosis.tc
+      atc: diagnosis.atc,
+      cb: diagnosis.cb,
+      cr: diagnosis.cr
     })
+  }
+
+  const handleEditData = () => {
+    setResult(null)
   }
 
   return (
@@ -55,6 +59,7 @@ export default function Home() {
           <ResultCard 
             result={result} 
             onNewDiagnosis={() => setResult(null)}
+            onEditData={handleEditData}
           />
         )}
       </div>

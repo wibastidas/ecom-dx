@@ -12,14 +12,6 @@
     "adspend": "Gasto en publicidad (USD)",
     "ordersCount": "Número de pedidos"
   },
-  "tooltips": {
-    "ATC": "ATC (Agregar al Carrito): % de personas que agregan al carrito.",
-    "CB": "Cart→Buy (Carrito a Compra): % de carritos que terminan en compra.",
-    "CR": "CR (Conversión Total): % de visitas que terminan en compra.",
-    "AOV": "AOV (Ticket Promedio): ventas / pedidos.",
-    "ROAS": "ROAS (Retorno de Ads): ventas atribuidas / gasto en ads.",
-    "CAC": "CAC (Costo por Cliente): gasto en ads / pedidos."
-  },
   "sections": {
     "basicMetrics": "Métricas básicas",
     "improvePrecision": "Mejorá la precisión (opcional)",
@@ -38,7 +30,8 @@
     "calcFinance": "Calcular finanzas rápidas",
     "loginSave": "Iniciar sesión y guardar",
     "newDiag": "Hacer nuevo diagnóstico",
-    "seeDetails": "Ver recomendaciones detalladas"
+    "seeDetails": "Ver recomendaciones detalladas",
+    "editData": "Recalcular"
   },
   "notes": {
     "fast": "⚡ Instantáneo · 📊 Tasas clave · 🎯 Recomendaciones",
@@ -59,6 +52,20 @@
     "c": "CR (Conversión Total) = ¿convencés de punta a punta?",
     "foot": "Los números dicen dónde. Tus palabras corrigen el por qué."
   },
+  "tooltips": {
+    "ATC": "ATC (Agregar al Carrito) = ¿interesa lo que prometés?",
+    "CB": "Cart→Buy (Carrito a Compra) = ¿confían para pagar?",
+    "CR": "CR (Conversión Total) = ¿convencés de punta a punta?",
+    "AOV": "AOV (Average Order Value) = Valor promedio por pedido",
+    "ROAS": "ROAS (Return on Ad Spend) = Retorno de inversión publicitaria",
+    "CAC": "CAC (Customer Acquisition Cost) = Costo de adquirir un cliente"
+  },
+  "bottlenecks": {
+    "trafico": "Tráfico",
+    "oferta_web": "Página / Oferta",
+    "checkout": "Checkout / Confianza",
+    "escalar": "Listo para Escalar"
+  },
   "result": {
     "bottleneck": "Tu cuello principal: {{bottleneck}}",
     "sub": "Tu tienda {{msg}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
@@ -67,7 +74,9 @@
     "commATC": "ATC bajo → No lo están entendiendo/queriendo: falta propuesta clara, beneficios en su lenguaje y prueba social visible.",
     "commCB": "Cart→Buy bajo → No te creen o se traban: dudas de logística/seguridad o fricción en formularios.",
     "commTraffic": "Tasas sanas pero pocas visitas → Tu mensaje no llega afuera: probá 3 ángulos (dolor/beneficio/prueba).",
-    "commScale": "Todo sano → Escalá manteniendo la promesa central."
+    "commScale": "Todo sano → Escalá manteniendo la promesa central.",
+    "financeEmptyTitle": "Finanzas rápidas (opcional)",
+    "financeEmptyText": "Sumá 3 datos y descubrí si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones."
   },
   "cta": {
     "mcTraffic": "Encender tráfico con criterio (90' – USD 27)",
@@ -75,5 +84,29 @@
     "mcCheckout": "Checkout sin fricción (90' – USD 27)",
     "mcScale": "Escalar con calma (90' – USD 27)",
     "sub": "Acceso inmediato. 90 minutos. Sin tecnicismos."
+  },
+  "finance": {
+    "title": "Finanzas rápidas",
+    "summaryTitle": "¿Qué significan estos números?",
+    "hint": "Con estos datos estimamos si tus anuncios van en buen camino.",
+    "aov": "AOV (Ticket Promedio)",
+    "roas": "ROAS (Retorno de Ads)",
+    "cac": "CAC (Costo por Cliente)",
+    "emptyTitle": "Finanzas rápidas (opcional)",
+    "emptyText": "No completaste los campos opcionales. Si los agregás, te mostramos ROAS (Retorno de Ads), AOV (Ticket Promedio) y CAC (Costo por Cliente).",
+    "level": {
+      "critical": "Crítico",
+      "fragile": "Frágil",
+      "ok": "Aceptable",
+      "strong": "Sólido"
+    },
+    "notes": {
+      "caveatMargin": "Nota: sin margen bruto no podemos calcular rentabilidad exacta. Esto es una orientación.",
+      "smallSample": "Muestra chica: con menos de 10 pedidos, tomá estas señales con cautela."
+    },
+    "actionsTitle": "Tus 3 próximos pasos",
+    "actionsTitleBasic": "Tus 3 próximos pasos",
+    "actionsTitleFinance": "Tus 3 próximos pasos (financieros)",
+    "cta": "Editar datos y recalcular"
   }
 }

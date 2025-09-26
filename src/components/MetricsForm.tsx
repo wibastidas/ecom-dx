@@ -15,7 +15,7 @@ interface MetricsFormData {
 }
 
 interface MetricsFormProps {
-  onDiagnosis: (visits: number, carts: number, purchases: number) => void
+  onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => void
 }
 
 export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
@@ -136,7 +136,7 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
       trackDiagnosisSubmit(visits, carts, purchases)
       
       // Trigger diagnosis con todos los datos
-      onDiagnosis(visits, carts, purchases)
+      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders)
       
       console.log('📊 Datos completos para diagnóstico:', diagnosisData)
     } catch (error) {
