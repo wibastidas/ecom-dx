@@ -38,7 +38,7 @@ export default function Home() {
               </svg>
             </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 leading-tight">
-                  {t('app.title')}
+                  <span dangerouslySetInnerHTML={{ __html: t('app.title').replace('E-commerce', 'E<span style="white-space: nowrap;">-commerce</span>') }} />
                 </h1>
                 <p className="hero-subtitle mb-4" dangerouslySetInnerHTML={{ __html: t('app.subtitle') }}>
                 </p>
