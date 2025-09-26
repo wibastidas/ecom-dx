@@ -1,0 +1,112 @@
+{
+  "scenarios": {
+    "trafico": {
+      "description": "Pocas visitas pero buenas tasas - necesita más tráfico",
+      "basic": { "visits": 300, "carts": 15, "orders": 5 },
+      "expected": { "dx": "trafico", "atc": 5.0, "cb": 33.3, "cr": 1.7 }
+    },
+    "pagina_oferta": {
+      "description": "Muchas visitas pero baja tasa de carrito - problema en página/oferta",
+      "basic": { "visits": 1000, "carts": 20, "orders": 6 },
+      "expected": { "dx": "pagina_oferta", "atc": 2.0, "cb": 30.0, "cr": 0.6 }
+    },
+    "checkout_confianza": {
+      "description": "Buena tasa de carrito pero baja conversión - problema en checkout",
+      "basic": { "visits": 1000, "carts": 80, "orders": 20 },
+      "expected": { "dx": "checkout_confianza", "atc": 8.0, "cb": 25.0, "cr": 2.0 }
+    },
+    "escalar": {
+      "description": "Buenas tasas en todo - listo para escalar",
+      "basic": { "visits": 2000, "carts": 100, "orders": 40 },
+      "expected": { "dx": "escalar", "atc": 5.0, "cb": 40.0, "cr": 2.0 }
+    }
+  },
+  "finance_scenarios": {
+    "critical": {
+      "description": "ROAS < 1 - perdiendo dinero en ads",
+      "data": { "sales": 1500, "adspend": 2000, "ordersCount": 15 },
+      "expected": { "aov": 100, "roas": 0.75, "cac": 133.33, "level": "critical" }
+    },
+    "fragile": {
+      "description": "ROAS 1-2 - cubre costos pero sin margen",
+      "data": { "sales": 600, "adspend": 400, "ordersCount": 15 },
+      "expected": { "aov": 40, "roas": 1.50, "cac": 26.67, "level": "fragile" }
+    },
+    "strong": {
+      "description": "ROAS > 2 y CAC < AOV - eficiencia sólida",
+      "data": { "sales": 1200, "adspend": 300, "ordersCount": 15 },
+      "expected": { "aov": 80, "roas": 4.00, "cac": 20, "level": "strong" }
+    },
+    "cac_problem": {
+      "description": "ROAS bueno pero CAC > AOV - problema de rentabilidad",
+      "data": { "sales": 600, "adspend": 500, "ordersCount": 15 },
+      "expected": { "aov": 40, "roas": 1.20, "cac": 33.33, "level": "fragile" }
+    }
+  },
+  "quick_tests": [
+    {
+      "name": "Test Básico - Solo Tráfico",
+      "input": { "visits": 300, "carts": 15, "orders": 5 },
+      "description": "Debería mostrar 'Tráfico' como cuello de botella"
+    },
+    {
+      "name": "Test Completo - Con Finanzas",
+      "input": { 
+        "visits": 1000, "carts": 50, "orders": 20,
+        "sales": 1000, "adspend": 500, "ordersCount": 20
+      },
+      "description": "Debería mostrar diagnóstico + métricas financieras"
+    },
+    {
+      "name": "Test Sin Finanzas",
+      "input": { "visits": 500, "carts": 25, "orders": 10 },
+      "description": "Debería mostrar solo diagnóstico básico, sin bloque financiero"
+    }
+  ],
+  "edge_cases": [
+    {
+      "name": "ATC exactamente 3%",
+      "input": { "visits": 1000, "carts": 30, "orders": 9 },
+      "expected": "pagina_oferta",
+      "description": "Debería ser Página/Oferta, no Checkout"
+    },
+    {
+      "name": "CB exactamente 30%",
+      "input": { "visits": 1000, "carts": 50, "orders": 15 },
+      "expected": "checkout_confianza",
+      "description": "Debería ser Checkout, no Página/Oferta"
+    },
+    {
+      "name": "Visits = 499 (límite inferior)",
+      "input": { "visits": 499, "carts": 25, "orders": 8 },
+      "expected": "trafico",
+      "description": "Debería ser Tráfico (visits < 500)"
+    },
+    {
+      "name": "Visits = 500 (límite superior)",
+      "input": { "visits": 500, "carts": 25, "orders": 8 },
+      "expected": "escalar",
+      "description": "NO debería ser Tráfico (visits >= 500)"
+    }
+  ],
+  "validation_cases": [
+    {
+      "name": "Error: carts > visits",
+      "input": { "visits": 100, "carts": 150, "orders": 10 },
+      "shouldError": true,
+      "description": "Debería fallar con error de validación"
+    },
+    {
+      "name": "Error: orders > carts",
+      "input": { "visits": 1000, "carts": 50, "orders": 80 },
+      "shouldError": true,
+      "description": "Debería fallar con error de validación"
+    },
+    {
+      "name": "ROAS con adspend = 0",
+      "input": { "sales": 1000, "adspend": 0, "ordersCount": 10 },
+      "shouldError": true,
+      "description": "Debería manejar Infinity graciosamente"
+    }
+  ]
+}

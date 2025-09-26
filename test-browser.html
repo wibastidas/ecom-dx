@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests de Diagnóstico E-commerce</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .test-container { background: white; padding: 20px; border-radius: 8px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-title { color: #2563eb; font-weight: bold; margin-bottom: 10px; }
+        .test-result { padding: 10px; border-radius: 4px; margin: 5px 0; }
+        .success { background: #dcfce7; border-left: 4px solid #16a34a; }
+        .error { background: #fef2f2; border-left: 4px solid #dc2626; }
+        .info { background: #eff6ff; border-left: 4px solid #2563eb; }
+        button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #1d4ed8; }
+        .input-group { margin: 10px 0; }
+        .input-group label { display: inline-block; width: 120px; }
+        .input-group input { padding: 5px; border: 1px solid #ccc; border-radius: 4px; width: 100px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Tests de Diagnóstico E-commerce</h1>
+    
+    <div class="test-container">
+        <div class="test-title">Tests Automáticos</div>
+        <button onclick="runAllTests()">Ejecutar Todos los Tests</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">Test Manual</div>
+        <div class="input-group">
+            <label>Visitas:</label>
+            <input type="number" id="visits" value="1000">
+        </div>
+        <div class="input-group">
+            <label>Carritos:</label>
+            <input type="number" id="carts" value="50">
+        </div>
+        <div class="input-group">
+            <label>Pedidos:</label>
+            <input type="number" id="orders" value="20">
+        </div>
+        <div class="input-group">
+            <label>Ventas ($):</label>
+            <input type="number" id="sales" value="1000">
+        </div>
+        <div class="input-group">
+            <label>Gasto Ads ($):</label>
+            <input type="number" id="adspend" value="500">
+        </div>
+        <div class="input-group">
+            <label>Pedidos:</label>
+            <input type="number" id="ordersCount" value="20">
+        </div>
+        <button onclick="testManual()">Probar Manualmente</button>
+        <div id="manual-results"></div>
+    </div>
+
+    <script>
+        // Simulación de las funciones (en un entorno real, estas vendrían de los módulos)
+        function diagnose(visits, carts, orders, sales, adspend, ordersCount) {
+            const atc = carts / visits;
+            const cb = orders / carts;
+            const cr = orders / visits;
+            
+            let dx;
+            if (visits < 500 && atc >= 0.03 && cb >= 0.30) {
+                dx = 'trafico';
+            } else if (atc < 0.03) {
+                dx = 'pagina_oferta';
+            } else if (cb < 0.30) {
+                dx = 'checkout_confianza';
+            } else {
+                dx = 'escalar';
+            }
+            
+            let aov = null, roas = null, cac = null;
+            if (sales && adspend && ordersCount) {
+                aov = sales / ordersCount;
+                roas = adspend > 0 ? sales / adspend : null;
+                cac = ordersCount > 0 ? adspend / ordersCount : null;
+            }
+            
+            return { dx, atc, cb, cr, aov, roas, cac };
+        }
+
+        function evaluateFinance({aov, roas, cac, ordersCount}) {
+            if (!isFinite(aov) || !isFinite(roas) || !isFinite(cac)) {
+                throw new Error('missing_finance_data');
+            }
+
+            const microcopys = {
+                roas: `Por cada $1 que invertiste en anuncios, volvieron $${roas.toFixed(2)}.`,
+                cac: `Cada pedido te costó $${cac.toFixed(2)} en publicidad.`,
+                aov: `Tu ticket promedio fue de $${aov.toFixed(2)}.`
+            };
+
+            if (roas < 1) {
+                return {
+                    level: 'critical',
+                    headline: microcopys.roas,
+                    summary: "Hoy tus anuncios no se pagan solos: por cada $1 invertido, recuperás menos de $1.\n💡 Revisa si tu página convence lo suficiente o si estás atrayendo al público correcto.",
+                    actions: [
+                        'Pausá lo que no vende: dejá solo el mejor anuncio por ángulo durante 72h.',
+                        'Arreglá la PDP: reescribí el hero en 1 línea y sumá 3 beneficios + 3 reseñas.',
+                        'Mostrá costos totales y políticas antes del pago para bajar abandono.'
+                    ]
+                };
+            }
+
+            if (roas >= 1 && roas < 2) {
+                return {
+                    level: 'fragile',
+                    headline: microcopys.roas,
+                    summary: "Tus anuncios cubren su costo, pero todavía no dejan margen.\n🧠 Enfocá los próximos 7 días en mejorar una sola tasa (ATC o Checkout) para que el retorno crezca.",
+                    actions: [
+                        'Subí el ATC: clarificá valor en la PDP y agregá prueba social arriba.',
+                        'Bajá fricción de checkout: menos campos, costos sin sorpresa, contacto visible.',
+                        'Mejorá calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.'
+                    ]
+                };
+            }
+
+            if (cac > aov) {
+                return {
+                    level: 'fragile',
+                    headline: microcopys.roas,
+                    summary: "Estás pagando más por conseguir un cliente de lo que te deja su compra.\n🧩 Revisá la oferta o el ticket promedio: subir precios, packs o umbral de envío gratis puede ayudarte.",
+                    actions: [
+                        'Aumentá AOV: bundling, packs y envío gratis desde umbral.',
+                        'Mejorá conversión (CR): ajustá mensaje del anuncio para alinear con la PDP.',
+                        'Negociá costos logísticos o medios de pago para mejorar margen efectivo.'
+                    ]
+                };
+            }
+
+            if (Math.abs(cac - aov) / aov < 0.1) {
+                return {
+                    level: 'ok',
+                    headline: microcopys.roas,
+                    summary: "Estás empatando: por cada cliente que ganás, lo que invertís en publicidad es casi igual a lo que te compra.\n🔁 Necesitás o mejorar conversión o subir valor del pedido.",
+                    actions: [
+                        'Subí ticket promedio (AOV): pack de 2–3 con beneficio real.',
+                        'Mantené la coherencia anuncio→PDP: mismo claim, misma promesa.',
+                        'Escalá de a poco vigilando Cart→Buy para no perder eficiencia.'
+                    ]
+                };
+            }
+
+            return {
+                level: 'strong',
+                headline: microcopys.roas,
+                summary: "Buen trabajo: tus anuncios generan más de lo que cuestan.\n🚀 Podés escalar con cuidado, vigilando que tus tasas se mantengan estables.",
+                actions: [
+                    'Duplicá creatividades manteniendo el claim ganador.',
+                    'Abrí audiencias lookalike sin tocar la promesa central.',
+                    'Sumá remarketing con prueba social y objeciones resueltas.'
+                ]
+            };
+        }
+
+        function runAllTests() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '';
+
+            const tests = [
+                {
+                    name: 'Tráfico (pocas visitas, buenas tasas)',
+                    input: { visits: 300, carts: 15, orders: 5 },
+                    expected: 'trafico'
+                },
+                {
+                    name: 'Página/Oferta (baja ATC)',
+                    input: { visits: 1000, carts: 20, orders: 6 },
+                    expected: 'pagina_oferta'
+                },
+                {
+                    name: 'Checkout (baja CB)',
+                    input: { visits: 1000, carts: 80, orders: 20 },
+                    expected: 'checkout_confianza'
+                },
+                {
+                    name: 'Escalar (buenas tasas)',
+                    input: { visits: 2000, carts: 100, orders: 40 },
+                    expected: 'escalar'
+                }
+            ];
+
+            tests.forEach(test => {
+                const result = diagnose(test.input.visits, test.input.carts, test.input.orders);
+                const success = result.dx === test.expected;
+                
+                const div = document.createElement('div');
+                div.className = `test-result ${success ? 'success' : 'error'}`;
+                div.innerHTML = `
+                    <strong>${test.name}</strong><br>
+                    Input: ${test.input.visits} visitas, ${test.input.carts} carritos, ${test.input.orders} pedidos<br>
+                    Resultado: ${result.dx} (esperado: ${test.expected})<br>
+                    ATC: ${(result.atc * 100).toFixed(1)}%, CB: ${(result.cb * 100).toFixed(1)}%, CR: ${(result.cr * 100).toFixed(1)}%
+                `;
+                results.appendChild(div);
+            });
+
+            // Test de finanzas
+            const financeTests = [
+                {
+                    name: 'Finanzas Críticas (ROAS < 1)',
+                    input: { aov: 100, roas: 0.75, cac: 80, ordersCount: 15 },
+                    expected: 'critical'
+                },
+                {
+                    name: 'Finanzas Frágiles (ROAS 1-2)',
+                    input: { aov: 40, roas: 1.50, cac: 26.67, ordersCount: 15 },
+                    expected: 'fragile'
+                },
+                {
+                    name: 'Finanzas Sólidas (ROAS > 2)',
+                    input: { aov: 80, roas: 4.00, cac: 20, ordersCount: 15 },
+                    expected: 'strong'
+                }
+            ];
+
+            financeTests.forEach(test => {
+                try {
+                    const result = evaluateFinance(test.input);
+                    const success = result.level === test.expected;
+                    
+                    const div = document.createElement('div');
+                    div.className = `test-result ${success ? 'success' : 'error'}`;
+                    div.innerHTML = `
+                        <strong>${test.name}</strong><br>
+                        Nivel: ${result.level} (esperado: ${test.expected})<br>
+                        Headline: ${result.headline}
+                    `;
+                    results.appendChild(div);
+                } catch (e) {
+                    const div = document.createElement('div');
+                    div.className = 'test-result error';
+                    div.innerHTML = `<strong>${test.name}</strong><br>Error: ${e.message}`;
+                    results.appendChild(div);
+                }
+            });
+        }
+
+        function testManual() {
+            const visits = parseInt(document.getElementById('visits').value);
+            const carts = parseInt(document.getElementById('carts').value);
+            const orders = parseInt(document.getElementById('orders').value);
+            const sales = parseInt(document.getElementById('sales').value);
+            const adspend = parseInt(document.getElementById('adspend').value);
+            const ordersCount = parseInt(document.getElementById('ordersCount').value);
+
+            const result = diagnose(visits, carts, orders, sales, adspend, ordersCount);
+            
+            let financeResult = null;
+            if (result.aov !== null && result.roas !== null && result.cac !== null) {
+                try {
+                    financeResult = evaluateFinance({
+                        aov: result.aov,
+                        roas: result.roas,
+                        cac: result.cac,
+                        ordersCount: ordersCount
+                    });
+                } catch (e) {
+                    financeResult = { error: e.message };
+                }
+            }
+
+            const results = document.getElementById('manual-results');
+            results.innerHTML = `
+                <div class="test-result info">
+                    <strong>Diagnóstico Básico:</strong><br>
+                    Cuello de botella: ${result.dx}<br>
+                    ATC: ${(result.atc * 100).toFixed(1)}%<br>
+                    Cart→Buy: ${(result.cb * 100).toFixed(1)}%<br>
+                    CR: ${(result.cr * 100).toFixed(1)}%
+                </div>
+                ${financeResult ? `
+                    <div class="test-result info">
+                        <strong>Análisis Financiero:</strong><br>
+                        AOV: $${result.aov?.toFixed(2) || 'N/A'}<br>
+                        ROAS: ${result.roas?.toFixed(2) || 'N/A'}<br>
+                        CAC: $${result.cac?.toFixed(2) || 'N/A'}<br>
+                        ${financeResult.error ? `Error: ${financeResult.error}` : `Nivel: ${financeResult.level}`}
+                    </div>
+                ` : '<div class="test-result info">No hay datos financieros completos</div>'}
+            `;
+        }
+    </script>
+</body>
+</html>

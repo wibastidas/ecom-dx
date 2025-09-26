@@ -20,8 +20,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
   const getMessage = (dx: string) => {
     const messages = {
       trafico: 'necesita más visitantes',
-      oferta_web: 'convierte bien pero pocos llegan al carrito',
-      checkout: 'tiene muchos carritos pero pocos se completan',
+      pagina_oferta: 'convierte bien pero pocos llegan al carrito',
+      checkout_confianza: 'tiene muchos carritos pero pocos se completan',
       escalar: 'está lista para crecer'
     }
     return messages[dx as keyof typeof messages] || 'necesita optimización'
@@ -31,8 +31,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
   const getMicrocourseCta = (dx: string) => {
     const ctas = {
       trafico: t('cta.mcTraffic'),
-      oferta_web: t('cta.mcPdp'),
-      checkout: t('cta.mcCheckout'),
+      pagina_oferta: t('cta.mcPdp'),
+      checkout_confianza: t('cta.mcCheckout'),
       escalar: t('cta.mcScale')
     }
     return ctas[dx as keyof typeof ctas] || t('cta.mcTraffic')
@@ -42,8 +42,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
   const getCommunicationInsight = (dx: string) => {
     const insights = {
       trafico: t('result.commTraffic'),
-      oferta_web: t('result.commATC'),
-      checkout: t('result.commCB'),
+      pagina_oferta: t('result.commATC'),
+      checkout_confianza: t('result.commCB'),
       escalar: t('result.commScale')
     }
     return insights[dx as keyof typeof insights] || t('result.commTraffic')
@@ -57,12 +57,12 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
         'Arreglá la PDP: reescribí el hero en 1 línea y sumá 3 beneficios + 3 reseñas.',
         'Mostrá costos totales y políticas antes del pago para bajar abandono.'
       ],
-      oferta_web: [
+      pagina_oferta: [
         'Subí el ATC: clarificá valor en la PDP y agregá prueba social arriba.',
         'Bajá fricción de checkout: menos campos, costos sin sorpresa, contacto visible.',
         'Mejorá calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.'
       ],
-      checkout: [
+      checkout_confianza: [
         'Aumentá AOV: bundling, packs y envío gratis desde umbral.',
         'Mejorá conversión (CR): ajustá mensaje del anuncio para alinear con la PDP.',
         'Negociá costos logísticos o medios de pago para mejorar margen efectivo.'
@@ -209,17 +209,15 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
           </div>
 
           {/* Resumen */}
-          <div className={`p-6 rounded-xl border-2 mb-6 ${
-            financeInsight.level === 'critical' ? 'bg-red-50 border-red-200' :
-            financeInsight.level === 'fragile' ? 'bg-yellow-50 border-yellow-200' :
-            financeInsight.level === 'ok' ? 'bg-blue-50 border-blue-200' :
-            'bg-green-50 border-green-200'
-          }`}>
+                  <div className={`p-6 rounded-xl border-2 mb-6 ${
+                    financeInsight.level === 'critical' ? 'bg-red-50 border-red-200' :
+                    financeInsight.level === 'fragile' ? 'bg-yellow-50 border-yellow-200' :
+                    'bg-green-50 border-green-200'
+                  }`}>
             <div className="flex items-center mb-4">
               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                 financeInsight.level === 'critical' ? 'bg-red-100 text-red-800' :
                 financeInsight.level === 'fragile' ? 'bg-yellow-100 text-yellow-800' :
-                financeInsight.level === 'ok' ? 'bg-blue-100 text-blue-800' :
                 'bg-green-100 text-green-800'
               }`}>
                 {t(`finance.level.${financeInsight.level}`)}

@@ -1,5 +1,5 @@
 export type FinanceInsight = {
-  level: 'critical' | 'fragile' | 'ok' | 'strong',
+  level: 'critical' | 'fragile' | 'strong',
   headline: string,
   summary: string,
   actions: string[],
@@ -83,7 +83,7 @@ export function evaluateFinance(
   // Verificar si CAC ≈ AOV (empatando)
   if (Math.abs(cac - aov) / aov < 0.1) { // Diferencia menor al 10%
     return {
-      level: 'ok',
+      level: 'fragile',
       headline: microcopys.roas,
       summary: "Estás empatando: por cada cliente que ganás, lo que invertís en publicidad es casi igual a lo que te compra.\n🔁 Necesitás o mejorar conversión o subir valor del pedido.",
       actions: [

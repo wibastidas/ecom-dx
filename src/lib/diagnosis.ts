@@ -1,4 +1,4 @@
-export type Diagnosis = 'trafico' | 'oferta_web' | 'checkout' | 'escalar'
+export type Diagnosis = 'trafico' | 'pagina_oferta' | 'checkout_confianza' | 'escalar'
 
 export interface DiagnosisResult {
   dx: Diagnosis
@@ -43,16 +43,16 @@ export function diagnose(
 // Función de clasificación según la especificación
 function classify({ visits, atc, cb }: { visits: number, atc: number, cb: number }): Diagnosis {
   if (visits < 500 && atc >= 0.03 && cb >= 0.30) return "trafico"
-  if (atc < 0.03) return "oferta_web"
-  if (cb < 0.30) return "checkout"
+  if (atc < 0.03) return "pagina_oferta"
+  if (cb < 0.30) return "checkout_confianza"
   return "escalar"
 }
 
 export function getDiagnosisLabel(dx: Diagnosis): string {
   const labels = {
     trafico: 'Tráfico',
-    oferta_web: 'Página / Oferta',
-    checkout: 'Checkout / Confianza',
+    pagina_oferta: 'Página / Oferta',
+    checkout_confianza: 'Checkout / Confianza',
     escalar: 'Listo para Escalar'
   }
   
@@ -62,8 +62,8 @@ export function getDiagnosisLabel(dx: Diagnosis): string {
 export function getDiagnosisDescription(dx: Diagnosis): string {
   const descriptions = {
     trafico: 'Tu tienda necesita más visitantes. El problema principal es la falta de tráfico cualificado.',
-    oferta_web: 'Tienes visitantes pero no se convierten en carritos. Revisa tu oferta y experiencia web.',
-    checkout: 'Los visitantes agregan al carrito pero no completan la compra. Optimiza tu proceso de checkout.',
+    pagina_oferta: 'Tienes visitantes pero no se convierten en carritos. Revisa tu oferta y experiencia web.',
+    checkout_confianza: 'Los visitantes agregan al carrito pero no completan la compra. Optimiza tu proceso de checkout.',
     escalar: '¡Excelente! Tu tienda tiene métricas saludables. Sigue optimizando para crecer más.'
   }
   

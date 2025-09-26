@@ -62,8 +62,8 @@
   },
   "bottlenecks": {
     "trafico": "Tráfico",
-    "oferta_web": "Página / Oferta",
-    "checkout": "Checkout / Confianza",
+    "pagina_oferta": "Página / Oferta", 
+    "checkout_confianza": "Checkout / Confianza",
     "escalar": "Listo para Escalar"
   },
   "result": {
@@ -97,7 +97,6 @@
     "level": {
       "critical": "Crítico",
       "fragile": "Frágil",
-      "ok": "Aceptable",
       "strong": "Sólido"
     },
     "notes": {
