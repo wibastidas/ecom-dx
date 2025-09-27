@@ -84,7 +84,7 @@ export default function Toast({ id, type, title, message, duration = 4000, onClo
         p-4 rounded-lg border shadow-lg
         ${getBgColor()}
       `}>
-        <div className="flex items-start">
+        <div className="flex items-center">
           <div className="flex-shrink-0 text-lg mr-3">
             {getIcon()}
           </div>

@@ -343,7 +343,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             <p className="text-gray-600 mb-6 whitespace-pre-line">
               {t('result.financeEmptyText')}
             </p>
-            <button 
+            <button
               onClick={onEditData}
               className="btn-outline"
             >
@@ -377,12 +377,6 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             className="btn-outline"
           >
             {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
-          </button>
-          <button 
-            onClick={onEditData}
-            className="btn-outline"
-          >
-            ✏️ Editar datos
           </button>
           {user && (
             <button 

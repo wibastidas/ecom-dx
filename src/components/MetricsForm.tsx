@@ -16,9 +16,10 @@ interface MetricsFormData {
 
 interface MetricsFormProps {
   onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => void
+  openAccordion?: boolean
 }
 
-export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
+export default function MetricsForm({ onDiagnosis, openAccordion = false }: MetricsFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     visits: '',
@@ -252,7 +253,7 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
         <div className="space-y-4">
           <div className="divider"></div>
           
-          <details className="group">
+          <details className="group" open={openAccordion}>
             <summary className="cursor-pointer list-none">
               <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 hover:from-blue-100 hover:to-indigo-100 transition-all duration-200">
                 <div className="flex items-center space-x-3">
@@ -381,11 +382,11 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
           {/* Mensaje de ayuda para validación */}
           {!isFormValid && (
             <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
-              <p className="text-yellow-800 text-sm text-center">
-                {visits <= 0 && '👥 Ingresá las visitas únicas • '}
-                {carts <= 0 && '🛒 Ingresá los carritos iniciados • '}
-                {purchases <= 0 && '✅ Ingresá las compras completadas • '}
-                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && '⚠️ Los carritos no pueden ser más que las visitas • '}
+              <p className="text-yellow-800 text-sm text-center whitespace-pre-line">
+                {visits <= 0 && '👥 Ingresá las visitas únicas\n'}
+                {carts <= 0 && '🛒 Ingresá los carritos iniciados\n'}
+                {purchases <= 0 && '✅ Ingresá las compras completadas\n'}
+                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && '⚠️ Los carritos no pueden ser más que las visitas\n'}
                 {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && '⚠️ Las compras no pueden ser más que los carritos'}
               </p>
             </div>

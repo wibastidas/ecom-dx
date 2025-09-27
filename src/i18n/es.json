@@ -80,10 +80,10 @@
     "financeEmptyText": "Sumá 3 datos y descubrí si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones."
   },
   "cta": {
-    "mcTraffic": "Encender tráfico con criterio (90' – USD 27)",
-    "mcPdp": "Armar mi PDP 80/20 (90' – USD 27)",
-    "mcCheckout": "Checkout sin fricción (90' – USD 27)",
-    "mcScale": "Escalar con calma (90' – USD 27)",
+    "mcTraffic": "Encender tráfico con criterio (USD 27)",
+    "mcPdp": "Armar mi PDP 80/20 (USD 27)",
+    "mcCheckout": "Checkout sin fricción (USD 27)",
+    "mcScale": "Escalar con calma (USD 27)",
     "sub": "Acceso inmediato. 90 minutos. Sin tecnicismos."
   },
   "finance": {
@@ -129,8 +129,8 @@
     "existsText": "Si continuás, vamos a actualizar el registro de {{monthLabel}} con estos valores.",
     "overwriteBtn": "Actualizar registro",
     "backBtn": "Volver",
-    "success": "✅ Guardamos {{monthLabel}} en tu historial.",
-    "error": "⚠️ No pudimos guardar. Probá de nuevo.",
+    "success": "Guardamos {{monthLabel}} en tu historial.",
+    "error": "No pudimos guardar. Probá de nuevo.",
     "privacy": "Solo vos podés ver tus datos. Podés borrarlos cuando quieras."
   },
   "history": {

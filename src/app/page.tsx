@@ -18,6 +18,7 @@ export default function Home() {
     adspend?: number | null
     ordersCount?: number | null
   } | null>(null)
+  const [openAccordion, setOpenAccordion] = useState(false)
   const { t } = useTranslations()
 
   // Scroll automático al inicio cuando se muestre el resultado
@@ -57,6 +58,7 @@ export default function Home() {
   const handleEditData = () => {
     setResult(null)
     setDiagnosisData(null)
+    setOpenAccordion(true) // Abrir acordeón cuando se edite desde "Recalcular"
     // Scroll automático al inicio cuando se regrese al formulario
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -64,6 +66,7 @@ export default function Home() {
   const handleNewDiagnosis = () => {
     setResult(null)
     setDiagnosisData(null)
+    setOpenAccordion(false) // Resetear acordeón para nuevo diagnóstico
     // Scroll automático al inicio cuando se regrese al formulario
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -93,7 +96,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <MetricsForm onDiagnosis={handleDiagnosis} />
+            <MetricsForm onDiagnosis={handleDiagnosis} openAccordion={openAccordion} />
           </>
         ) : (
           <ResultCard 
