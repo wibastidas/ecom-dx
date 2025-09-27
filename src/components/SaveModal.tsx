@@ -55,9 +55,9 @@ export default function SaveModal({ isOpen, onClose, onSave, diagnosisData }: Sa
       const currentMonth = nowUy.toFormat('yyyy-LL')
       setSelectedMonth(currentMonth)
       
-      // Generar opciones de meses (últimos 12 + próximos 3)
+      // Generar opciones de meses (últimos 24 + próximos 3)
       const options = []
-      for (let i = 11; i >= 0; i--) {
+      for (let i = 23; i >= 0; i--) {
         const month = nowUy.minus({ months: i })
         options.push({
           value: month.toFormat('yyyy-LL'),
