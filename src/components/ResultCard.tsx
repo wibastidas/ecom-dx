@@ -349,9 +349,14 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
       <div className="card-elevated">
         {/* CTA al microcurso */}
         <div className="text-center mb-8">
-          <button className="btn-primary text-lg px-8 py-4">
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center"
+          >
             {getMicrocourseCta(result.dx)}
-          </button>
+          </a>
           <p className="text-sm text-gray-600 mt-2">
             {t('cta.sub')}
           </p>

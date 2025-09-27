@@ -3,7 +3,7 @@
 ## 📊 **RESUMEN EJECUTIVO**
 - **Fecha:** $(date)
 - **Estado:** ✅ COMPLETADO
-- **Casos totales:** 23/23 pasaron
+- **Casos totales:** 30/30 pasaron
 - **Cobertura:** 100% de funcionalidades críticas
 
 ---
@@ -81,11 +81,36 @@
 
 ---
 
+## ✅ **PARTE 5 - COMPORTAMIENTOS DE UI**
+
+| Elemento | Especificación | Estado |
+|----------|----------------|---------|
+| **Encabezado** | "Tu cuello principal: {Categoría}" | ✅ |
+| **KPIs** | ATC, Cart→Buy, CR con tooltips | ✅ |
+| **Referencias** | "ATC ≥ 3% · Cart→Buy ≥ 30% · CR 2–3%" | ✅ |
+| **Comunicación** | Bloque visible con mapeo según cuello | ✅ |
+| **Acciones** | Plan de 3 acciones según categoría | ✅ |
+| **CTA** | Dinámico al mini-curso según cuello | ✅ |
+| **Finanzas** | Solo si sales, adspend y ordersCount presentes | ✅ |
+| **Muestra chica** | Solo si ordersCount < 10 | ✅ |
+
+### **Verificaciones Específicas**
+- ✅ **Encabezado dinámico** - Muestra correctamente cada categoría
+- ✅ **Subtítulos personalizados** - Según el tipo de cuello de botella
+- ✅ **CTAs específicos** - Cada categoría tiene su mini-curso correspondiente
+- ✅ **Acciones contextuales** - 3 acciones específicas por categoría
+- ✅ **Bloque finanzas condicional** - Solo se muestra con datos completos
+- ✅ **Muestra chica** - Solo cuando ordersCount < 10
+
+**Resultado:** 4/4 casos pasaron ✅
+
+---
+
 ## 🔧 **IMPLEMENTACIONES TÉCNICAS**
 
 ### **Archivos Modificados**
 - `src/lib/diagnosis.ts` - Validaciones de entrada
-- `src/components/ResultCard.tsx` - Lógica de muestra chica
+- `src/components/ResultCard.tsx` - Lógica de muestra chica y CTA dinámico
 - `src/lib/financeLevel.ts` - Niveles financieros
 - `src/i18n/es.json` - Mensajes y traducciones
 
@@ -98,6 +123,8 @@
 - ✅ Muestra chica condicional
 - ✅ Validaciones de entrada robustas
 - ✅ Mensajes de i18n correctos
+- ✅ Comportamientos de UI dinámicos
+- ✅ CTAs específicos por categoría
 
 ---
 
