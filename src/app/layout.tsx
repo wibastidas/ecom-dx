@@ -7,10 +7,15 @@ import ToastProvider from '@/components/ToastProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Diagnóstico E-commerce - Descubre dónde se pierde tu venta',
+  title: 'Radar E-commerce - Diagnóstico de Conversión',
   description: 'Herramienta gratuita para diagnosticar problemas de conversión en tu tienda online. Obtén recomendaciones personalizadas en 2 minutos.',
   keywords: 'ecommerce, diagnóstico, conversión, tienda online, marketing digital',
   authors: [{ name: 'William Bastidas' }],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 }
 
 export const viewport = {

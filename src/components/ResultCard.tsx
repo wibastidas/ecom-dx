@@ -361,7 +361,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             href="#"
               target="_blank"
               rel="noopener noreferrer"
-            className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center"
+            className="btn-primary-gradient text-lg px-8 py-4 inline-flex items-center justify-center"
           >
             {getMicrocourseCta(result.dx)}
           </a>
