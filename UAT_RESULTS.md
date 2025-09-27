@@ -3,7 +3,7 @@
 ## 📊 **RESUMEN EJECUTIVO**
 - **Fecha:** $(date)
 - **Estado:** ✅ COMPLETADO
-- **Casos totales:** 36/36 pasaron
+- **Casos totales:** 49/49 pasaron
 - **Cobertura:** 100% de funcionalidades críticas
 
 ---
@@ -132,6 +132,55 @@
 
 ---
 
+## ✅ **PARTE 7 - DECISIONES DE IMPLEMENTACIÓN**
+
+| Decisión | Especificación | Estado |
+|----------|----------------|---------|
+| **ROAS = 2.00** | Debe salir como nivel Frágil | ✅ |
+| **visits = 499** | Con ATC ≥ 3% y CB ≥ 30% debe clasificar como Tráfico | ✅ |
+| **ATC = 3.0% exacto** | NO debe ir a Página/Oferta | ✅ |
+| **CB = 30.0% exacto** | NO debe ir a Checkout/Confianza | ✅ |
+| **Bloque Finanzas** | No se renderiza si faltan datos; aparece card persuasivo | ✅ |
+
+### **Verificaciones Específicas**
+- ✅ **ROAS = 2.00** → Nivel "Frágil" (no "Sólido")
+- ✅ **visits = 499** + ATC ≥ 3% + CB ≥ 30% → "Tráfico"
+- ✅ **ATC = 3.0% exacto** → "Escalar" (no "Página/Oferta")
+- ✅ **CB = 30.0% exacto** → "Escalar" (no "Checkout/Confianza")
+- ✅ **Bloque Finanzas** → Solo si `sales && adspend && ordersCount`
+- ✅ **Casos edge** → 1.99 (frágil), 2.01 (sólido), 500 (escalar), 2.99 (página), 29.99 (checkout)
+
+**Resultado:** 5/5 decisiones verificadas ✅
+
+---
+
+## ✅ **PARTE 8 - DEFINITION OF DONE**
+
+| Elemento DOD | Estado | Verificación |
+|--------------|--------|--------------|
+| **Fórmulas y redondeos correctos en UI** | ✅ | ATC, CB, CR con 1 decimal |
+| **Clasificación de cuello cumple el orden y los bordes** | ✅ | 6/6 casos edge correctos |
+| **Nombres de categorías exactos** | ✅ | trafico / pagina_oferta / checkout_confianza / escalar |
+| **Niveles financieros con 3 estados y ROAS=2.00 → Frágil** | ✅ | critical / fragile / strong |
+| **"CAC = XX% del ticket" visible cuando hay finanzas** | ✅ | Ratio redondeado a entero |
+| **"Muestra chica" solo con ordersCount < 10** | ✅ | 4/4 casos correctos |
+| **Card "Finanzas rápidas (opcional)" cuando faltan datos** | ✅ | 4/4 casos correctos |
+| **Guardado por mes con deduplicación y prefill desde historial** | ✅ | yyyymm, actualización, prefill |
+
+### **Verificaciones Específicas**
+- ✅ **Fórmulas precisas** - ATC, CB, CR con redondeo a 1 decimal
+- ✅ **Clasificación robusta** - Orden correcto y bordes exactos
+- ✅ **Nombres consistentes** - En todo el código y i18n
+- ✅ **Niveles financieros** - 3 estados, ROAS=2.00 es frágil
+- ✅ **CAC ratio** - Visible solo con datos financieros
+- ✅ **Muestra chica** - Solo cuando ordersCount < 10
+- ✅ **Card persuasivo** - Cuando faltan datos financieros
+- ✅ **Sistema de guardado** - Completo con deduplicación y prefill
+
+**Resultado:** 8/8 elementos DOD verificados ✅
+
+---
+
 ## 🔧 **IMPLEMENTACIONES TÉCNICAS**
 
 ### **Archivos Modificados**
@@ -158,6 +207,8 @@
 - ✅ Sistema de guardado e historial
 - ✅ Autenticación Google
 - ✅ Persistencia Firebase
+- ✅ Decisiones de implementación específicas
+- ✅ Definition of Done completo
 
 ---
 
