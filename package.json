@@ -7,7 +7,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:uat": "node tests/run-all-tests.js",
+    "test:diagnosis": "node tests/diagnosis-uat.test.js",
+    "test:finance": "node tests/finance-uat.test.js",
+    "test:decisions": "node tests/implementation-decisions.test.js",
+    "test:dod": "node tests/dod-final.test.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",
