@@ -12,13 +12,13 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789:web:abcdef123456",
 }
 
-// Solo inicializar Firebase si hay credenciales reales
+// Inicializar Firebase siempre
 let app: any = null
 let auth: any = null
 let db: any = null
 let googleProvider: any = null
 
-if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE_API_KEY !== "demo-key") {
+try {
   // Initialize Firebase
   app = initializeApp(firebaseConfig)
   
@@ -30,8 +30,10 @@ if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && process.env.NEXT_PUBLIC_FIREBASE
   
   // Google Auth Provider
   googleProvider = new GoogleAuthProvider()
-} else {
-  console.log("🔧 Firebase deshabilitado - Modo desarrollo")
+  
+  console.log("🔥 Firebase inicializado correctamente")
+} catch (error) {
+  console.error("❌ Error inicializando Firebase:", error)
 }
 
 export { auth, db, googleProvider }
