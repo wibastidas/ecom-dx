@@ -3,7 +3,7 @@
 ## 📊 **RESUMEN EJECUTIVO**
 - **Fecha:** $(date)
 - **Estado:** ✅ COMPLETADO
-- **Casos totales:** 30/30 pasaron
+- **Casos totales:** 36/36 pasaron
 - **Cobertura:** 100% de funcionalidades críticas
 
 ---
@@ -106,6 +106,32 @@
 
 ---
 
+## ✅ **PARTE 6 - GUARDAR E HISTORIAL**
+
+| Funcionalidad | Especificación | Estado |
+|---------------|----------------|---------|
+| **Botón "Iniciar sesión y guardar"** | Si no hay sesión: login → modal | ✅ |
+| **Modal "Guardar diagnóstico"** | Selector Mes-Año (default: actual) | ✅ |
+| **Zona horaria** | America/Montevideo | ✅ |
+| **Nota opcional** | Campo de texto libre | ✅ |
+| **Confirmación actualización** | Si existe registro del mes | ✅ |
+| **Persistencia por mes** | Clave yyyymm, inputs + KPIs | ✅ |
+| **Historial ordenado** | Descendente por mes | ✅ |
+| **Formato fila** | "Sep 2025 — ATC 2,7% · Cart→Buy 26% · CR 0,7% — Ver · Nota" | ✅ |
+| **Prefill "Ver"** | Para comparar/editar | ✅ |
+| **"Hacer nuevo diagnóstico"** | Crea nuevo (prefill recomendado) | ✅ |
+
+### **Verificaciones Específicas**
+- ✅ **Flujo completo implementado** - Login → Modal → Guardado → Historial
+- ✅ **Selector de mes-año** - Default mes actual, zona Montevideo
+- ✅ **Persistencia robusta** - Clave yyyymm, sin duplicados
+- ✅ **Historial funcional** - Orden descendente, formato correcto
+- ✅ **Prefill inteligente** - "Ver" para editar, "Nuevo" para crear
+
+**Resultado:** 6/6 funcionalidades verificadas ✅
+
+---
+
 ## 🔧 **IMPLEMENTACIONES TÉCNICAS**
 
 ### **Archivos Modificados**
@@ -113,6 +139,10 @@
 - `src/components/ResultCard.tsx` - Lógica de muestra chica y CTA dinámico
 - `src/lib/financeLevel.ts` - Niveles financieros
 - `src/i18n/es.json` - Mensajes y traducciones
+- `src/components/SaveModal.tsx` - Modal de guardado con selector mes-año
+- `src/components/HistoryModal.tsx` - Modal de historial con formato correcto
+- `src/lib/saveService.ts` - Servicio de persistencia Firebase
+- `src/lib/auth.ts` - Autenticación Google
 
 ### **Funcionalidades Verificadas**
 - ✅ Formulario de métricas básicas
@@ -125,6 +155,9 @@
 - ✅ Mensajes de i18n correctos
 - ✅ Comportamientos de UI dinámicos
 - ✅ CTAs específicos por categoría
+- ✅ Sistema de guardado e historial
+- ✅ Autenticación Google
+- ✅ Persistencia Firebase
 
 ---
 
