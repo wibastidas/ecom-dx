@@ -28,7 +28,8 @@
   "buttons": {
     "getDiag": "Obtener diagnóstico",
     "calcFinance": "Calcular finanzas rápidas",
-    "loginSave": "Iniciar sesión y guardar",
+    "loginSave": "Iniciar sesión con Google y guardar",
+    "saveDiagnosis": "Guardar diagnóstico",
     "newDiag": "Hacer nuevo diagnóstico",
     "seeDetails": "Ver recomendaciones detalladas",
     "editData": "Recalcular"

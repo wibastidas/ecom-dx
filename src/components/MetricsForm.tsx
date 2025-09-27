@@ -125,7 +125,9 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('🚀 FORM SUBMIT TRIGGERED!')
     console.log('📝 Datos del formulario:', formData)
+    console.log('🔍 Validación:', { visits, carts, purchases, isFormValid })
     setIsSubmitting(true)
     
     try {
@@ -144,6 +146,7 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
       trackDiagnosisSubmit(visits, carts, purchases)
       
       // Trigger diagnosis con todos los datos
+      console.log('🎯 Llamando onDiagnosis con:', { visits, carts, purchases, sales_total: diagnosisData.sales_total, ad_spend: diagnosisData.ad_spend, orders: diagnosisData.orders })
       onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders)
       
       console.log('📊 Datos completos para diagnóstico:', diagnosisData)

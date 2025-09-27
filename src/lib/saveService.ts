@@ -184,3 +184,46 @@ export async function deleteDiagnosis(user: User, yyyymm: string): Promise<void>
     throw error
   }
 }
+
+/**
+ * Guarda un sharing en la BD
+ */
+export async function saveSharing(user: User, diagnosisData: {
+  dx: string
+  visits: number
+  carts: number
+  orders: number
+  atc: number
+  cb: number
+  cr: number
+}): Promise<void> {
+  if (!db) {
+    console.warn('Firebase no configurado - modo desarrollo')
+    return
+  }
+
+  try {
+    const sharingData = {
+      uid: user.uid,
+      email: user.email,
+      diagnosis: diagnosisData.dx,
+      visits: diagnosisData.visits,
+      carts: diagnosisData.carts,
+      orders: diagnosisData.orders,
+      atc: diagnosisData.atc,
+      cb: diagnosisData.cb,
+      cr: diagnosisData.cr,
+      shared_at: serverTimestamp(),
+      platform: 'whatsapp'
+    }
+
+    // Guardar en colección de sharings
+    const sharingRef = doc(collection(db, 'sharings'))
+    await setDoc(sharingRef, sharingData)
+
+    console.log('Sharing guardado exitosamente')
+  } catch (error) {
+    console.error('Error saving sharing:', error)
+    throw error
+  }
+}

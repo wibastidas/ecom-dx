@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DiagnosisResult } from '@/lib/diagnosis'
 import { evaluateFinance, FinanceInsight } from '@/lib/finance'
 import { financeLevel } from '@/lib/financeLevel'
@@ -8,6 +8,7 @@ import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
 import SaveModal from './SaveModal'
 import HistoryModal from './HistoryModal'
+import ShareModal from './ShareModal'
 import { useAuth } from '@/lib/auth'
 
 interface ResultCardProps {
@@ -30,6 +31,18 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
   const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [showHistoryModal, setShowHistoryModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [previousUser, setPreviousUser] = useState(user)
+
+  // Redirigir al Home si el usuario cierra sesión desde la página de resultados
+  useEffect(() => {
+    // Solo ejecutar si el usuario cambió de logueado a no logueado
+    if (previousUser && !user) {
+      console.log('🚪 Usuario cerró sesión, volviendo al Home')
+      onNewDiagnosis()
+    }
+    setPreviousUser(user)
+  }, [user, previousUser])
 
   // Manejar click de "Iniciar sesión y guardar"
   const handleSaveClick = async () => {
@@ -349,10 +362,10 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
       <div className="card-elevated">
         {/* CTA al microcurso */}
         <div className="text-center mb-8">
-          <a
+            <a
             href="#"
-            target="_blank"
-            rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
             className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center"
           >
             {getMicrocourseCta(result.dx)}
@@ -363,26 +376,39 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         </div>
 
         {/* Acciones secundarias */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
           <button 
             onClick={handleSaveClick}
             className="btn-outline"
           >
-            {t('buttons.loginSave')}
+            {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
           </button>
           {user && (
             <button 
               onClick={() => setShowHistoryModal(true)}
               className="btn-outline"
             >
-              Ver historial
+              📊 Ver historial
             </button>
           )}
           <button 
             onClick={onNewDiagnosis}
             className="btn-outline"
           >
-            {t('buttons.newDiag')}
+            🔄 Hacer nuevo diagnóstico
+          </button>
+          </div>
+
+        {/* Link discreto para compartir */}
+        <div className="text-center mt-8 pt-6 border-t border-gray-200">
+          <button
+            onClick={() => setShowShareModal(true)}
+            className="text-sm text-gray-500 hover:text-gray-700 underline"
+          >
+            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
+            Compartir esta herramienta con un amigo
           </button>
         </div>
       </div>
@@ -414,6 +440,21 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
         onEditDiagnosis={handleEditFromHistory}
+      />
+
+      {/* Modal de compartir */}
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        diagnosisData={{
+          dx: result.dx,
+          visits: diagnosisData.visits,
+          carts: diagnosisData.carts,
+          orders: diagnosisData.orders,
+          atc: result.atc,
+          cb: result.cb,
+          cr: result.cr
+        }}
           />
     </div>
   )

@@ -34,6 +34,14 @@
     @apply bg-transparent hover:bg-blue-50 text-blue-600 font-medium py-2 px-4 rounded-lg border border-blue-200 transition-all duration-200;
   }
   
+  .btn-primary-sm {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-sm;
+  }
+  
+  .btn-outline-sm {
+    @apply bg-transparent hover:bg-gray-50 text-gray-600 font-medium py-1.5 px-3 rounded-md border border-gray-200 transition-all duration-200 text-sm;
+  }
+  
   .input-field {
     @apply w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm transition-all duration-200;
   }

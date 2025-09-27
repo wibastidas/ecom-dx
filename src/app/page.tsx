@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import MetricsForm from '@/components/MetricsForm'
 import ResultCard from '@/components/ResultCard'
+import Header from '@/components/Header'
 import { diagnose, DiagnosisResult } from '@/lib/diagnosis'
 import { track } from '@/lib/analytics'
 import useTranslations from '@/hooks/useTranslations'
@@ -21,34 +22,44 @@ export default function Home() {
 
   // Scroll automático al inicio cuando se muestre el resultado
   useEffect(() => {
+    console.log('🔄 useEffect result changed:', result)
     if (result) {
+      console.log('📱 Scrolling to top because result exists')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [result])
 
   const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => {
+    console.log('🚀 HANDLE DIAGNOSIS CALLED!')
     console.log('🔍 Diagnóstico iniciado:', { visits, carts, purchases, sales, adspend, ordersCount })
-    const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
-    console.log('📊 Resultado del diagnóstico:', diagnosis)
-    setResult(diagnosis)
     
-    // Guardar datos de diagnóstico para el modal de guardar
-    setDiagnosisData({
-      visits,
-      carts,
-      orders: purchases,
-      sales: sales || null,
-      adspend: adspend || null,
-      ordersCount: ordersCount || null
-    })
-    
-    // Track the diagnosis result view
-    track('diag_result_view', { 
-      diagnosis: diagnosis.dx,
-      atc: diagnosis.atc,
-      cb: diagnosis.cb,
-      cr: diagnosis.cr
-    })
+    try {
+      const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
+      console.log('📊 Resultado del diagnóstico:', diagnosis)
+      console.log('🎯 Setting result state...')
+      setResult(diagnosis)
+      console.log('✅ Result state set!')
+      
+      // Guardar datos de diagnóstico para el modal de guardar
+      setDiagnosisData({
+        visits,
+        carts,
+        orders: purchases,
+        sales: sales || null,
+        adspend: adspend || null,
+        ordersCount: ordersCount || null
+      })
+      
+      // Track the diagnosis result view
+      track('diag_result_view', { 
+        diagnosis: diagnosis.dx,
+        atc: diagnosis.atc,
+        cb: diagnosis.cb,
+        cr: diagnosis.cr
+      })
+    } catch (error) {
+      console.error('❌ Error en handleDiagnosis:', error)
+    }
   }
 
   const handleEditData = () => {
@@ -65,8 +76,12 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  console.log('🎨 RENDER - result state:', result)
+  console.log('🎨 RENDER - showing form:', !result)
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <Header />
       <div className="container-responsive py-8">
         {/* Content */}
         {!result ? (
