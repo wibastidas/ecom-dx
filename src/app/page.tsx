@@ -101,6 +101,8 @@ export default function Home() {
             onNewDiagnosis={handleNewDiagnosis}
             onEditData={handleEditData}
             diagnosisData={diagnosisData!}
+            onResultChange={setResult}
+            onDiagnosisDataChange={setDiagnosisData}
           />
         )}
       </div>

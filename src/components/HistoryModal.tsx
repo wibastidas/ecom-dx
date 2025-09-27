@@ -5,20 +5,22 @@ import { HistoryItem, getDiagnosisHistory, deleteDiagnosis } from '@/lib/saveSer
 import { useAuth } from '@/lib/auth'
 import { useToastContext } from '@/components/ToastProvider'
 import useTranslations from '@/hooks/useTranslations'
+import HistoryDetailModal from './HistoryDetailModal'
 
 interface HistoryModalProps {
   isOpen: boolean
   onClose: () => void
-  onEditDiagnosis: (data: HistoryItem) => void
 }
 
-export default function HistoryModal({ isOpen, onClose, onEditDiagnosis }: HistoryModalProps) {
+export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
   const { t } = useTranslations()
   const { user } = useAuth()
   const { showSuccess, showError } = useToastContext()
   const [history, setHistory] = useState<HistoryItem[]>([])
   const [loading, setLoading] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null)
 
   // Cargar historial cuando se abre el modal
   useEffect(() => {
@@ -42,10 +44,11 @@ export default function HistoryModal({ isOpen, onClose, onEditDiagnosis }: Histo
     }
   }
 
-  const handleEdit = (item: HistoryItem) => {
-    onEditDiagnosis(item)
-    onClose()
+  const handleViewDetail = (item: HistoryItem) => {
+    setSelectedItem(item)
+    setShowDetailModal(true)
   }
+
 
   const handleDelete = async (yyyymm: string) => {
     if (!user) return
@@ -135,7 +138,7 @@ export default function HistoryModal({ isOpen, onClose, onEditDiagnosis }: Histo
                           {formatDate(item.yyyymm)}
                         </h3>
                         <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                          {getDiagnosisLabel(item.dx)}
+                          Problema: {getDiagnosisLabel(item.dx)}
                         </span>
                         {item.note && (
                           <span className="text-sm text-gray-600 italic">
@@ -173,7 +176,7 @@ export default function HistoryModal({ isOpen, onClose, onEditDiagnosis }: Histo
 
                     <div className="flex flex-col sm:flex-row gap-2 sm:ml-4">
                       <button
-                        onClick={() => handleEdit(item)}
+                        onClick={() => handleViewDetail(item)}
                         className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors font-medium"
                       >
                         Ver detalle
@@ -193,6 +196,13 @@ export default function HistoryModal({ isOpen, onClose, onEditDiagnosis }: Histo
           )}
         </div>
       </div>
+
+      {/* Modal de detalle */}
+      <HistoryDetailModal
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        historyItem={selectedItem}
+      />
     </div>
   )
 }

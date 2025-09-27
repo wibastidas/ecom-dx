@@ -23,9 +23,11 @@ interface ResultCardProps {
     adspend?: number | null
     ordersCount?: number | null
   }
+  onResultChange?: (result: DiagnosisResult) => void
+  onDiagnosisDataChange?: (data: any) => void
 }
 
-export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData }: ResultCardProps) {
+export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData, onResultChange, onDiagnosisDataChange }: ResultCardProps) {
   const { t } = useTranslations()
   const { user, signIn } = useAuth()
   const [showSaveDialog, setShowSaveDialog] = useState(false)
@@ -73,11 +75,6 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
     }
   }
 
-  // Manejar edición desde historial
-  const handleEditFromHistory = (historyItem: any) => {
-    // TODO: Implementar prellenado del formulario con datos del historial
-    onEditData()
-  }
 
   // Determinar el mensaje según el diagnóstico
   const getMessage = (dx: string) => {
@@ -381,6 +378,12 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           >
             {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
           </button>
+          <button 
+            onClick={onEditData}
+            className="btn-outline"
+          >
+            ✏️ Editar datos
+          </button>
           {user && (
             <button 
               onClick={() => setShowHistoryModal(true)}
@@ -434,11 +437,10 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
       />
 
       {/* Modal de historial */}
-      <HistoryModal
-        isOpen={showHistoryModal}
-        onClose={() => setShowHistoryModal(false)}
-        onEditDiagnosis={handleEditFromHistory}
-      />
+        <HistoryModal
+          isOpen={showHistoryModal}
+          onClose={() => setShowHistoryModal(false)}
+        />
 
       {/* Modal de compartir */}
       <ShareModal

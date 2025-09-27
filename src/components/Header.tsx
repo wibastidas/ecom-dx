@@ -132,10 +132,6 @@ export default function Header() {
       <HistoryModal
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
-        onEditDiagnosis={() => {
-          // TODO: Implementar navegación al formulario con datos prellenados
-          console.log('Editando desde historial')
-        }}
       />
     </>
   )

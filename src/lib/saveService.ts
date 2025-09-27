@@ -7,7 +7,8 @@ import {
   orderBy,
   getDocs,
   serverTimestamp,
-  DocumentData 
+  DocumentData,
+  deleteDoc
 } from 'firebase/firestore'
 import { db } from './firebase'
 import { User } from 'firebase/auth'
@@ -177,8 +178,8 @@ export async function deleteDiagnosis(user: User, yyyymm: string): Promise<void>
 
   try {
     const docRef = doc(db, 'users', user.uid, 'metrics', yyyymm)
-    await setDoc(docRef, { deleted: true }, { merge: true })
-    console.log('Diagnóstico marcado como eliminado:', yyyymm)
+    await deleteDoc(docRef)
+    console.log('Diagnóstico eliminado exitosamente:', yyyymm)
   } catch (error) {
     console.error('Error eliminando diagnóstico:', error)
     throw error
