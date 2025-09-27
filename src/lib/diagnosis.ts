@@ -18,6 +18,14 @@ export function diagnose(
   adspend?: number, 
   ordersCount?: number
 ): DiagnosisResult {
+  // Validaciones que deben bloquear cálculo
+  if (carts > visits) {
+    throw new Error('Error: carritos no pueden ser más que visitas')
+  }
+  if (purchases > carts) {
+    throw new Error('Error: pedidos no pueden ser más que carritos')
+  }
+
   // KPIs básicos (siempre se calculan)
   const atc = visits ? carts / visits : 0
   const cb = carts ? purchases / carts : 0

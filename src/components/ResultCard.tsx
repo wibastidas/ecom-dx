@@ -280,14 +280,21 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             <p className="text-xs text-gray-500">
               {t('finance.copy.caveat')}
             </p>
+            
+            {/* Muestra chica */}
+            {diagnosisData.ordersCount && diagnosisData.ordersCount < 10 && (
+              <p className="text-xs text-gray-500 mt-2">
+                {t('finance.notes.smallSample')}
+              </p>
+            )}
           </div>
 
           {/* Acciones financieras - Simplificadas */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t('finance.actionsTitleFinance')}
-            </h3>
-            <div className="space-y-3">
+          </h3>
+          <div className="space-y-3">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-blue-600 text-sm font-semibold">1</span>
@@ -402,7 +409,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
         onEditDiagnosis={handleEditFromHistory}
-      />
+          />
     </div>
   )
 }
