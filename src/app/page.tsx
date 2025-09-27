@@ -9,6 +9,14 @@ import useTranslations from '@/hooks/useTranslations'
 
 export default function Home() {
   const [result, setResult] = useState<DiagnosisResult | null>(null)
+  const [diagnosisData, setDiagnosisData] = useState<{
+    visits: number
+    carts: number
+    orders: number
+    sales?: number | null
+    adspend?: number | null
+    ordersCount?: number | null
+  } | null>(null)
   const { t } = useTranslations()
 
   // Scroll automático al inicio cuando se muestre el resultado
@@ -24,6 +32,16 @@ export default function Home() {
     console.log('📊 Resultado del diagnóstico:', diagnosis)
     setResult(diagnosis)
     
+    // Guardar datos de diagnóstico para el modal de guardar
+    setDiagnosisData({
+      visits,
+      carts,
+      orders: purchases,
+      sales: sales || null,
+      adspend: adspend || null,
+      ordersCount: ordersCount || null
+    })
+    
     // Track the diagnosis result view
     track('diag_result_view', { 
       diagnosis: diagnosis.dx,
@@ -35,12 +53,14 @@ export default function Home() {
 
   const handleEditData = () => {
     setResult(null)
+    setDiagnosisData(null)
     // Scroll automático al inicio cuando se regrese al formulario
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleNewDiagnosis = () => {
     setResult(null)
+    setDiagnosisData(null)
     // Scroll automático al inicio cuando se regrese al formulario
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -76,6 +96,7 @@ export default function Home() {
             result={result} 
             onNewDiagnosis={handleNewDiagnosis}
             onEditData={handleEditData}
+            diagnosisData={diagnosisData!}
           />
         )}
       </div>

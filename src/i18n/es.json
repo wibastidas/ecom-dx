@@ -99,6 +99,13 @@
       "fragile": "Frágil",
       "strong": "Sólido"
     },
+    "copy": {
+      "critical": "Hoy tus anuncios no se pagan solos. Pausá lo que no vende y mejorá página/checkout antes de invertir.",
+      "fragile": "Tus anuncios cubren costo, pero sin colchón. Enfocate 7 días en una palanca (ATC o Checkout) o subí el ticket.",
+      "strong": "Buen trabajo: tus anuncios dejan margen. Escalá de a poco y vigilá que las tasas se mantengan estables.",
+      "caveat": "Sin margen bruto, esto es orientación. Tomalo como señal, no como contabilidad.",
+      "ratio": "CAC = {{ratio}}% del ticket."
+    },
     "notes": {
       "caveatMargin": "Nota: sin margen bruto no podemos calcular rentabilidad exacta. Esto es una orientación.",
       "smallSample": "Muestra chica: con menos de 10 pedidos, tomá estas señales con cautela."
@@ -107,5 +114,28 @@
     "actionsTitleBasic": "Tus 3 próximos pasos",
     "actionsTitleFinance": "Tus 3 próximos pasos (financieros)",
     "cta": "Editar datos y recalcular"
+  },
+  "save": {
+    "openTitle": "Guardar diagnóstico",
+    "monthLabel": "Mes a guardar",
+    "monthHelp": "Elegí el mes al que corresponden estos datos.",
+    "monthDefaultHint": "Por defecto usamos el mes actual (según tu zona horaria).",
+    "noteLabel": "Nota (opcional)",
+    "notePlaceholder": "Ej.: Campaña primavera, suba de precios, etc.",
+    "saveBtn": "Guardar",
+    "cancelBtn": "Cancelar",
+    "existsTitle": "Ya tenés un diagnóstico guardado para este mes",
+    "existsText": "Si continuás, vamos a actualizar el registro de {{monthLabel}} con estos valores.",
+    "overwriteBtn": "Actualizar registro",
+    "backBtn": "Volver",
+    "success": "✅ Guardamos {{monthLabel}} en tu historial.",
+    "error": "⚠️ No pudimos guardar. Probá de nuevo.",
+    "privacy": "Solo vos podés ver tus datos. Podés borrarlos cuando quieras."
+  },
+  "history": {
+    "title": "Tu historial",
+    "empty": "Aún no guardaste meses. Hacé tu diagnóstico y guardalo para ver la evolución.",
+    "row": "{{monthShort}} — ATC {{atc}}% · Cart→Buy {{cb}}% · CR {{cr}}% — Ver · Nota",
+    "newDiag": "Hacer nuevo diagnóstico"
   }
 }

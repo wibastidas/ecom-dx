@@ -37,6 +37,8 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
 
   // Función simple para manejar cambios en los inputs
   const handleInputChange = (field: string, value: string) => {
+    console.log(`🔄 handleInputChange: ${field} = "${value}"`)
+    
     // Para campos numéricos, solo permitir números
     if (['visits', 'carts', 'purchases', 'orders'].includes(field)) {
       const numericValue = value.replace(/[^0-9]/g, '')
@@ -47,10 +49,16 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
         cleanedValue = numericValue.replace(/^0+/, '') || '0'
       }
       
-      setFormData(prev => ({
-        ...prev,
-        [field]: cleanedValue
-      }))
+      console.log(`   → numericValue: "${numericValue}", cleanedValue: "${cleanedValue}"`)
+      
+      setFormData(prev => {
+        const newData = {
+          ...prev,
+          [field]: cleanedValue
+        }
+        console.log(`   → new formData:`, newData)
+        return newData
+      })
     } else {
       // Para campos monetarios, permitir números y punto decimal
       const numericValue = value.replace(/[^0-9.]/g, '')

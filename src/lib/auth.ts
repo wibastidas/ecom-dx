@@ -4,6 +4,7 @@ import {
   User,
   onAuthStateChanged 
 } from 'firebase/auth'
+import { useState, useEffect } from 'react'
 import { auth, googleProvider } from './firebase'
 
 export const signInWithGoogle = async (): Promise<User> => {
@@ -44,3 +45,44 @@ export const onAuthChange = (callback: (user: User | null) => void) => {
 }
 
 export { auth }
+
+// Hook para usar autenticación
+export const useAuth = () => {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const unsubscribe = onAuthChange((user) => {
+      setUser(user)
+      setLoading(false)
+    })
+
+    return unsubscribe
+  }, [])
+
+  const signIn = async () => {
+    try {
+      const user = await signInWithGoogle()
+      return user
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error)
+      throw error
+    }
+  }
+
+  const signOutUser = async () => {
+    try {
+      await signOut()
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+      throw error
+    }
+  }
+
+  return {
+    user,
+    loading,
+    signIn,
+    signOut: signOutUser
+  }
+}

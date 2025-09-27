@@ -28,7 +28,7 @@ export default function FinanceCard({ metrics }: FinanceCardProps) {
       {/* Métricas principales */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className={`text-3xl font-bold mb-2 ${getROASColor(roas)}`}>
+          <div className={`text-3xl font-bold mb-2 ${getROASColor(roas || null)}`}>
             {roas ? roas.toFixed(2) : 'N/A'}
           </div>
           <div className="text-sm text-gray-500 font-medium mb-2">ROAS</div>

@@ -163,7 +163,7 @@ export default function SaveDialog({ isOpen, onClose, onSave, result }: SaveDial
                   <strong>Diagnóstico:</strong> {result.dx}
                 </div>
                 <div className="text-sm text-gray-700">
-                  <strong>Métricas:</strong> CV: {result.cv.toFixed(1)}%, CC: {result.cc.toFixed(1)}%, TC: {result.tc.toFixed(1)}%
+                  <strong>Métricas:</strong> ATC: {(result.atc * 100).toFixed(1)}%, CB: {(result.cb * 100).toFixed(1)}%, CR: {(result.cr * 100).toFixed(1)}%
                 </div>
               </div>
             </div>

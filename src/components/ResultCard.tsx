@@ -3,18 +3,70 @@
 import { useState } from 'react'
 import { DiagnosisResult } from '@/lib/diagnosis'
 import { evaluateFinance, FinanceInsight } from '@/lib/finance'
+import { financeLevel } from '@/lib/financeLevel'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
+import SaveModal from './SaveModal'
+import HistoryModal from './HistoryModal'
+import { useAuth } from '@/lib/auth'
 
 interface ResultCardProps {
   result: DiagnosisResult
   onNewDiagnosis: () => void
   onEditData: () => void
+  diagnosisData: {
+    visits: number
+    carts: number
+    orders: number
+    sales?: number | null
+    adspend?: number | null
+    ordersCount?: number | null
+  }
 }
 
-export default function ResultCard({ result, onNewDiagnosis, onEditData }: ResultCardProps) {
+export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData }: ResultCardProps) {
   const { t } = useTranslations()
+  const { user, signIn } = useAuth()
   const [showSaveDialog, setShowSaveDialog] = useState(false)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [showHistoryModal, setShowHistoryModal] = useState(false)
+
+  // Manejar click de "Iniciar sesión y guardar"
+  const handleSaveClick = async () => {
+    if (!user) {
+      // Si no está logueado, iniciar sesión primero
+      try {
+        await signIn()
+        // Después del login exitoso, abrir modal
+        setShowSaveModal(true)
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error)
+      }
+    } else {
+      // Si ya está logueado, abrir modal directamente
+      setShowSaveModal(true)
+    }
+  }
+
+  // Manejar guardado desde el modal
+  const handleSave = async (saveData: { yyyymm: string, monthLabel: string, note: string }) => {
+    try {
+      // TODO: Implementar guardado en Firebase
+      console.log('Guardando:', { ...saveData, result })
+      setShowSaveModal(false)
+      // TODO: Mostrar toast de éxito
+    } catch (error) {
+      console.error('Error al guardar:', error)
+      // TODO: Mostrar toast de error
+    }
+  }
+
+  // Manejar edición desde historial
+  const handleEditFromHistory = (historyItem: any) => {
+    // TODO: Implementar prellenado del formulario con datos del historial
+    console.log('Editando desde historial:', historyItem)
+    onEditData()
+  }
 
   // Determinar el mensaje según el diagnóstico
   const getMessage = (dx: string) => {
@@ -77,23 +129,14 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
   }
 
   // Evaluar finanzas si hay datos
-  let financeInsight: FinanceInsight | null = null
   let hasFinanceData = false
+  let financialLevel: 'critical' | 'fragile' | 'strong' | null = null
+  let cacRatio = 0
 
   if (result.aov && result.roas && result.cac) {
-    try {
-      // Necesitamos el ordersCount, lo calculamos desde los datos básicos
-      const ordersCount = result.cr > 0 ? Math.round(result.cr * 100) : 0 // Aproximación
-      financeInsight = evaluateFinance({
-        aov: result.aov,
-        roas: result.roas,
-        cac: result.cac,
-        ordersCount
-      })
-      hasFinanceData = true
-    } catch (error) {
-      console.log('No hay datos financieros completos')
-    }
+    hasFinanceData = true
+    financialLevel = financeLevel(result.roas)
+    cacRatio = Math.round((result.cac / result.aov) * 100)
   }
 
   return (
@@ -174,7 +217,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
       </div>
 
       {/* Tarjeta 2: Finanzas (condicional) */}
-      {hasFinanceData && financeInsight ? (
+      {hasFinanceData ? (
         <div className="card-elevated">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             {t('finance.title')}
@@ -209,68 +252,60 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
           </div>
 
           {/* Resumen */}
-                  <div className={`p-6 rounded-xl border-2 mb-6 ${
-                    financeInsight.level === 'critical' ? 'bg-red-50 border-red-200' :
-                    financeInsight.level === 'fragile' ? 'bg-yellow-50 border-yellow-200' :
-                    'bg-green-50 border-green-200'
-                  }`}>
+          <div className={`p-6 rounded-xl border-2 mb-6 ${
+            financialLevel === 'critical' ? 'bg-red-50 border-red-200' :
+            financialLevel === 'fragile' ? 'bg-yellow-50 border-yellow-200' :
+            'bg-green-50 border-green-200'
+          }`}>
             <div className="flex items-center mb-4">
               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                financeInsight.level === 'critical' ? 'bg-red-100 text-red-800' :
-                financeInsight.level === 'fragile' ? 'bg-yellow-100 text-yellow-800' :
+                financialLevel === 'critical' ? 'bg-red-100 text-red-800' :
+                financialLevel === 'fragile' ? 'bg-yellow-100 text-yellow-800' :
                 'bg-green-100 text-green-800'
               }`}>
-                {t(`finance.level.${financeInsight.level}`)}
+                {t(`finance.level.${financialLevel}`)}
               </span>
             </div>
             <div className="mb-4">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                {financeInsight.headline}
-          </h3>
-              <p className="text-gray-700 whitespace-pre-line">
-                {financeInsight.summary}
+              <p className="text-gray-700">
+                {t(`finance.copy.${financialLevel}`)}
               </p>
             </div>
             
-            {/* Microcopys y Notas */}
-            <div className="space-y-3">
-              {/* Microcopys estilo Maider */}
-              {financeInsight.notes && financeInsight.notes.filter(note => 
-                note.includes('Por cada $') || note.includes('Cada pedido') || note.includes('Tu ticket')
-              ).map((note, index) => (
-                <p key={index} className="text-sm text-gray-700 font-medium">
-                  {note}
-                </p>
-              ))}
-              
-              {/* Nota de margen */}
-              <p className="text-sm text-gray-600 italic">
-                {t('finance.notes.caveatMargin')}
-              </p>
-              
-              {/* Nota de muestra pequeña */}
-              {financeInsight.notes && financeInsight.notes.some(note => note.includes('Muestra chica')) && (
-                <p className="text-sm text-gray-600 italic">
-                  {t('finance.notes.smallSample')}
-                </p>
-              )}
-            </div>
+            {/* Contexto CAC/AOV */}
+            <p className="text-sm text-gray-600 mb-2">
+              {t('finance.copy.ratio', { ratio: cacRatio })}
+            </p>
+            
+            <p className="text-xs text-gray-500">
+              {t('finance.copy.caveat')}
+            </p>
           </div>
 
-          {/* Acciones financieras */}
+          {/* Acciones financieras - Simplificadas */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t('finance.actionsTitleFinance')}
             </h3>
-          <div className="space-y-3">
-              {financeInsight.actions.map((action, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-blue-600 text-sm font-semibold">{index + 1}</span>
-                  </div>
-                  <p className="text-gray-700">{action}</p>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-blue-600 text-sm font-semibold">1</span>
                 </div>
-              ))}
+                <p className="text-gray-700">Mejorá tu página de producto: clarificá valor y agregá prueba social</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-blue-600 text-sm font-semibold">2</span>
+                </div>
+                <p className="text-gray-700">Optimizá el checkout: menos campos, costos claros, contacto visible</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-blue-600 text-sm font-semibold">3</span>
+                </div>
+                <p className="text-gray-700">Subí el ticket promedio: packs, envío gratis, upsells</p>
+              </div>
             </div>
           </div>
 
@@ -318,11 +353,19 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
         {/* Acciones secundarias */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button 
-            onClick={() => setShowSaveDialog(true)}
+            onClick={handleSaveClick}
             className="btn-outline"
           >
             {t('buttons.loginSave')}
           </button>
+          {user && (
+            <button 
+              onClick={() => setShowHistoryModal(true)}
+              className="btn-outline"
+            >
+              Ver historial
+            </button>
+          )}
           <button 
             onClick={onNewDiagnosis}
             className="btn-outline"
@@ -331,6 +374,35 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData }: Resul
           </button>
         </div>
       </div>
+
+      {/* Modal de guardar */}
+      <SaveModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onSave={handleSave}
+        diagnosisData={{
+          dx: result.dx,
+          visits: diagnosisData.visits,
+          carts: diagnosisData.carts,
+          orders: diagnosisData.orders,
+          atc: result.atc,
+          cb: result.cb,
+          cr: result.cr,
+          sales: diagnosisData.sales || null,
+          adspend: diagnosisData.adspend || null,
+          ordersCount: diagnosisData.ordersCount || null,
+          aov: result.aov || null,
+          roas: result.roas || null,
+          cac: result.cac || null
+        }}
+      />
+
+      {/* Modal de historial */}
+      <HistoryModal
+        isOpen={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+        onEditDiagnosis={handleEditFromHistory}
+      />
     </div>
   )
 }
