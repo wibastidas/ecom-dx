@@ -22,23 +22,15 @@ export default function Home() {
 
   // Scroll automático al inicio cuando se muestre el resultado
   useEffect(() => {
-    console.log('🔄 useEffect result changed:', result)
     if (result) {
-      console.log('📱 Scrolling to top because result exists')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [result])
 
   const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => {
-    console.log('🚀 HANDLE DIAGNOSIS CALLED!')
-    console.log('🔍 Diagnóstico iniciado:', { visits, carts, purchases, sales, adspend, ordersCount })
-    
     try {
       const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
-      console.log('📊 Resultado del diagnóstico:', diagnosis)
-      console.log('🎯 Setting result state...')
       setResult(diagnosis)
-      console.log('✅ Result state set!')
       
       // Guardar datos de diagnóstico para el modal de guardar
       setDiagnosisData({
@@ -75,9 +67,6 @@ export default function Home() {
     // Scroll automático al inicio cuando se regrese al formulario
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
-
-  console.log('🎨 RENDER - result state:', result)
-  console.log('🎨 RENDER - showing form:', !result)
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

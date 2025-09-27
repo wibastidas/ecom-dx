@@ -37,8 +37,6 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
 
   // Función simple para manejar cambios en los inputs
   const handleInputChange = (field: string, value: string) => {
-    console.log(`🔄 handleInputChange: ${field} = "${value}"`)
-    
     // Para campos numéricos, solo permitir números
     if (['visits', 'carts', 'purchases', 'orders'].includes(field)) {
       const numericValue = value.replace(/[^0-9]/g, '')
@@ -49,16 +47,10 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
         cleanedValue = numericValue.replace(/^0+/, '') || '0'
       }
       
-      console.log(`   → numericValue: "${numericValue}", cleanedValue: "${cleanedValue}"`)
-      
-      setFormData(prev => {
-        const newData = {
-          ...prev,
-          [field]: cleanedValue
-        }
-        console.log(`   → new formData:`, newData)
-        return newData
-      })
+      setFormData(prev => ({
+        ...prev,
+        [field]: cleanedValue
+      }))
     } else {
       // Para campos monetarios, permitir números y punto decimal
       const numericValue = value.replace(/[^0-9.]/g, '')
@@ -108,26 +100,11 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
   
   // Validación simple: todos los campos deben ser números positivos
   const isFormValid = visits > 0 && carts > 0 && purchases > 0 && carts <= visits && purchases <= carts
-
-  // Debug simple
-  console.log('🔍 Form validation:', {
-    formData,
-    visits,
-    carts,
-    purchases,
-    sales_total: Number(formData.sales_total) || 0,
-    ad_spend: Number(formData.ad_spend) || 0,
-    orders: Number(formData.orders) || 0,
-    isValid: isFormValid
-  })
   
 
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('🚀 FORM SUBMIT TRIGGERED!')
-    console.log('📝 Datos del formulario:', formData)
-    console.log('🔍 Validación:', { visits, carts, purchases, isFormValid })
     setIsSubmitting(true)
     
     try {
@@ -146,10 +123,7 @@ export default function MetricsForm({ onDiagnosis }: MetricsFormProps) {
       trackDiagnosisSubmit(visits, carts, purchases)
       
       // Trigger diagnosis con todos los datos
-      console.log('🎯 Llamando onDiagnosis con:', { visits, carts, purchases, sales_total: diagnosisData.sales_total, ad_spend: diagnosisData.ad_spend, orders: diagnosisData.orders })
       onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders)
-      
-      console.log('📊 Datos completos para diagnóstico:', diagnosisData)
     } catch (error) {
       console.error('Error submitting form:', error)
     } finally {

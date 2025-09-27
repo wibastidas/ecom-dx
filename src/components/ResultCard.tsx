@@ -38,7 +38,6 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
   useEffect(() => {
     // Solo ejecutar si el usuario cambió de logueado a no logueado
     if (previousUser && !user) {
-      console.log('🚪 Usuario cerró sesión, volviendo al Home')
       onNewDiagnosis()
     }
     setPreviousUser(user)
@@ -65,7 +64,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
   const handleSave = async (saveData: { yyyymm: string, monthLabel: string, note: string }) => {
     try {
       // TODO: Implementar guardado en Firebase
-      console.log('Guardando:', { ...saveData, result })
+      // TODO: Implementar guardado en Firebase
       setShowSaveModal(false)
       // TODO: Mostrar toast de éxito
     } catch (error) {
@@ -77,7 +76,6 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
   // Manejar edición desde historial
   const handleEditFromHistory = (historyItem: any) => {
     // TODO: Implementar prellenado del formulario con datos del historial
-    console.log('Editando desde historial:', historyItem)
     onEditData()
   }
 
