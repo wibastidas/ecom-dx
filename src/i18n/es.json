@@ -37,7 +37,7 @@
   "notes": {
     "fast": "⚡ Instantáneo · 📊 Tasas clave · 🎯 Recomendaciones",
     "financeNote": "Estimaciones sin atribución por canal. Úsalas como guía.",
-    "refs": "Referencias orientativas: ATC ≥ 3% · Cart→Buy ≥ 30% · CR 2–3% (según rubro)"
+    "refs": "Estos son los valores normales de la industria: 4-6% de visitantes agregan al carrito, 15-25% de carritos se convierten en compra, y 1% de visitantes compran directamente."
   },
   "validation": {
     "required": "Ingresá un número.",
@@ -60,6 +60,18 @@
     "AOV": "AOV (Average Order Value) = Valor promedio por pedido",
     "ROAS": "ROAS (Return on Ad Spend) = Retorno de inversión publicitaria",
     "CAC": "CAC (Customer Acquisition Cost) = Costo de adquirir un cliente"
+  },
+  "metrics": {
+    "atcTitle": "% Carritos vs. Visitas",
+    "cbTitle": "% Compras vs. Carritos", 
+    "crTitle": "Tasa de Conversión",
+    "atcNormal": "Normal entre un 4% y un 6%",
+    "cbNormal": "Normal entre un 15% y un 25%",
+    "crNormal": "Normal 1%",
+    "below": "Por Debajo → Hay que mejorar",
+    "above": "Por Encima → Excelente",
+    "equal": "En el rango normal",
+    "vsAverage": "vs promedio industria"
   },
   "bottlenecks": {
     "trafico": "Tráfico",

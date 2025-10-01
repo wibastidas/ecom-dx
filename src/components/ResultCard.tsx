@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { DiagnosisResult } from '@/lib/diagnosis'
 import { evaluateFinance, FinanceInsight } from '@/lib/finance'
 import { financeLevel } from '@/lib/financeLevel'
+import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
 import SaveModal from './SaveModal'
@@ -154,36 +155,91 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         {/* Título y subtítulo */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Tu cuello principal:{' '}
-            <span className="text-blue-600">
-              {t(`bottlenecks.${result.dx}`)}
-            </span>
+            {result.dx === 'escalar' ? (
+              <>
+                ¡Excelente!{' '}
+                <span className="text-green-600">
+                  Todo está funcionando bien
+                </span>
+              </>
+            ) : (
+              <>
+                Tu cuello principal:{' '}
+                <span className="text-blue-600">
+                  {t(`bottlenecks.${result.dx}`)}
+                </span>
+              </>
+            )}
           </h1>
           <p className="text-xl text-gray-600">
             {t('result.sub', { msg: getMessage(result.dx) })}
           </p>
         </div>
 
-        {/* KPIs con tooltips */}
+        {/* KPIs con tooltips y comparación vs promedio */}
         <div className="grid grid-cols-3 gap-1 mb-8">
-          <div className="text-center p-4 bg-blue-50 rounded-lg min-w-0">
-              <Tooltip content={t('tooltips.ATC')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">ATC ⓘ</div>
-              </Tooltip>
-            <div className="text-2xl font-bold text-blue-600">{(result.atc * 100).toFixed(1)}%</div>
-          </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg min-w-0">
-              <Tooltip content={t('tooltips.CB')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">Cart→Buy ⓘ</div>
-              </Tooltip>
-            <div className="text-2xl font-bold text-green-600">{(result.cb * 100).toFixed(1)}%</div>
-          </div>
-          <div className="text-center p-4  bg-purple-50 rounded-lg min-w-0">
-              <Tooltip content={t('tooltips.CR')}>
-              <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">CR ⓘ</div>
-              </Tooltip>
-            <div className="text-2xl font-bold text-purple-600">{(result.cr * 100).toFixed(1)}%</div>
-          </div>
+          {/* ATC */}
+          {(() => {
+            const atcComparison = getATCComparison(result.atc * 100)
+            return (
+              <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-lg min-w-0`}>
+                <Tooltip content={t('tooltips.ATC')}>
+                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.atcTitle')} ⓘ</div>
+                </Tooltip>
+                <div className={`text-2xl font-bold ${atcComparison.colorClass} mb-2`}>
+                  {(result.atc * 100).toFixed(1)}%
+                </div>
+                <div className={`text-xs font-medium ${atcComparison.colorClass} mb-1`}>
+                  {atcComparison.normalRange}
+                </div>
+                <div className={`text-sm font-bold ${atcComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                  {atcComparison.statusMessage}
+                </div>
+              </div>
+            )
+          })()}
+          
+          {/* Cart→Buy */}
+          {(() => {
+            const cbComparison = getCBComparison(result.cb * 100)
+            return (
+              <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-lg min-w-0`}>
+                <Tooltip content={t('tooltips.CB')}>
+                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.cbTitle')} ⓘ</div>
+                </Tooltip>
+                <div className={`text-2xl font-bold ${cbComparison.colorClass} mb-2`}>
+                  {(result.cb * 100).toFixed(1)}%
+                </div>
+                <div className={`text-xs font-medium ${cbComparison.colorClass} mb-1`}>
+                  {cbComparison.normalRange}
+                </div>
+                <div className={`text-sm font-bold ${cbComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                  {cbComparison.statusMessage}
+                </div>
+              </div>
+            )
+          })()}
+          
+          {/* CR */}
+          {(() => {
+            const crComparison = getCRComparison(result.cr * 100)
+            return (
+              <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-lg min-w-0`}>
+                <Tooltip content={t('tooltips.CR')}>
+                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.crTitle')} ⓘ</div>
+                </Tooltip>
+                <div className={`text-2xl font-bold ${crComparison.colorClass} mb-2`}>
+                  {(result.cr * 100).toFixed(1)}%
+                </div>
+                <div className={`text-xs font-medium ${crComparison.colorClass} mb-1`}>
+                  {crComparison.normalRange}
+                </div>
+                <div className={`text-sm font-bold ${crComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                  {crComparison.statusMessage}
+                </div>
+              </div>
+            )
+          })()}
         </div>
 
         {/* Banda de referencias */}
@@ -201,13 +257,13 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           <p className="text-gray-700 mb-4">
             {t('result.commLead')}
           </p>
-          <p className="text-sm text-gray-600">
+          <p className={`text-sm ${result.dx === 'escalar' ? 'text-green-700 font-semibold bg-white px-3 py-2 rounded-lg border border-green-300' : 'text-gray-600'}`}>
             {getCommunicationInsight(result.dx)}
           </p>
-      </div>
+        </div>
 
         {/* Plan de 3 acciones básicas */}
-                <div>
+        <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             {t('finance.actionsTitleBasic')}
           </h3>
@@ -290,7 +346,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             </p>
             
             {/* Muestra chica */}
-            {diagnosisData.ordersCount && diagnosisData.ordersCount < 10 && (
+            {(diagnosisData.ordersCount && diagnosisData.ordersCount < 10) && (
               <p className="text-xs text-gray-500 mt-2">
                 {t('finance.notes.smallSample')}
               </p>
@@ -301,8 +357,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t('finance.actionsTitleFinance')}
-          </h3>
-          <div className="space-y-3">
+            </h3>
+            <div className="space-y-3">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-blue-600 text-sm font-semibold">1</span>
@@ -324,13 +380,13 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             </div>
           </div>
 
-          {/* Botón recalcular */}
+          {/* Botón guardar diagnóstico */}
           <div className="text-center">
-            <button
-              onClick={onEditData}
+            <button 
+              onClick={handleSaveClick}
               className="btn-outline"
             >
-              {t('finance.cta')}
+              {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
             </button>
           </div>
         </div>
@@ -372,12 +428,6 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
 
         {/* Acciones secundarias */}
         <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
-          <button 
-            onClick={handleSaveClick}
-            className="btn-outline"
-          >
-            {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
-          </button>
           {user && (
             <button 
               onClick={() => setShowHistoryModal(true)}
@@ -392,7 +442,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           >
             🔄 Hacer nuevo diagnóstico
           </button>
-          </div>
+        </div>
 
         {/* Link discreto para compartir */}
         <div className="text-center mt-8 pt-6 border-t border-gray-200">
@@ -449,7 +499,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           cb: result.cb,
           cr: result.cr
         }}
-          />
+      />
     </div>
   )
 }

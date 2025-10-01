@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { diagnose, DiagnosisResult } from '@/lib/diagnosis'
 import { financeLevel } from '@/lib/financeLevel'
+import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
 import { HistoryItem } from '@/lib/saveService'
@@ -130,36 +131,91 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
             {/* Título y subtítulo */}
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Tu cuello principal:{' '}
-                <span className="text-blue-600">
-                  {t(`bottlenecks.${diagnosis.dx}`)}
-                </span>
+                {diagnosis.dx === 'escalar' ? (
+                  <>
+                    ¡Excelente!{' '}
+                    <span className="text-green-600">
+                      Todo estaba funcionando bien
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Tu cuello principal:{' '}
+                    <span className="text-blue-600">
+                      {t(`bottlenecks.${diagnosis.dx}`)}
+                    </span>
+                  </>
+                )}
               </h3>
               <p className="text-lg text-gray-600">
                 {t('result.sub', { msg: getMessage(diagnosis.dx) })}
               </p>
             </div>
 
-            {/* KPIs con tooltips */}
+            {/* KPIs con tooltips y comparación vs promedio */}
             <div className="grid grid-cols-3 gap-1 mb-6">
-              <div className="text-center p-4 bg-blue-50 rounded-lg min-w-0">
-                <Tooltip content={t('tooltips.ATC')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">ATC ⓘ</div>
-                </Tooltip>
-                <div className="text-2xl font-bold text-blue-600">{(diagnosis.atc * 100).toFixed(1)}%</div>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg min-w-0">
-                <Tooltip content={t('tooltips.CB')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">Cart→Buy ⓘ</div>
-                </Tooltip>
-                <div className="text-2xl font-bold text-green-600">{(diagnosis.cb * 100).toFixed(1)}%</div>
-              </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg min-w-0">
-                <Tooltip content={t('tooltips.CR')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">CR ⓘ</div>
-                </Tooltip>
-                <div className="text-2xl font-bold text-purple-600">{(diagnosis.cr * 100).toFixed(1)}%</div>
-              </div>
+              {/* ATC */}
+              {(() => {
+                const atcComparison = getATCComparison(diagnosis.atc * 100)
+                return (
+                  <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-lg min-w-0`}>
+                    <Tooltip content={t('tooltips.ATC')}>
+                      <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.atcTitle')} ⓘ</div>
+                    </Tooltip>
+                    <div className={`text-2xl font-bold ${atcComparison.colorClass} mb-2`}>
+                      {(diagnosis.atc * 100).toFixed(1)}%
+                    </div>
+                    <div className={`text-xs font-medium ${atcComparison.colorClass} mb-1`}>
+                      {atcComparison.normalRange}
+                    </div>
+                    <div className={`text-sm font-bold ${atcComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                      {atcComparison.statusMessage}
+                    </div>
+                  </div>
+                )
+              })()}
+              
+              {/* Cart→Buy */}
+              {(() => {
+                const cbComparison = getCBComparison(diagnosis.cb * 100)
+                return (
+                  <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-lg min-w-0`}>
+                    <Tooltip content={t('tooltips.CB')}>
+                      <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.cbTitle')} ⓘ</div>
+                    </Tooltip>
+                    <div className={`text-2xl font-bold ${cbComparison.colorClass} mb-2`}>
+                      {(diagnosis.cb * 100).toFixed(1)}%
+                    </div>
+                    <div className={`text-xs font-medium ${cbComparison.colorClass} mb-1`}>
+                      {cbComparison.normalRange}
+                    </div>
+                    <div className={`text-sm font-bold ${cbComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                      {cbComparison.statusMessage}
+                    </div>
+                  </div>
+                )
+              })()}
+              
+              {/* CR */}
+              {(() => {
+                const crComparison = getCRComparison(diagnosis.cr * 100)
+                return (
+                  <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-lg min-w-0`}>
+                    <Tooltip content={t('tooltips.CR')}>
+                      <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.crTitle')} ⓘ</div>
+                    </Tooltip>
+                    <div className={`text-2xl font-bold ${crComparison.colorClass} mb-2`}>
+                      {(diagnosis.cr * 100).toFixed(1)}%
+                    </div>
+                    <div className={`text-xs font-medium ${crComparison.colorClass} mb-1`}>
+                      {crComparison.normalRange}
+                    </div>
+                    <div className={`text-sm font-bold ${crComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                      {crComparison.statusMessage}
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
 
             {/* Banda de referencias */}
@@ -177,7 +233,7 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
               <p className="text-gray-700 mb-2">
                 {t('result.commLead')}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className={`text-sm ${diagnosis.dx === 'escalar' ? 'text-green-700 font-semibold bg-white px-3 py-2 rounded-lg border border-green-300' : 'text-gray-600'}`}>
                 {getMessage(diagnosis.dx)}
               </p>
             </div>
