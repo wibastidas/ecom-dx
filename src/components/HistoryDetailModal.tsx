@@ -168,7 +168,7 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
                     <div className={`text-xs font-medium ${atcComparison.colorClass} mb-1`}>
                       {atcComparison.normalRange}
                     </div>
-                    <div className={`text-sm font-bold ${atcComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <div className={`text-sm font-bold ${atcComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
                       {atcComparison.statusMessage}
                     </div>
                   </div>
@@ -189,7 +189,7 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
                     <div className={`text-xs font-medium ${cbComparison.colorClass} mb-1`}>
                       {cbComparison.normalRange}
                     </div>
-                    <div className={`text-sm font-bold ${cbComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <div className={`text-sm font-bold ${cbComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
                       {cbComparison.statusMessage}
                     </div>
                   </div>
@@ -210,7 +210,7 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
                     <div className={`text-xs font-medium ${crComparison.colorClass} mb-1`}>
                       {crComparison.normalRange}
                     </div>
-                    <div className={`text-sm font-bold ${crComparison.colorClass} bg-white px-2 py-1 rounded-md border-2 ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <div className={`text-sm font-bold ${crComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
                       {crComparison.statusMessage}
                     </div>
                   </div>
