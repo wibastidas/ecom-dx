@@ -1,5 +1,6 @@
 'use client'
 
+// 🚀 Deploy automático - Mejoras implementadas
 import { useState, useEffect } from 'react'
 import MetricsForm from '@/components/MetricsForm'
 import ResultCard from '@/components/ResultCard'
