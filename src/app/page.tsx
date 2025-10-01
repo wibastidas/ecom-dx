@@ -114,3 +114,4 @@ export default function Home() {
     </main>
   )
 }
+// Deploy automático funcionando - Wed Oct  1 19:24:04 -03 2025
