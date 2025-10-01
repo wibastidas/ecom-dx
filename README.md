@@ -170,15 +170,34 @@ Para leads de mayor calidad:
 
 ## 🚀 Deploy
 
-1. **Vercel** (recomendado):
-   ```bash
-   npm run build
-   # Conectar repositorio a Vercel
-   ```
+### **Deploy Automático (Recomendado)**
+1. **Conectar repositorio a Vercel**:
+   - Ve a [vercel.com/dashboard](https://vercel.com/dashboard)
+   - Settings → Git → Conectar GitHub
+   - Seleccionar repositorio `wibastidas/ecom-dx`
+   - Branch: `main`
+   - Cada `git push origin main` activa deploy automático
 
-2. **Configurar dominio**:
-   - Subdominio: `app.williambastidas.com`
-   - Variables de entorno en Vercel
+### **Deploy Manual (Alternativo)**
+Si el deploy automático no funciona, usar CLI:
+```bash
+cd /Users/williambastidas/Documents/Fuentes/ecom-dx
+npx vercel --prod
+```
+
+### **Configuración de Producción**
+- **Dominio**: `ecom-dx.vercel.app`
+- **Variables de entorno**: Configuradas en Vercel Dashboard
+- **Framework**: Next.js 15.5.3
+- **Build command**: `npm run build`
+- **Output directory**: `.next`
+
+### **Troubleshooting Deploy**
+Si el deploy automático no funciona:
+1. **Verificar conexión Git**: Settings → Git → Debe estar conectado a GitHub
+2. **Verificar branch**: Debe ser `main` (no `master`)
+3. **Usar deploy manual**: `npx vercel --prod`
+4. **Verificar logs**: `npx vercel inspect [deployment-url] --logs`
 
 ## 📋 Estado del Proyecto
 
@@ -197,10 +216,8 @@ Para leads de mayor calidad:
 - [ ] Autenticación Google (configuración pendiente)
 
 ### ⏳ Pendiente
-- [ ] Deploy en Vercel
-- [ ] Configuración de dominio
+- [ ] Configuración de dominio personalizado
 - [ ] Reglas de seguridad Firestore
-- [ ] Variables de entorno de producción
 
 ## 📄 Licencia
 
