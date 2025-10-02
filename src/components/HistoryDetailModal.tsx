@@ -153,7 +153,7 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
             </div>
 
             {/* KPIs con tooltips y comparación vs promedio */}
-            <div className="flex gap-1 mb-6">
+            <div className="flex gap-1 mb-6 h-[250px]">
               {/* ATC */}
               {(() => {
                 const atcComparison = getATCComparison(diagnosis.atc * 100)
