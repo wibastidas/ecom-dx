@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth'
 import { useToastContext } from '@/components/ToastProvider'
 import useTranslations from '@/hooks/useTranslations'
 import HistoryDetailModal from './HistoryDetailModal'
+import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
 
 interface HistoryModalProps {
   isOpen: boolean
@@ -86,6 +87,35 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
     return labels[dx as keyof typeof labels] || dx
   }
 
+  const getOverallStatus = (item: HistoryItem) => {
+    const atcComparison = getATCComparison(item.atc * 100)
+    const cbComparison = getCBComparison(item.cb * 100)
+    const crComparison = getCRComparison(item.cr * 100)
+    
+    // Contar cuántas métricas están por encima, en rango, o por debajo
+    const aboveCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'above').length
+    const normalCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'normal').length
+    const belowCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'below').length
+    
+    if (aboveCount >= 2) {
+      return { status: 'excellent', label: 'Por encima del promedio', color: 'green' }
+    } else if (normalCount >= 2 || (aboveCount === 1 && normalCount === 1)) {
+      return { status: 'good', label: 'En el rango normal', color: 'blue' }
+    } else {
+      return { status: 'needs_improvement', label: 'Por debajo del promedio', color: 'red' }
+    }
+  }
+
+  const getDiagnosisMessage = (dx: string) => {
+    const messages = {
+      trafico: 'Pocas visitas y baja conversión',
+      pagina_oferta: 'Buen tráfico pero baja conversión a carrito',
+      checkout_confianza: 'Buena conversión a carrito pero baja conversión de carrito',
+      escalar: '¡Excelente! Todo funcionando bien'
+    }
+    return messages[dx as keyof typeof messages] || 'Diagnóstico realizado'
+  }
+
   if (!isOpen) return null
 
   return (
@@ -137,8 +167,12 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                         <h3 className="font-semibold text-gray-900 text-lg">
                           {formatDate(item.yyyymm)}
                         </h3>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                          Problema: {getDiagnosisLabel(item.dx)}
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          item.dx === 'escalar' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {item.dx === 'escalar' ? '¡Excelente!' : `Problema: ${getDiagnosisLabel(item.dx)}`}
                         </span>
                         {item.note && (
                           <span className="text-sm text-gray-600 italic">
@@ -147,31 +181,23 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                         )}
                       </div>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mb-3">
-                        <div>
-                          <span className="font-medium">ATC:</span> {(item.atc * 100).toFixed(1)}%
-                        </div>
-                        <div>
-                          <span className="font-medium">Cart→Buy:</span> {(item.cb * 100).toFixed(1)}%
-                        </div>
-                        <div>
-                          <span className="font-medium">CR:</span> {(item.cr * 100).toFixed(1)}%
-                        </div>
+                      <div className="mb-3">
+                        <p className="text-gray-700 text-sm mb-2">
+                          {getDiagnosisMessage(item.dx)}
+                        </p>
+                        {(() => {
+                          const overallStatus = getOverallStatus(item)
+                          return (
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              overallStatus.color === 'green' ? 'bg-green-100 text-green-800' :
+                              overallStatus.color === 'blue' ? 'bg-blue-100 text-blue-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              Estado: {overallStatus.label}
+                            </span>
+                          )
+                        })()}
                       </div>
-
-                      {item.aov && item.roas && item.cac && (
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600">
-                          <div>
-                            <span className="font-medium">AOV:</span> ${item.aov.toFixed(2)}
-                          </div>
-                          <div>
-                            <span className="font-medium">ROAS:</span> {item.roas.toFixed(2)}
-                          </div>
-                          <div>
-                            <span className="font-medium">CAC:</span> ${item.cac.toFixed(2)}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2 sm:ml-4">
@@ -184,7 +210,7 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                       <button
                         onClick={() => handleDelete(item.yyyymm)}
                         disabled={deleting === item.yyyymm}
-                        className="px-3 py-1.5 bg-red-600 text-white text-xs rounded-md hover:bg-red-700 disabled:opacity-50 transition-colors font-medium"
+                        className="px-3 py-1.5 border border-red-300 text-red-600 text-xs rounded-md hover:bg-red-50 disabled:opacity-50 transition-colors font-medium"
                       >
                         {deleting === item.yyyymm ? 'Eliminando...' : 'Eliminar'}
                       </button>
