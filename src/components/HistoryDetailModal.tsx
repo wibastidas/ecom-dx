@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { diagnose, DiagnosisResult } from '@/lib/diagnosis'
 import { financeLevel } from '@/lib/financeLevel'
 import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
+import { formatCurrency, formatNumber } from '@/lib/formatters'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
 import { HistoryItem } from '@/lib/saveService'
@@ -353,15 +354,15 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
                   <div className="space-y-0">
                     <div className="p-4 border-b border-gray-200">
                       <div className="text-sm font-medium text-gray-500 mb-1">Visitas únicas</div>
-                      <div className="text-lg font-semibold text-gray-900">{historyItem.visits.toLocaleString()}</div>
+                      <div className="text-lg font-semibold text-gray-900">{formatNumber(historyItem.visits)}</div>
                     </div>
                     <div className="p-4 border-b border-gray-200">
                       <div className="text-sm font-medium text-gray-500 mb-1">Carritos iniciados</div>
-                      <div className="text-lg font-semibold text-gray-900">{historyItem.carts.toLocaleString()}</div>
+                      <div className="text-lg font-semibold text-gray-900">{formatNumber(historyItem.carts)}</div>
                     </div>
                     <div className="p-4">
                       <div className="text-sm font-medium text-gray-500 mb-1">Compras completadas</div>
-                      <div className="text-lg font-semibold text-gray-900">{historyItem.orders.toLocaleString()}</div>
+                      <div className="text-lg font-semibold text-gray-900">{formatNumber(historyItem.orders)}</div>
                     </div>
                   </div>
                 </div>
@@ -378,19 +379,19 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
                       {historyItem.sales && (
                         <div className="p-4 border-b border-gray-200">
                           <div className="text-sm font-medium text-gray-500 mb-1">Ventas totales (USD)</div>
-                          <div className="text-lg font-semibold text-gray-900">${historyItem.sales.toLocaleString()}</div>
+                          <div className="text-lg font-semibold text-gray-900">${formatCurrency(historyItem.sales)}</div>
                         </div>
                       )}
                       {historyItem.adspend && (
                         <div className="p-4 border-b border-gray-200">
                           <div className="text-sm font-medium text-gray-500 mb-1">Gasto en publicidad (USD)</div>
-                          <div className="text-lg font-semibold text-gray-900">${historyItem.adspend.toLocaleString()}</div>
+                          <div className="text-lg font-semibold text-gray-900">${formatCurrency(historyItem.adspend)}</div>
                         </div>
                       )}
                       {historyItem.ordersCount && (
                         <div className="p-4">
                           <div className="text-sm font-medium text-gray-500 mb-1">Número de pedidos</div>
-                          <div className="text-lg font-semibold text-gray-900">{historyItem.ordersCount.toLocaleString()}</div>
+                          <div className="text-lg font-semibold text-gray-900">{formatNumber(historyItem.ordersCount)}</div>
                         </div>
                       )}
                     </div>

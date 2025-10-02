@@ -5,6 +5,7 @@ import { DiagnosisResult } from '@/lib/diagnosis'
 import { evaluateFinance, FinanceInsight } from '@/lib/finance'
 import { financeLevel } from '@/lib/financeLevel'
 import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
+import { formatCurrency } from '@/lib/formatters'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
 import SaveModal from './SaveModal'
@@ -301,7 +302,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
                   <span className="cursor-help">{t('finance.aov')} ⓘ</span>
                 </Tooltip>
               </span>
-              <span className="text-xl font-bold text-gray-900">${result.aov?.toFixed(2)}</span>
+              <span className="text-xl font-bold text-gray-900">${formatCurrency(result.aov || 0)}</span>
             </div>
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <span className="text-gray-700">
@@ -317,7 +318,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
                   <span className="cursor-help">{t('finance.cac')} ⓘ</span>
                 </Tooltip>
               </span>
-              <span className="text-xl font-bold text-gray-900">${result.cac?.toFixed(2)}</span>
+              <span className="text-xl font-bold text-gray-900">${formatCurrency(result.cac || 0)}</span>
             </div>
           </div>
 

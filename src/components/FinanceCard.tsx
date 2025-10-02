@@ -1,6 +1,7 @@
 'use client'
 
 import { FinancialMetrics, FinancialAlert, getROASColor, getROASBadgeColor } from '@/lib/financial'
+import { formatCurrency } from '@/lib/formatters'
 
 interface FinanceCardProps {
   metrics: FinancialMetrics & { alerts: FinancialAlert[] }
@@ -41,14 +42,14 @@ export default function FinanceCard({ metrics }: FinanceCardProps) {
         
         <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="text-3xl font-bold text-green-600 mb-2">
-            {aov ? `$${aov.toFixed(2)}` : 'N/A'}
+            {aov ? `$${formatCurrency(aov)}` : 'N/A'}
           </div>
           <div className="text-sm text-gray-500 font-medium">Ticket Medio (AOV)</div>
         </div>
         
         <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="text-3xl font-bold text-purple-600 mb-2">
-            {cac ? `$${cac.toFixed(2)}` : 'N/A'}
+            {cac ? `$${formatCurrency(cac)}` : 'N/A'}
           </div>
           <div className="text-sm text-gray-500 font-medium">CAC Aprox.</div>
         </div>
