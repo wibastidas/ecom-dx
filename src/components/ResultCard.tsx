@@ -182,9 +182,9 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           {(() => {
             const atcComparison = getATCComparison(result.atc * 100)
             return (
-              <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-lg min-w-0`}>
+              <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
                 <Tooltip content={t('tooltips.ATC')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.atcTitle')} ⓘ</div>
+                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.atcTitle')} ⓘ</div>
                 </Tooltip>
                 <div className={`text-2xl font-bold ${atcComparison.colorClass} mb-2`}>
                   {(result.atc * 100).toFixed(1)}%
@@ -192,8 +192,10 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
                 <div className={`text-xs font-medium ${atcComparison.colorClass} mb-1`}>
                   {atcComparison.normalRange}
                 </div>
-                <div className={`text-sm font-bold ${atcComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                  {atcComparison.statusMessage}
+                <div className="mt-auto">
+                  <div className={`text-xs sm:text-sm font-bold ${atcComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <span className="leading-tight">{atcComparison.statusMessage}</span>
+                  </div>
                 </div>
               </div>
             )
@@ -203,9 +205,9 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           {(() => {
             const cbComparison = getCBComparison(result.cb * 100)
             return (
-              <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-lg min-w-0`}>
+              <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
                 <Tooltip content={t('tooltips.CB')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.cbTitle')} ⓘ</div>
+                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.cbTitle')} ⓘ</div>
                 </Tooltip>
                 <div className={`text-2xl font-bold ${cbComparison.colorClass} mb-2`}>
                   {(result.cb * 100).toFixed(1)}%
@@ -213,8 +215,10 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
                 <div className={`text-xs font-medium ${cbComparison.colorClass} mb-1`}>
                   {cbComparison.normalRange}
                 </div>
-                <div className={`text-sm font-bold ${cbComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                  {cbComparison.statusMessage}
+                <div className="mt-auto">
+                  <div className={`text-xs sm:text-sm font-bold ${cbComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <span className="leading-tight">{cbComparison.statusMessage}</span>
+                  </div>
                 </div>
               </div>
             )
@@ -224,9 +228,9 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           {(() => {
             const crComparison = getCRComparison(result.cr * 100)
             return (
-              <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-lg min-w-0`}>
+              <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
                 <Tooltip content={t('tooltips.CR')}>
-                  <div className="text-sm text-gray-600 cursor-help mb-2 whitespace-nowrap">{t('metrics.crTitle')} ⓘ</div>
+                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.crTitle')} ⓘ</div>
                 </Tooltip>
                 <div className={`text-2xl font-bold ${crComparison.colorClass} mb-2`}>
                   {(result.cr * 100).toFixed(1)}%
@@ -234,8 +238,10 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
                 <div className={`text-xs font-medium ${crComparison.colorClass} mb-1`}>
                   {crComparison.normalRange}
                 </div>
-                <div className={`text-sm font-bold ${crComparison.colorClass} bg-white px-3 py-2 rounded-md border-2 min-h-[2.5rem] flex items-center justify-center text-center ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                  {crComparison.statusMessage}
+                <div className="mt-auto">
+                  <div className={`text-xs sm:text-sm font-bold ${crComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
+                    <span className="leading-tight">{crComparison.statusMessage}</span>
+                  </div>
                 </div>
               </div>
             )

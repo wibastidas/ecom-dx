@@ -62,8 +62,8 @@
     "CAC": "CAC (Customer Acquisition Cost) = Costo de adquirir un cliente"
   },
   "metrics": {
-    "atcTitle": "% Carritos vs. Visitas",
-    "cbTitle": "% Compras vs. Carritos", 
+    "atcTitle": "Carritos vs. Visitas",
+    "cbTitle": "Compras vs. Carritos", 
     "crTitle": "Tasa de Conversión",
     "atcNormal": "Normal entre un 4% y un 6%",
     "cbNormal": "Normal entre un 15% y un 25%",
