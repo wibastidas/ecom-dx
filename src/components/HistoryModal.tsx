@@ -94,12 +94,12 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
     
     // Contar cuántas métricas están por encima, en rango, o por debajo
     const aboveCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'above').length
-    const normalCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'normal').length
+    const equalCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'equal').length
     const belowCount = [atcComparison.status, cbComparison.status, crComparison.status].filter(s => s === 'below').length
     
     if (aboveCount >= 2) {
       return { status: 'excellent', label: 'Por encima del promedio', color: 'green' }
-    } else if (normalCount >= 2 || (aboveCount === 1 && normalCount === 1)) {
+    } else if (equalCount >= 2 || (aboveCount === 1 && equalCount === 1)) {
       return { status: 'good', label: 'En el rango normal', color: 'blue' }
     } else {
       return { status: 'needs_improvement', label: 'Por debajo del promedio', color: 'red' }
