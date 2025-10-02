@@ -337,6 +337,69 @@ export default function HistoryDetailModal({ isOpen, onClose, historyItem }: His
             </div>
           )}
 
+          {/* Datos originales ingresados por el usuario */}
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h4 className="text-xl font-bold text-gray-900 mb-6">
+              Datos ingresados
+            </h4>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Tabla 1: Datos básicos de e-commerce */}
+              <div>
+                <h5 className="text-lg font-semibold text-gray-800 mb-4">
+                  📊 Datos básicos de e-commerce
+                </h5>
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                  <div className="space-y-0">
+                    <div className="p-4 border-b border-gray-200">
+                      <div className="text-sm font-medium text-gray-500 mb-1">Visitas únicas</div>
+                      <div className="text-lg font-semibold text-gray-900">{historyItem.visits.toLocaleString()}</div>
+                    </div>
+                    <div className="p-4 border-b border-gray-200">
+                      <div className="text-sm font-medium text-gray-500 mb-1">Carritos iniciados</div>
+                      <div className="text-lg font-semibold text-gray-900">{historyItem.carts.toLocaleString()}</div>
+                    </div>
+                    <div className="p-4">
+                      <div className="text-sm font-medium text-gray-500 mb-1">Compras completadas</div>
+                      <div className="text-lg font-semibold text-gray-900">{historyItem.orders.toLocaleString()}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tabla 2: Datos financieros (si están disponibles) */}
+              {(historyItem.sales || historyItem.adspend || historyItem.ordersCount) && (
+                <div>
+                  <h5 className="text-lg font-semibold text-gray-800 mb-4">
+                    💰 Datos financieros
+                  </h5>
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div className="space-y-0">
+                      {historyItem.sales && (
+                        <div className="p-4 border-b border-gray-200">
+                          <div className="text-sm font-medium text-gray-500 mb-1">Ventas totales (USD)</div>
+                          <div className="text-lg font-semibold text-gray-900">${historyItem.sales.toLocaleString()}</div>
+                        </div>
+                      )}
+                      {historyItem.adspend && (
+                        <div className="p-4 border-b border-gray-200">
+                          <div className="text-sm font-medium text-gray-500 mb-1">Gasto en publicidad (USD)</div>
+                          <div className="text-lg font-semibold text-gray-900">${historyItem.adspend.toLocaleString()}</div>
+                        </div>
+                      )}
+                      {historyItem.ordersCount && (
+                        <div className="p-4">
+                          <div className="text-sm font-medium text-gray-500 mb-1">Número de pedidos</div>
+                          <div className="text-lg font-semibold text-gray-900">{historyItem.ordersCount.toLocaleString()}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Tarjeta 3: CTA */}
           <div className="bg-gray-50 rounded-xl p-6 text-center">
             <h4 className="text-lg font-bold text-gray-900 mb-4">
