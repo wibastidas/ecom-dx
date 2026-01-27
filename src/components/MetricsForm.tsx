@@ -91,7 +91,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     if (!isTouched) return { status: 'neutral', message: '' }
     
     if (value <= 0) {
-      return { status: 'error', message: t('validation.required') }
+      return { status: 'error', message: t('validation.fieldRequired') }
     }
     
     if (field === 'carts' && value > visits) {
@@ -542,18 +542,16 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             {t('notes.fast')}
           </p>
           
-          {/* Mensaje de ayuda para validación */}
+          {/* Mensaje de ayuda para validación (Casos 09–13: mensajes alineados con el spec) */}
           {!isFormValid && (
             <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
               <p className="text-yellow-800 text-sm text-center whitespace-pre-line">
-                {!storeUrlValid && '🌐 Ingresá un dominio válido (ej: mitienda.com)\n'}
-                {platform === '' && '📦 Seleccioná una plataforma\n'}
-                {visits <= 0 && '👥 Ingresá las visitas únicas\n'}
-                {carts <= 0 && '🛒 Ingresá los carritos iniciados\n'}
-                {purchases <= 0 && '✅ Ingresá las compras completadas\n'}
-                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && '⚠️ Los carritos no pueden ser más que las visitas\n'}
-                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && '⚠️ Las compras no pueden ser más que los carritos\n'}
-                {checkoutsNum > 0 && !checkoutsValid && '💳 Llegaron al pago debe estar entre carritos y compras'}
+                {!storeUrlValid && `🌐 ${t('validation.urlInvalid')}\n`}
+                {platform === '' && `📦 ${t('validation.platformRequired')}\n`}
+                {(visits <= 0 || carts <= 0 || purchases <= 0) && `${t('validation.fieldRequired')}\n`}
+                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && `⚠️ ${t('validation.cartsGtVisits')}\n`}
+                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && `⚠️ ${t('validation.ordersGtCarts')}\n`}
+                {checkoutsNum > 0 && !checkoutsValid && (checkoutsNum > carts ? `💳 ${t('validation.checkoutsGtCarts')}` : `💳 ${t('validation.ordersGtCheckouts')}`)}
               </p>
             </div>
           )}

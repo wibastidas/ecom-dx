@@ -12,7 +12,8 @@
     "test:diagnosis": "node tests/diagnosis-uat.test.js",
     "test:finance": "node tests/finance-uat.test.js",
     "test:decisions": "node tests/implementation-decisions.test.js",
-    "test:dod": "node tests/dod-final.test.js"
+    "test:dod": "node tests/dod-final.test.js",
+    "test:casos": "node tests/radar-casos-13.test.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

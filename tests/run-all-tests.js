@@ -14,7 +14,8 @@ console.log('=' .repeat(60));
 
 const testFiles = [
   'diagnosis-uat.test.js',
-  'finance-uat.test.js', 
+  'radar-casos-13.test.js',
+  'finance-uat.test.js',
   'implementation-decisions.test.js',
   'dod-final.test.js'
 ];

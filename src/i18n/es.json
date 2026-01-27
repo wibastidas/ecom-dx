@@ -78,14 +78,15 @@
   },
   "validation": {
     "required": "Ingresá un número.",
+    "fieldRequired": "Campo obligatorio",
     "urlRequired": "Ingresá la URL de tu tienda.",
-    "urlInvalid": "Ingresá un dominio válido (ej: mitienda.com).",
+    "urlInvalid": "Ingresa un dominio válido (ej. https://www.google.com/search?q=tienda.com)",
     "platformRequired": "Seleccioná una plataforma.",
     "numeric": "Usá solo números (sin puntos ni comas).",
-    "cartsGtVisits": "Carritos no puede ser mayor a visitas.",
-    "ordersGtCarts": "Compras no puede ser mayor a carritos.",
-    "checkoutsGtCarts": "Llegaron al pago no puede ser mayor a carritos.",
-    "ordersGtCheckouts": "Compras no puede ser mayor a llegaron al pago.",
+    "cartsGtVisits": "Los carritos no pueden ser mayores a las visitas",
+    "ordersGtCarts": "Las compras no pueden ser mayores a los carritos",
+    "checkoutsGtCarts": "Los checkouts no pueden ser mayores a los carritos",
+    "ordersGtCheckouts": "Las compras no pueden ser mayores a los checkouts iniciados",
     "outlier": "Valores inusuales: revisá si estás usando el mes actual."
   },
   "coach": {
