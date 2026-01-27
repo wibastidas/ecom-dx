@@ -8,10 +8,11 @@ import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metric
 import { formatCurrency } from '@/lib/formatters'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
-import SaveModal from './SaveModal'
-import HistoryModal from './HistoryModal'
+// MVP: Guardado e historial comentados. Más adelante remover comentarios para restaurar.
+// import SaveModal from './SaveModal'
+// import HistoryModal from './HistoryModal'
 import ShareModal from './ShareModal'
-import { useAuth } from '@/lib/auth'
+// import { useAuth } from '@/lib/auth'
 
 interface ResultCardProps {
   result: DiagnosisResult
@@ -31,51 +32,43 @@ interface ResultCardProps {
 
 export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData, onResultChange, onDiagnosisDataChange }: ResultCardProps) {
   const { t } = useTranslations()
-  const { user, signIn } = useAuth()
-  const [showSaveDialog, setShowSaveDialog] = useState(false)
-  const [showSaveModal, setShowSaveModal] = useState(false)
-  const [showHistoryModal, setShowHistoryModal] = useState(false)
+  // const { user, signIn } = useAuth()
+  // const [showSaveDialog, setShowSaveDialog] = useState(false)
+  // const [showSaveModal, setShowSaveModal] = useState(false)
+  // const [showHistoryModal, setShowHistoryModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
-  const [previousUser, setPreviousUser] = useState(user)
+  // const [previousUser, setPreviousUser] = useState(user)
 
-  // Redirigir al Home si el usuario cierra sesión desde la página de resultados
-  useEffect(() => {
-    // Solo ejecutar si el usuario cambió de logueado a no logueado
-    if (previousUser && !user) {
-      onNewDiagnosis()
-    }
-    setPreviousUser(user)
-  }, [user, previousUser])
+  // MVP: Redirigir al Home si el usuario cierra sesión – comentado.
+  // useEffect(() => {
+  //   if (previousUser && !user) {
+  //     onNewDiagnosis()
+  //   }
+  //   setPreviousUser(user)
+  // }, [user, previousUser])
 
-  // Manejar click de "Iniciar sesión y guardar"
-  const handleSaveClick = async () => {
-    if (!user) {
-      // Si no está logueado, iniciar sesión primero
-      try {
-        await signIn()
-        // Después del login exitoso, abrir modal
-        setShowSaveModal(true)
-      } catch (error) {
-        console.error('Error al iniciar sesión:', error)
-      }
-    } else {
-      // Si ya está logueado, abrir modal directamente
-      setShowSaveModal(true)
-    }
-  }
+  // MVP: Iniciar sesión y guardar – comentado.
+  // const handleSaveClick = async () => {
+  //   if (!user) {
+  //     try {
+  //       await signIn()
+  //       setShowSaveModal(true)
+  //     } catch (error) {
+  //       console.error('Error al iniciar sesión:', error)
+  //     }
+  //   } else {
+  //     setShowSaveModal(true)
+  //   }
+  // }
 
-  // Manejar guardado desde el modal
-  const handleSave = async (saveData: { yyyymm: string, monthLabel: string, note: string }) => {
-    try {
-      // TODO: Implementar guardado en Firebase
-      // TODO: Implementar guardado en Firebase
-      setShowSaveModal(false)
-      // TODO: Mostrar toast de éxito
-    } catch (error) {
-      console.error('Error al guardar:', error)
-      // TODO: Mostrar toast de error
-    }
-  }
+  // MVP: Guardado desde modal – comentado.
+  // const handleSave = async (saveData: { yyyymm: string, monthLabel: string, note: string }) => {
+  //   try {
+  //     setShowSaveModal(false)
+  //   } catch (error) {
+  //     console.error('Error al guardar:', error)
+  //   }
+  // }
 
 
   // Determinar el mensaje según el diagnóstico
@@ -387,15 +380,15 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             </div>
           </div>
 
-          {/* Botón guardar diagnóstico */}
-          <div className="text-center">
+          {/* MVP: Botón guardar / Iniciar sesión y guardar – comentado */}
+          {/* <div className="text-center">
             <button 
               onClick={handleSaveClick}
               className="btn-outline"
             >
               {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
             </button>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="card-elevated">
@@ -435,14 +428,15 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
 
         {/* Acciones secundarias */}
         <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
-          {user && (
+          {/* MVP: Ver historial – comentado */}
+          {/* {user && (
             <button 
               onClick={() => setShowHistoryModal(true)}
               className="btn-outline"
             >
               📊 Ver historial
             </button>
-          )}
+          )} */}
           <button 
             onClick={onNewDiagnosis}
             className="btn-outline"
@@ -465,8 +459,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         </div>
       </div>
 
-      {/* Modal de guardar */}
-      <SaveModal
+      {/* MVP: Modal de guardar (mes y nota) – comentado */}
+      {/* <SaveModal
         isOpen={showSaveModal}
         onClose={() => setShowSaveModal(false)}
         onSave={handleSave}
@@ -485,13 +479,13 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           roas: result.roas || null,
           cac: result.cac || null
         }}
-      />
+      /> */}
 
-      {/* Modal de historial */}
-        <HistoryModal
-          isOpen={showHistoryModal}
-          onClose={() => setShowHistoryModal(false)}
-        />
+      {/* MVP: Modal de historial – comentado */}
+      {/* <HistoryModal
+        isOpen={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+      /> */}
 
       {/* Modal de compartir */}
       <ShareModal

@@ -1,39 +1,39 @@
 'use client'
 
-import { useAuth } from '@/lib/auth'
-import { useState } from 'react'
-import HistoryModal from './HistoryModal'
+// MVP: Autenticación e historial comentados – solo logo. Más adelante remover comentarios para restaurar.
+// import { useAuth } from '@/lib/auth'
+// import { useState } from 'react'
+// import HistoryModal from './HistoryModal'
 
 export default function Header() {
-  const { user, signIn, signOut } = useAuth()
-  const [showHistoryModal, setShowHistoryModal] = useState(false)
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  // const { user, signIn, signOut } = useAuth()
+  // const [showHistoryModal, setShowHistoryModal] = useState(false)
+  // const [showMobileMenu, setShowMobileMenu] = useState(false)
 
-  const handleSignIn = async () => {
-    try {
-      await signIn()
-      setShowMobileMenu(false)
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error)
-    }
-  }
+  // const handleSignIn = async () => {
+  //   try {
+  //     await signIn()
+  //     setShowMobileMenu(false)
+  //   } catch (error) {
+  //     console.error('Error al iniciar sesión:', error)
+  //   }
+  // }
 
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      setShowMobileMenu(false)
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error)
-    }
-  }
+  // const handleSignOut = async () => {
+  //   try {
+  //     await signOut()
+  //     setShowMobileMenu(false)
+  //   } catch (error) {
+  //     console.error('Error al cerrar sesión:', error)
+  //   }
+  // }
 
-  const handleHistoryClick = () => {
-    setShowHistoryModal(true)
-    setShowMobileMenu(false)
-  }
+  // const handleHistoryClick = () => {
+  //   setShowHistoryModal(true)
+  //   setShowMobileMenu(false)
+  // }
 
   const handleLogoClick = () => {
-    // Redirigir al home
     window.location.href = '/'
   }
 
@@ -59,8 +59,9 @@ export default function Header() {
               </h1>
             </button>
 
+            {/* MVP: Ocultos – Iniciar sesión, Ver Historial, Cerrar sesión. Dejar solo logo. */}
             {/* Desktop: Acciones de usuario */}
-            <div className="hidden md:flex items-center space-x-3">
+            {/* <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
                   <span className="text-sm text-gray-600">
@@ -87,10 +88,10 @@ export default function Header() {
                   🔑 Iniciar sesión
                 </button>
               )}
-            </div>
+            </div> */}
 
             {/* Mobile: Menú hamburguesa */}
-            <div className="md:hidden">
+            {/* <div className="md:hidden">
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -99,11 +100,11 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Mobile Menu */}
-          {showMobileMenu && (
+          {/* {showMobileMenu && (
             <div className="md:hidden mt-4 pt-4 border-t border-gray-200">
               <div className="space-y-3">
                 {user ? (
@@ -134,15 +135,15 @@ export default function Header() {
                 )}
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </header>
 
-      {/* Modal de historial */}
-      <HistoryModal
+      {/* MVP: Modal de historial comentado */}
+      {/* <HistoryModal
         isOpen={showHistoryModal}
         onClose={() => setShowHistoryModal(false)}
-      />
+      /> */}
     </>
   )
 }
