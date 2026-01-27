@@ -15,6 +15,8 @@ export interface DiagnosisResult {
   cartToCheckout?: number | null  // Checkouts/Carritos, < 70% → logística
   checkoutToBuy?: number | null   // Compras/Checkouts, < 40% → pasarela/cuotas
   checkoutInsight?: CheckoutInsight
+  /** true cuando checkouts > carritos: Compra Rápida, tasas calculadas sobre checkouts */
+  quickBuyMode?: boolean
 }
 
 export function diagnose(
@@ -30,21 +32,27 @@ export function diagnose(
   if (carts > visits) {
     throw new Error('Error: carritos no pueden ser más que visitas')
   }
-  if (purchases > carts) {
-    throw new Error('Error: pedidos no pueden ser más que carritos')
-  }
-  if (checkouts != null && checkouts > 0) {
-    if (checkouts > carts) {
-      throw new Error('Error: checkouts no pueden ser más que carritos')
+  const quickBuyMode = !!(checkouts != null && checkouts > 0 && checkouts > carts)
+  if (quickBuyMode) {
+    if (purchases > checkouts!) {
+      throw new Error('Error: compras no pueden ser más que checkouts')
     }
-    if (purchases > checkouts) {
+  } else {
+    if (purchases > carts) {
+      throw new Error('Error: pedidos no pueden ser más que carritos')
+    }
+    if (checkouts != null && checkouts > 0 && purchases > checkouts) {
       throw new Error('Error: compras no pueden ser más que checkouts')
     }
   }
+  // Si checkouts > carritos: modo "Compra Rápida", tasas sobre la métrica más alta (checkouts)
 
-  // KPIs básicos (siempre se calculan)
-  const atc = visits ? carts / visits : 0
-  const cb = carts ? purchases / carts : 0
+  // KPIs: base = métrica más alta cuando hay checkouts (Compra Rápida)
+  const effectiveCarts = (checkouts != null && checkouts > 0 && checkouts > carts)
+    ? checkouts
+    : carts
+  const atc = visits ? effectiveCarts / visits : 0
+  const cb = effectiveCarts ? purchases / effectiveCarts : 0
   const cr = visits ? purchases / visits : 0
 
   // Finanzas solo si existen los tres campos
@@ -66,17 +74,19 @@ export function diagnose(
   let checkoutToBuy: number | null = null
   let checkoutInsight: CheckoutInsight = null
 
-  if (checkouts != null && checkouts > 0 && carts > 0) {
-    cartToCheckout = checkouts / carts
+  if (checkouts != null && checkouts > 0) {
     checkoutToBuy = purchases / checkouts
-    const logistica = cartToCheckout < 0.70
-    const pago = checkoutToBuy < 0.40
-    if (logistica && pago) {
-      checkoutInsight = 'ambos'
-    } else if (logistica) {
-      checkoutInsight = 'logistica'
-    } else if (pago) {
-      checkoutInsight = 'pago'
+    if (quickBuyMode) {
+      // Compra Rápida: no hay paso carrito→checkout; solo importa checkout→compra
+      cartToCheckout = null
+      if (checkoutToBuy < 0.40) checkoutInsight = 'pago'
+    } else if (carts > 0) {
+      cartToCheckout = checkouts / carts
+      const logistica = cartToCheckout < 0.70
+      const pago = checkoutToBuy < 0.40
+      if (logistica && pago) checkoutInsight = 'ambos'
+      else if (logistica) checkoutInsight = 'logistica'
+      else if (pago) checkoutInsight = 'pago'
     }
   }
 
@@ -89,7 +99,7 @@ export function diagnose(
     roas,
     cac,
     ...(checkouts != null && checkouts > 0
-      ? { checkouts, cartToCheckout, checkoutToBuy, checkoutInsight }
+      ? { checkouts, cartToCheckout, checkoutToBuy, checkoutInsight, ...(quickBuyMode ? { quickBuyMode: true } : {}) }
       : {})
   }
 }

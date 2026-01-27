@@ -75,7 +75,8 @@ export default function Home() {
           cac: diagnosis.cac ?? null,
           cartToCheckout: diagnosis.cartToCheckout ?? null,
           checkoutToBuy: diagnosis.checkoutToBuy ?? null,
-          checkoutInsight: diagnosis.checkoutInsight ?? null
+          checkoutInsight: diagnosis.checkoutInsight ?? null,
+          quickBuyMode: diagnosis.quickBuyMode ?? false
         }).catch(() => {}) // fire-and-forget, no bloquear UI
       }
     } catch (error) {

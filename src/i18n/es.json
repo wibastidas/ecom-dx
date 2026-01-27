@@ -18,7 +18,9 @@
     "identity": "Identidad",
     "improvePrecision": "Mejorá la precisión (opcional)",
     "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles.",
-    "ordersFromComprasHint": "Si lo dejás vacío, usamos tus compras completadas para ROAS/AOV/CAC."
+    "financeUsesCompras": "Para AOV, ROAS y CAC usamos tu número de Compras completadas del bloque anterior.",
+    "ctaWithFinance": "Diagnóstico completo con métricas financieras",
+    "ctaWithoutFinance": "Obtén recomendaciones personalizadas en segundos"
   },
   "platforms": {
     "label": "Plataforma",
@@ -125,6 +127,7 @@
   "result": {
     "bottleneck": "Tu cuello principal: {{bottleneck}}",
     "sub": "Tu tienda {{msg}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
+    "quickBuyHint": "Compra Rápida detectada: tasas calculadas sobre llegadas a pago (no sobre carritos).",
     "checkoutInsightTitle": "Dónde se rompe el proceso",
     "checkoutInsightLogistica": "Tu fuga está en la logística (costos de envío o tiempos). Revisá costos, plazos y umbral de envío gratis.",
     "checkoutInsightPago": "Tu fuga está en la pasarela o falta de cuotas. Revisá métodos de pago, cuotas y mensajes de confianza.",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { trackDiagnosisStart, trackDiagnosisSubmit } from '@/lib/analytics'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
@@ -10,9 +10,8 @@ interface MetricsFormData {
   visits: string
   carts: string
   purchases: string
-  sales_total?: number
-  ad_spend?: number
-  orders?: number
+  sales_total?: string
+  ad_spend?: string
 }
 
 interface MetricsFormProps {
@@ -32,8 +31,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     checkouts: '',
     purchases: '',
     sales_total: '',
-    ad_spend: '',
-    orders: ''
+    ad_spend: ''
   })
   const [touchedFields, setTouchedFields] = useState({
     visits: false,
@@ -52,7 +50,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
       return
     }
     // Para campos numéricos, solo permitir números
-    if (['visits', 'carts', 'checkouts', 'purchases', 'orders'].includes(field)) {
+    if (['visits', 'carts', 'checkouts', 'purchases'].includes(field)) {
       const numericValue = value.replace(/[^0-9]/g, '')
       
       // Si el valor empieza con 0 y tiene más de un dígito, limpiar el 0
@@ -113,13 +111,6 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   const purchases = Number(formData.purchases) || 0
   const checkoutsNum = formData.checkouts.trim() ? Number(formData.checkouts) : 0
 
-  // Fase 5: Si el acordeón está abierto y ya hay Compras, pre-rellenar Número de pedidos
-  useEffect(() => {
-    if (openAccordion && purchases > 0) {
-      setFormData(prev => (prev.orders === '' ? { ...prev, orders: String(purchases) } : prev))
-    }
-  }, [openAccordion, purchases])
-
   // URL debe ser dominio válido: al menos un TLD (ej .com, .com.ar, .ar, .uy)
   const isValidStoreUrl = (url: string) => {
     const s = url.trim().replace(/^https?:\/\//i, '').split('/')[0] || ''
@@ -127,8 +118,13 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   }
   const storeUrlValid = storeUrl.trim() !== '' && isValidStoreUrl(storeUrl.trim())
 
-  // Con checkouts opcional: carritos >= checkouts >= compras
-  const checkoutsValid = !checkoutsNum || (checkoutsNum <= carts && purchases <= checkoutsNum)
+  // Con checkouts opcional: compras <= checkouts. Si checkouts > carritos → Compra Rápida (no se bloquea)
+  const checkoutsValid = !checkoutsNum || purchases <= checkoutsNum
+
+  // Bloque financiero: opcional. No pedimos "N.º de pedidos" por separado; usamos Compras completadas.
+  // Si completan ventas y ads, usamos purchases como ordersCount. Nunca exigimos un campo "orders".
+  const hasSalesOrAdspend = (formData.sales_total?.trim() ?? '') !== '' || (formData.ad_spend?.trim() ?? '') !== ''
+  const financialBlockOk = !hasSalesOrAdspend || purchases > 0  // si hay datos fin., basta con tener Compras
   
   // Identidad y métricas: URL y plataforma requeridos; métricas válidas
   const isFormValid =
@@ -139,7 +135,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     purchases > 0 &&
     carts <= visits &&
     purchases <= carts &&
-    checkoutsValid
+    checkoutsValid &&
+    financialBlockOk
   
 
 
@@ -148,15 +145,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     setIsSubmitting(true)
     
     try {
-      // Preparar datos para el diagnóstico. Fase 5: ordersCount = Compras cuando N.º pedidos está vacío
-      const ordersCountVal = formData.orders.trim() ? Number(formData.orders) : purchases
+      // ordersCount = Compras completadas (mismo número; no pedimos "N.º de pedidos" por separado)
       const diagnosisData = {
         visits,
         carts,
         purchases,
         sales_total: Number(formData.sales_total) || undefined,
         ad_spend: Number(formData.ad_spend) || undefined,
-        orders: ordersCountVal
+        orders: purchases
       }
       
       // Track form submission
@@ -165,7 +161,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
       
       // Trigger diagnosis con todos los datos + identidad y checkouts (opcional) para log de uso
       const checkoutsVal = formData.checkouts.trim() ? Number(formData.checkouts) : undefined
-      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, ordersCountVal, storeUrl.trim(), platform || undefined, checkoutsVal)
+      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, purchases, storeUrl.trim(), platform || undefined, checkoutsVal)
     } catch (error) {
       console.error('Error submitting form:', error)
     } finally {
@@ -357,7 +353,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               />
               {checkoutsNum > 0 && !checkoutsValid && (
                 <p className="mt-1 text-sm text-red-600">
-                  {checkoutsNum > carts ? t('validation.checkoutsGtCarts') : t('validation.ordersGtCheckouts')}
+                  {t('validation.ordersGtCheckouts')}
                 </p>
               )}
               <p className="mt-1 text-xs text-gray-500">{t('platforms.checkoutsOptionalInfo')}</p>
@@ -470,29 +466,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="orders" className="form-label">
-                    <Tooltip content={t('descriptions.ordersCount')}>
-                      <span className="cursor-help whitespace-nowrap">📦 {t('labels.ordersCount')} ⓘ</span>
-                    </Tooltip>
-                  </label>
-                  <input
-                    type="number"
-                    id="orders"
-                    value={formData.orders}
-                    onChange={(e) => handleInputChange('orders', e.target.value)}
-                    className="input-field"
-                    placeholder={purchases > 0 ? String(purchases) : '25'}
-                    min="0"
-                    step="1"
-                    inputMode="numeric"
-                    autoComplete="off"
-                    pattern="[0-9]*"
-                  />
-                  {purchases > 0 && (
-                    <p className="mt-1 text-xs text-gray-500">{t('sections.ordersFromComprasHint')}</p>
-                  )}
-                </div>
+                <p className="text-sm text-gray-600 col-span-full -mt-2">
+                  {t('sections.financeUsesCompras')}
+                </p>
               </div>
 
             </div>
@@ -504,9 +480,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
           <div className="text-center mb-4">
             <h3 className="text-lg font-bold text-white mb-2">🎯 ¿Listo para tu diagnóstico?</h3>
             <p className="text-blue-100 text-sm">
-              {formData.sales_total || formData.ad_spend || formData.orders 
-                ? 'Diagnóstico completo con métricas financieras' 
-                : 'Obtén recomendaciones personalizadas en segundos'
+              {formData.sales_total || formData.ad_spend
+                ? t('sections.ctaWithFinance')
+                : t('sections.ctaWithoutFinance')
               }
             </p>
           </div>
@@ -551,7 +527,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 {(visits <= 0 || carts <= 0 || purchases <= 0) && `${t('validation.fieldRequired')}\n`}
                 {visits > 0 && carts > 0 && purchases > 0 && carts > visits && `⚠️ ${t('validation.cartsGtVisits')}\n`}
                 {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && `⚠️ ${t('validation.ordersGtCarts')}\n`}
-                {checkoutsNum > 0 && !checkoutsValid && (checkoutsNum > carts ? `💳 ${t('validation.checkoutsGtCarts')}` : `💳 ${t('validation.ordersGtCheckouts')}`)}
+                {checkoutsNum > 0 && !checkoutsValid && `💳 ${t('validation.ordersGtCheckouts')}`}
               </p>
             </div>
           )}

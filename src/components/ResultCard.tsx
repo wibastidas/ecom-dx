@@ -151,6 +151,11 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           <p className="text-xl text-gray-600">
             {t('result.sub', { msg: getMessage(result.dx) })}
           </p>
+          {result.quickBuyMode && (
+            <p className="mt-3 text-sm text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 inline-block">
+              ⚡ {t('result.quickBuyHint')}
+            </p>
+          )}
         </div>
 
         {/* KPIs con tooltips y comparación vs promedio */}

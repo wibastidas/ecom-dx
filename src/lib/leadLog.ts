@@ -22,6 +22,7 @@ export interface LeadAnalizadoPayload {
   cartToCheckout?: number | null
   checkoutToBuy?: number | null
   checkoutInsight?: CheckoutInsight
+  quickBuyMode?: boolean
 }
 
 /**

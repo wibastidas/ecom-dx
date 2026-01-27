@@ -12,6 +12,7 @@ const esJsonPath = path.join(__dirname, '../src/i18n/es.json')
 const esJson = JSON.parse(fs.readFileSync(esJsonPath, 'utf8'))
 
 // Lógica de diagnosis (sincronizada con src/lib/diagnosis.ts)
+// Si checkouts > carritos → Compra Rápida: no bloquear, tasas sobre checkouts.
 function classify(visits, atc, cb) {
   if (visits < 500 && atc >= 0.03 && cb >= 0.30) return 'trafico'
   if (atc < 0.03) return 'pagina_oferta'
@@ -21,25 +22,34 @@ function classify(visits, atc, cb) {
 
 function diagnose(visits, carts, purchases, sales, adspend, ordersCount, checkouts) {
   if (carts > visits) throw new Error('Error: carritos no pueden ser más que visitas')
-  if (purchases > carts) throw new Error('Error: pedidos no pueden ser más que carritos')
-  if (checkouts != null && checkouts > 0) {
-    if (checkouts > carts) throw new Error('Error: checkouts no pueden ser más que carritos')
+  const quickBuyMode = !!(checkouts != null && checkouts > 0 && checkouts > carts)
+  if (quickBuyMode) {
     if (purchases > checkouts) throw new Error('Error: compras no pueden ser más que checkouts')
+  } else {
+    if (purchases > carts) throw new Error('Error: pedidos no pueden ser más que carritos')
+    if (checkouts != null && checkouts > 0 && purchases > checkouts) throw new Error('Error: compras no pueden ser más que checkouts')
   }
-  const atc = visits ? carts / visits : 0
-  const cb = carts ? purchases / carts : 0
+  const effectiveCarts = (checkouts != null && checkouts > 0 && checkouts > carts) ? checkouts : carts
+  const atc = visits ? effectiveCarts / visits : 0
+  const cb = effectiveCarts ? purchases / effectiveCarts : 0
   let checkoutInsight = null
-  if (checkouts != null && checkouts > 0 && carts > 0) {
-    const cartToCheckout = checkouts / carts
+  if (checkouts != null && checkouts > 0) {
     const checkoutToBuy = purchases / checkouts
-    const logistica = cartToCheckout < 0.70
-    const pago = checkoutToBuy < 0.40
-    if (logistica && pago) checkoutInsight = 'ambos'
-    else if (logistica) checkoutInsight = 'logistica'
-    else if (pago) checkoutInsight = 'pago'
+    if (quickBuyMode) {
+      if (checkoutToBuy < 0.40) checkoutInsight = 'pago'
+    } else if (carts > 0) {
+      const cartToCheckout = checkouts / carts
+      const logistica = cartToCheckout < 0.70
+      const pago = checkoutToBuy < 0.40
+      if (logistica && pago) checkoutInsight = 'ambos'
+      else if (logistica) checkoutInsight = 'logistica'
+      else if (pago) checkoutInsight = 'pago'
+    }
   }
   const dx = classify(visits, atc, cb)
-  return { dx, atc, cb, checkoutInsight }
+  const out = { dx, atc, cb, checkoutInsight }
+  if (checkouts != null && checkouts > 0 && quickBuyMode) out.quickBuyMode = true
+  return out
 }
 
 function isValidStoreUrl(url) {
@@ -178,11 +188,26 @@ if (fieldRequired === 'Campo obligatorio') {
   fail('13', 'Campos vacíos', 'Campo obligatorio', String(fieldRequired || '(sin definir)'))
 }
 
+// Caso 14: Compra Rápida (checkouts > carritos) — no bloquear, tasas sobre checkouts
+console.log('\n📌 Caso 14: Compra Rápida (checkouts > carritos)\n')
+try {
+  const r = diagnose(1000, 30, 40, undefined, undefined, undefined, 80)
+  const atcOk = Math.abs((r.atc * 100) - 8) < 0.1
+  const cbOk = Math.abs((r.cb * 100) - 50) < 0.1
+  if (r.dx === 'escalar' && r.quickBuyMode && atcOk && cbOk) {
+    ok('14', 'Compra Rápida: checkouts > carritos → no bloqueo, tasas sobre checkouts, dx=escalar', 'quickBuyMode, atc=8%, cb=50%')
+  } else {
+    fail('14', 'Compra Rápida', 'dx=escalar, quickBuyMode, atc≈8%, cb≈50%', `dx=${r.dx}, quickBuy=${!!r.quickBuyMode}, atc=${(r.atc * 100).toFixed(1)}%, cb=${(r.cb * 100).toFixed(1)}%`)
+  }
+} catch (e) {
+  fail('14', 'Compra Rápida', 'no debe bloquear', String(e))
+}
+
 console.log('\n' + '='.repeat(60))
 console.log(`\n📊 RESUMEN: ${passed}/${total} casos pasaron\n`)
 if (passed === total) {
   console.log('🎉 Todos los casos de prueba del Radar E-commerce están OK.')
-  console.log('✅ PASÓ (13/13)\n')
+  console.log(`✅ PASÓ (${total}/${total})\n`)
   process.exit(0)
 } else {
   console.log('⚠️  Revisar casos fallidos arriba.\n')
