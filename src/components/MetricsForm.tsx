@@ -486,6 +486,21 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               }
             </p>
           </div>
+
+          {/* Lo que falta — arriba del botón, integrado en la tarjeta */}
+          {!isFormValid && (
+            <div className="mb-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 px-4 py-3">
+              <p className="text-white/95 text-sm font-medium mb-2">{t('sections.ctaCompleteToContinue')}</p>
+              <ul className="text-blue-50 text-sm space-y-1 list-none">
+                {!storeUrlValid && <li className="flex items-center gap-2">🌐 {t('validation.urlInvalid')}</li>}
+                {platform === '' && <li className="flex items-center gap-2">📦 {t('validation.platformRequired')}</li>}
+                {(visits <= 0 || carts <= 0 || purchases <= 0) && <li className="flex items-center gap-2">📊 {t('sections.ctaBasicMetricsMissing')}</li>}
+                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && <li className="flex items-center gap-2">⚠️ {t('validation.cartsGtVisits')}</li>}
+                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && <li className="flex items-center gap-2">⚠️ {t('validation.ordersGtCarts')}</li>}
+                {checkoutsNum > 0 && !checkoutsValid && <li className="flex items-center gap-2">💳 {t('validation.ordersGtCheckouts')}</li>}
+              </ul>
+            </div>
+          )}
           
           <button
             type="submit"
@@ -493,7 +508,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             className={`w-full font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg transform flex items-center justify-center space-x-3 ${
               isFormValid 
                 ? 'bg-white hover:bg-gray-50 text-blue-600 hover:shadow-xl hover:-translate-y-0.5' 
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-white/20 text-white/80 cursor-not-allowed border border-white/30'
             } ${isSubmitting ? 'opacity-75' : ''}`}
           >
             {isSubmitting ? (
@@ -517,20 +532,6 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
           <p className="text-center text-blue-100 text-xs mt-3">
             {t('notes.fast')}
           </p>
-          
-          {/* Mensaje de ayuda para validación (Casos 09–13: mensajes alineados con el spec) */}
-          {!isFormValid && (
-            <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
-              <p className="text-yellow-800 text-sm text-center whitespace-pre-line">
-                {!storeUrlValid && `🌐 ${t('validation.urlInvalid')}\n`}
-                {platform === '' && `📦 ${t('validation.platformRequired')}\n`}
-                {(visits <= 0 || carts <= 0 || purchases <= 0) && `${t('validation.fieldRequired')}\n`}
-                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && `⚠️ ${t('validation.cartsGtVisits')}\n`}
-                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && `⚠️ ${t('validation.ordersGtCarts')}\n`}
-                {checkoutsNum > 0 && !checkoutsValid && `💳 ${t('validation.ordersGtCheckouts')}`}
-              </p>
-            </div>
-          )}
         </div>
         </div>
       </form>

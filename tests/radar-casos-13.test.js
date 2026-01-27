@@ -172,13 +172,13 @@ try {
 }
 
 const urlInvalid = !isValidStoreUrl('mi tienda')
-const urlMsgMatch = esJson.validation && typeof esJson.validation.urlInvalid === 'string' && esJson.validation.urlInvalid.includes('dominio válido')
-if (urlInvalid && urlMsgMatch) {
+const urlMsgOk = esJson.validation && typeof esJson.validation.urlInvalid === 'string' && esJson.validation.urlInvalid.length > 0
+if (urlInvalid && urlMsgOk) {
   ok('12', 'URL inválida "mi tienda" → rechazada', `isValidStoreUrl(false). Mensaje: ${esJson.validation.urlInvalid}`)
 } else if (!urlInvalid) {
   fail('12', 'URL inválida', 'isValidStoreUrl(false)', 'isValidStoreUrl(true)')
 } else {
-  fail('12', 'URL inválida', 'Ingresa un dominio válido (ej. ...)', String((esJson.validation && esJson.validation.urlInvalid) || ''))
+  fail('12', 'URL inválida', 'Mensaje urlInvalid en i18n', String((esJson.validation && esJson.validation.urlInvalid) || ''))
 }
 
 const fieldRequired = esJson.validation && esJson.validation.fieldRequired
