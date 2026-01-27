@@ -151,6 +151,9 @@
   "cta": {
     "prefix": "Ver solución para",
     "primarySub": "WhatsApp o agendar consultoría",
+    "webinarLead1": "Si el diagnóstico del Radar te deja pensando y querés llevar tu tienda al siguiente nivel, quiero invitarte a una formación en vivo totalmente gratuita.",
+    "webinarLead2": "Ahí te voy a enseñar la \"Arquitectura de Conversión\": el sistema paso a paso que usamos para que la web explique, convenza y cierre sola, sin que vos tengas que estar pegado al celular 24/7.",
+    "joinWhatsAppGroup": "Unirme al grupo de WhatsApp",
     "primary": {
       "trafico": "Atraer clientes calificados a mi tienda",
       "pagina_oferta": "Dominar mi Arquitectura de Conversión",
