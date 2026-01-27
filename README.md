@@ -23,7 +23,7 @@ Una aplicación web para diagnosticar problemas de conversión en tiendas online
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend**: Next.js 14+ (App Router), TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15+ (App Router), TypeScript, Tailwind CSS
 - **Backend**: Firebase (Auth + Firestore)
 - **Deploy**: Vercel
 - **Analytics**: Google Analytics 4, Google Tag Manager
@@ -64,6 +64,103 @@ Una aplicación web para diagnosticar problemas de conversión en tiendas online
    ```
    http://localhost:3000
    ```
+
+## 🔧 Troubleshooting
+
+### Error de permisos al iniciar el servidor (macOS)
+
+**¿Dejó de funcionar después de actualizar macOS?** Las actualizaciones suelen resetear permisos de red y privacidad. → **Guía rápida post-actualización:** [`MACOS_PERMISOS.md`](./MACOS_PERMISOS.md#-se-te-rompió-después-de-actualizar-macos) (sección “¿Se te rompió después de actualizar macOS?”).
+
+Si encuentras el error `EPERM: operation not permitted` al ejecutar `npm run dev`, sigue estos pasos:
+
+#### 1. Configurar permisos del Firewall en macOS
+
+**Paso a paso:**
+
+1. **Abrir Preferencias del Sistema**:
+   - Clic en el menú Apple (🍎) → **Preferencias del Sistema**
+   - O busca "Preferencias del Sistema" con Spotlight (⌘ + Espacio)
+
+2. **Ir a Seguridad y Privacidad**:
+   - Clic en **Seguridad y Privacidad** (o "Security & Privacy")
+   - Si está bloqueado, haz clic en el candado 🔒 y escribe tu contraseña
+
+3. **Configurar el Firewall**:
+   - Ve a la pestaña **Firewall**
+   - Si el firewall está **desactivado**, puedes activarlo o dejarlo desactivado (recomendado para desarrollo)
+   - Si está **activado**, haz clic en **Opciones del Firewall...**
+
+4. **Permitir Node.js**:
+   - En la lista de aplicaciones, busca **Node** o **node**
+   - Si aparece, asegúrate de que esté configurado como **Permitir conexiones entrantes**
+   - Si no aparece, haz clic en el botón **+** y navega a:
+     ```
+     /usr/local/bin/node
+     ```
+     O si usas nvm:
+     ```
+     ~/.nvm/versions/node/[tu-versión]/bin/node
+     ```
+   - Selecciona **Permitir conexiones entrantes**
+
+5. **Aplicar cambios**:
+   - Haz clic en **OK** para guardar
+
+#### 2. Verificar si el puerto está en uso
+
+```bash
+# Verificar qué proceso está usando el puerto 3000
+lsof -ti:3000
+
+# Si hay un proceso, ver detalles:
+lsof -i:3000
+
+# Para detener el proceso (reemplaza PID con el número que aparezca):
+kill -9 PID
+```
+
+#### 3. Usar un puerto diferente (solución rápida)
+
+Si el problema persiste, usa un puerto diferente:
+
+```bash
+PORT=3001 npm run dev
+```
+
+Luego accede a `http://localhost:3001`
+
+#### 4. Verificar permisos de Terminal/Editor
+
+Si estás ejecutando desde Cursor o VS Code, asegúrate de que tengan permisos de red:
+
+1. **Preferencias del Sistema** → **Seguridad y Privacidad** → **Privacidad**
+2. Busca **Acceso completo al disco** o **Full Disk Access**
+3. Asegúrate de que **Terminal** (o tu editor) esté en la lista y habilitado
+
+#### 5. Solución alternativa: Ejecutar desde Terminal nativa
+
+Si nada funciona, ejecuta el servidor directamente desde la Terminal de macOS:
+
+```bash
+cd /Users/williambastidas/Documents/Fuentes/ecom-dx
+npm run dev
+```
+
+Esto evita posibles restricciones de permisos de aplicaciones de terceros.
+
+### Error: Cannot find module
+
+Si encuentras errores de módulos no encontrados:
+
+```bash
+# Eliminar node_modules y reinstalar
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Variables de entorno no cargadas
+
+Asegúrate de que el archivo `.env.local` existe y contiene todas las variables necesarias. Ver `FIREBASE_SETUP.md` para más detalles.
 
 ## 📊 Lógica de Diagnóstico
 
@@ -170,34 +267,126 @@ Para leads de mayor calidad:
 
 ## 🚀 Deploy
 
-### **Deploy Automático (Recomendado)**
-1. **Conectar repositorio a Vercel**:
-   - Ve a [vercel.com/dashboard](https://vercel.com/dashboard)
-   - Settings → Git → Conectar GitHub
-   - Seleccionar repositorio `wibastidas/ecom-dx`
-   - Branch: `main`
-   - Cada `git push origin main` activa deploy automático
+El deploy **habitual** de este proyecto se hace **desde la máquina local** con la CLI de Vercel. Los pushes a GitHub pueden disparar deploys automáticos si el repo está conectado, pero el flujo estándar que usamos es **desplegar con `npx vercel --prod`** desde la carpeta del proyecto.
 
-### **Deploy Manual (Alternativo)**
-Si el deploy automático no funciona, usar CLI:
+---
+
+### **Forma habitual: deploy desde aquí (CLI)**
+
+Desde la raíz del proyecto, en tu terminal:
+
 ```bash
-cd /Users/williambastidas/Documents/Fuentes/ecom-dx
 npx vercel --prod
 ```
 
-### **Configuración de Producción**
-- **Dominio**: `ecom-dx.vercel.app`
-- **Variables de entorno**: Configuradas en Vercel Dashboard
-- **Framework**: Next.js 15.5.3
-- **Build command**: `npm run build`
-- **Output directory**: `.next`
+Eso sube el código actual, hace el build en Vercel y publica en producción. Es la forma **normal** que usamos para publicar cambios.
 
-### **Troubleshooting Deploy**
-Si el deploy automático no funciona:
-1. **Verificar conexión Git**: Settings → Git → Debe estar conectado a GitHub
-2. **Verificar branch**: Debe ser `main` (no `master`)
-3. **Usar deploy manual**: `npx vercel --prod`
-4. **Verificar logs**: `npx vercel inspect [deployment-url] --logs`
+**Requisitos:**
+
+- Estar en la carpeta del proyecto (por ejemplo `ecom-dx`).
+- Tener el proyecto ya vinculado a Vercel (ver “Primera vez” más abajo).
+- Estar autenticado en Vercel (ver “Autenticación y token” si aparece error de token).
+
+---
+
+### **Autenticación y token**
+
+Si al ejecutar `npx vercel --prod` ves:
+
+```text
+Error: The specified token is not valid. Use `vercel login` to generate a new token.
+```
+
+el token de Vercel ya no es válido (caducado, revocado o nunca configurado). Hay que volver a iniciar sesión:
+
+```bash
+npx vercel logout
+npx vercel login
+```
+
+Durante `vercel login` te pedirá enlazar con email o con GitHub y abrirá el navegador para autorizar. Cuando termines, ejecutá de nuevo:
+
+```bash
+npx vercel --prod
+```
+
+**Token desde el dashboard (opcional):**
+
+1. Ir a [vercel.com/account/tokens](https://vercel.com/account/tokens).
+2. Crear un token y copiarlo.
+3. En la misma sesión donde vas a hacer deploy:
+   ```bash
+   export VERCEL_TOKEN="tu_nuevo_token"
+   npx vercel --prod
+   ```
+
+---
+
+### **Primera vez: conectar repo a Vercel**
+
+Antes de poder usar `npx vercel --prod` con este proyecto, el proyecto tiene que existir en Vercel (una sola vez):
+
+1. Entrá a [vercel.com/dashboard](https://vercel.com/dashboard).
+2. **Add New…** → **Project** (o **Import Project**).
+3. En **Import Git Repository**:
+   - Conectá GitHub si hace falta (**Connect Git Provider** → GitHub → autorizar).
+   - Elegí el repo **wibastidas/ecom-dx** (o el tuyo).
+4. **Configure Project**:
+   - **Framework Preset**: Next.js.
+   - **Root Directory**: vacío si el código está en la raíz.
+   - **Build Command**: `npm run build`.
+   - **Output Directory**: `.next`.
+5. **Environment Variables**: cargá las de `.env.local` en **Project Settings** → **Environment Variables** (Firebase, analytics, etc.).
+6. **Deploy**: así se crea el proyecto y se hace el primer deploy.
+
+Después de eso, **el flujo normal es seguir desplegando con `npx vercel --prod`** desde la carpeta del proyecto.
+
+---
+
+### **Deploy automático por push (alternativa)**
+
+Si el repositorio está conectado en Vercel, cada push a la rama de producción también puede generar un deploy automático. Desde la carpeta del proyecto:
+
+```bash
+git add .
+git commit -m "Tu mensaje"
+git push origin main
+```
+
+Vercel detecta el push a `main` y lanza un nuevo deploy. Los builds se ven en **Vercel** → tu proyecto → **Deployments**.
+
+Aun así, **la forma estándar que usamos para publicar es `npx vercel --prod` desde aquí**, porque nos permite decidir exactamente cuándo se publica y no depender del push.
+
+---
+
+### **Si el deploy falla o no se ejecuta**
+
+Revisar en este orden:
+
+1. **Token / login**  
+   Si usás `npx vercel --prod`, asegurate de estar logueado (`npx vercel login`). Si usás `VERCEL_TOKEN`, que sea un token válido y reciente.
+
+2. **Rama en Vercel**  
+   Vercel → proyecto → **Settings** → **Git** → **Production Branch** debe ser `main` (o la rama que uses para producción).
+
+3. **Repo conectado**  
+   En **Settings** → **Git** tiene que estar el repo de GitHub. Si no, hay que importar de nuevo el mismo repo.
+
+4. **Push a GitHub**  
+   Si confiás en el deploy por push: `git push origin main` debe terminar sin error y los commits tienen que verse en GitHub en la rama correcta.
+
+5. **Logs en Vercel**  
+   **Deployments** → el deployment que corresponda → **Building** / **Logs** para ver si falla el build, variables de entorno, etc.
+
+---
+
+### **Configuración de producción (referencia)**
+
+- **Dominio**: `ecom-dx.vercel.app` (o el que tenga tu proyecto en Vercel).
+- **Variables de entorno**: Vercel → proyecto → **Settings** → **Environment Variables**.
+- **Framework**: Next.js.
+- **Build command**: `npm run build`.
+- **Output directory**: `.next`.
 
 ## 📋 Estado del Proyecto
 

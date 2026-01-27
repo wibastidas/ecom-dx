@@ -7,6 +7,7 @@ import ResultCard from '@/components/ResultCard'
 import Header from '@/components/Header'
 import { diagnose, DiagnosisResult } from '@/lib/diagnosis'
 import { track } from '@/lib/analytics'
+import { logLeadAnalizado } from '@/lib/leadLog'
 import useTranslations from '@/hooks/useTranslations'
 
 export default function Home() {
@@ -29,11 +30,11 @@ export default function Home() {
     }
   }, [result])
 
-  const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => {
+  const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string) => {
     try {
       const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
       setResult(diagnosis)
-      
+
       // Guardar datos de diagnóstico para el modal de guardar
       setDiagnosisData({
         visits,
@@ -43,14 +44,35 @@ export default function Home() {
         adspend: adspend || null,
         ordersCount: ordersCount || null
       })
-      
+
       // Track the diagnosis result view
-      track('diag_result_view', { 
+      track('diag_result_view', {
         diagnosis: diagnosis.dx,
         atc: diagnosis.atc,
         cb: diagnosis.cb,
         cr: diagnosis.cr
       })
+
+      // Log de uso en leads_analizados (sin login, fire-and-forget)
+      if (storeUrl != null && platform != null) {
+        logLeadAnalizado({
+          storeUrl,
+          platform,
+          visits,
+          carts,
+          orders: purchases,
+          sales: sales ?? null,
+          adspend: adspend ?? null,
+          ordersCount: ordersCount ?? null,
+          dx: diagnosis.dx,
+          atc: diagnosis.atc,
+          cb: diagnosis.cb,
+          cr: diagnosis.cr,
+          aov: diagnosis.aov ?? null,
+          roas: diagnosis.roas ?? null,
+          cac: diagnosis.cac ?? null
+        }).catch(() => {}) // fire-and-forget, no bloquear UI
+      }
     } catch (error) {
       console.error('❌ Error en handleDiagnosis:', error)
     }

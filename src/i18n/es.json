@@ -14,8 +14,38 @@
   },
   "sections": {
     "basicMetrics": "Métricas básicas",
+    "identity": "Identidad",
     "improvePrecision": "Mejorá la precisión (opcional)",
     "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles."
+  },
+  "platforms": {
+    "label": "Plataforma",
+    "placeholder": "Seleccioná plataforma",
+    "storeUrlLabel": "URL de la tienda",
+    "storeUrlPlaceholder": "Ej: https://mitienda.com",
+    "options": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "tiendanube": "Tiendanube",
+      "vtex": "Vtex",
+      "custom": "Otra"
+    },
+    "helpers": {
+      "shopify": {
+        "storeUrl": "Tu dominio principal (ej: mitienda.com)",
+        "visits": "Panel > Informes > Sesiones",
+        "carts": "Métrica: Añadido al carrito (Added to cart)",
+        "checkouts": "Métrica: Llegaron al pago (Reached checkout)",
+        "orders": "Total de pedidos procesados / Sesiones convertidas. Solo órdenes pagas."
+      },
+      "general": {
+        "storeUrl": "Tu dominio principal",
+        "visits": "Sesiones únicas o usuarios en el periodo.",
+        "carts": "Añadidos al carrito (Add to Cart).",
+        "checkouts": "Inicios de pago o llegadas a la caja. (Opcional)",
+        "orders": "Pedidos totales pagados o sesiones convertidas. Solo órdenes pagas."
+      }
+    }
   },
   "descriptions": {
     "visits": "Personas que entraron a tu web",
@@ -41,6 +71,8 @@
   },
   "validation": {
     "required": "Ingresá un número.",
+    "urlRequired": "Ingresá la URL de tu tienda.",
+    "platformRequired": "Seleccioná una plataforma.",
     "numeric": "Usá solo números (sin puntos ni comas).",
     "cartsGtVisits": "Carritos no puede ser mayor a visitas.",
     "ordersGtCarts": "Compras no puede ser mayor a carritos.",

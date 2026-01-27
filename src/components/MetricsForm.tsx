@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { trackDiagnosisStart, trackDiagnosisSubmit } from '@/lib/analytics'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
+import { PLATFORM_OPTIONS, type Platform } from '@/lib/constants'
 
 interface MetricsFormData {
   visits: string
@@ -15,12 +16,16 @@ interface MetricsFormData {
 }
 
 interface MetricsFormProps {
-  onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number) => void
+  onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string) => void
   openAccordion?: boolean
 }
 
 export default function MetricsForm({ onDiagnosis, openAccordion = false }: MetricsFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [storeUrl, setStoreUrl] = useState('')
+  const [storeUrlTouched, setStoreUrlTouched] = useState(false)
+  const [platform, setPlatform] = useState<Platform | ''>('')
+  const [platformTouched, setPlatformTouched] = useState(false)
   const [formData, setFormData] = useState({
     visits: '',
     carts: '',
@@ -38,6 +43,10 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
 
   // Función simple para manejar cambios en los inputs
   const handleInputChange = (field: string, value: string) => {
+    if (field === 'storeUrl') {
+      setStoreUrl(value)
+      return
+    }
     // Para campos numéricos, solo permitir números
     if (['visits', 'carts', 'purchases', 'orders'].includes(field)) {
       const numericValue = value.replace(/[^0-9]/g, '')
@@ -99,8 +108,15 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   const carts = Number(formData.carts) || 0
   const purchases = Number(formData.purchases) || 0
   
-  // Validación simple: todos los campos deben ser números positivos
-  const isFormValid = visits > 0 && carts > 0 && purchases > 0 && carts <= visits && purchases <= carts
+  // Identidad y métricas: URL y plataforma requeridos; métricas válidas
+  const isFormValid =
+    storeUrl.trim() !== '' &&
+    platform !== '' &&
+    visits > 0 &&
+    carts > 0 &&
+    purchases > 0 &&
+    carts <= visits &&
+    purchases <= carts
   
 
 
@@ -123,8 +139,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
       trackDiagnosisStart()
       trackDiagnosisSubmit(visits, carts, purchases)
       
-      // Trigger diagnosis con todos los datos
-      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders)
+      // Trigger diagnosis con todos los datos + identidad para log de uso (leads_analizados)
+      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders, storeUrl.trim(), platform || undefined)
     } catch (error) {
       console.error('Error submitting form:', error)
     } finally {
@@ -133,8 +149,79 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   }
 
   return (
-    <div className="card-elevated max-w-2xl mx-auto">
-      <form onSubmit={onSubmit} className="space-y-8">
+    <div className="max-w-2xl mx-auto">
+      <form onSubmit={onSubmit} className="space-y-6">
+        {/* Identidad: URL + Plataforma — primer bloque con fondo indigo para que se vea arriba de todo */}
+        <div className="rounded-2xl border-2 border-indigo-200 bg-indigo-50/90 p-6 shadow-sm">
+          {/* Icono + título "Identidad" — comentado para ir directo al grano (URL + plataforma)
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            </div>
+            <h3 className="section-title mb-0">{t('sections.identity')}</h3>
+          </div>
+          */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="form-group">
+              <label htmlFor="storeUrl" className="form-label">
+                🌐 {t('platforms.storeUrlLabel')}
+              </label>
+              <input
+                type="text"
+                id="storeUrl"
+                value={storeUrl}
+                onChange={(e) => handleInputChange('storeUrl', e.target.value)}
+                onBlur={() => setStoreUrlTouched(true)}
+                className={`input-field ${storeUrlTouched && !storeUrl.trim() ? 'border-red-300 focus:border-red-500' : ''}`}
+                placeholder={t('platforms.storeUrlPlaceholder')}
+                required
+                aria-required="true"
+              />
+              {storeUrlTouched && !storeUrl.trim() && (
+                <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {t('validation.urlRequired')}
+                </p>
+              )}
+            </div>
+            <div className="form-group">
+              <label htmlFor="platform" className="form-label">
+                📦 {t('platforms.label')}
+              </label>
+              <select
+                id="platform"
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value as Platform | '')}
+                onBlur={() => setPlatformTouched(true)}
+                className={`input-field ${platformTouched && platform === '' ? 'border-red-300 focus:border-red-500' : ''}`}
+                required
+                aria-required="true"
+              >
+                <option value="">{t('platforms.placeholder')}</option>
+                {PLATFORM_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {t(opt.labelKey)}
+                  </option>
+                ))}
+              </select>
+              {platformTouched && platform === '' && (
+                <p className="mt-1 text-sm text-red-600 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {t('validation.platformRequired')}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Métricas básicas — card blanca */}
+        <div className="card-elevated space-y-8">
         {/* Métricas básicas */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2">
@@ -383,6 +470,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
           {!isFormValid && (
             <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
               <p className="text-yellow-800 text-sm text-center whitespace-pre-line">
+                {!storeUrl.trim() && '🌐 Ingresá la URL de tu tienda\n'}
+                {platform === '' && '📦 Seleccioná una plataforma\n'}
                 {visits <= 0 && '👥 Ingresá las visitas únicas\n'}
                 {carts <= 0 && '🛒 Ingresá los carritos iniciados\n'}
                 {purchases <= 0 && '✅ Ingresá las compras completadas\n'}
@@ -391,6 +480,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               </p>
             </div>
           )}
+        </div>
         </div>
       </form>
     </div>

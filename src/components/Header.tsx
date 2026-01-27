@@ -1,6 +1,7 @@
 'use client'
 
-// MVP: Autenticación e historial comentados – solo logo. Más adelante remover comentarios para restaurar.
+// MVP: Autenticación e historial comentados – solo logo. Botón "Iniciar sesión" desactivado.
+// Más adelante remover comentarios para restaurar.
 // import { useAuth } from '@/lib/auth'
 // import { useState } from 'react'
 // import HistoryModal from './HistoryModal'
@@ -59,8 +60,8 @@ export default function Header() {
               </h1>
             </button>
 
-            {/* MVP: Ocultos – Iniciar sesión, Ver Historial, Cerrar sesión. Dejar solo logo. */}
-            {/* Desktop: Acciones de usuario */}
+            {/* MVP: Botón Iniciar sesión DESACTIVADO – comentado. Solo logo visible. */}
+            {/* Desktop: Iniciar sesión, Ver Historial, Cerrar sesión – todo comentado */}
             {/* <div className="hidden md:flex items-center space-x-3">
               {user ? (
                 <>
@@ -90,6 +91,7 @@ export default function Header() {
               )}
             </div> */}
 
+            {/* MVP: Menú móvil con Iniciar sesión – comentado */}
             {/* Mobile: Menú hamburguesa */}
             {/* <div className="md:hidden">
               <button
@@ -103,6 +105,7 @@ export default function Header() {
             </div> */}
           </div>
 
+          {/* MVP: Mobile menu con Iniciar sesión – comentado */}
           {/* Mobile Menu */}
           {/* {showMobileMenu && (
             <div className="md:hidden mt-4 pt-4 border-t border-gray-200">
