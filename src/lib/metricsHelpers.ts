@@ -17,10 +17,12 @@ export interface MetricComparison {
 }
 
 /**
- * Compara una métrica con su rango normal y retorna información sobre su estado
+ * Compara una métrica con su rango normal y retorna información sobre su estado.
+ * Redondeamos al primer decimal para evitar que 3.999... se marque "por debajo" cuando se muestra 4.0%.
  */
 export function compareMetric(value: number, min: number, max: number, normalRange: string): MetricComparison {
-  if (value >= min && value <= max) {
+  const rounded = Math.round(value * 10) / 10
+  if (rounded >= min && rounded <= max) {
     return {
       status: 'equal',
       percentage: 0,
@@ -29,7 +31,7 @@ export function compareMetric(value: number, min: number, max: number, normalRan
       colorClass: 'text-blue-600',
       bgColorClass: 'bg-blue-50'
     }
-  } else if (value > max) {
+  } else if (rounded > max) {
     return {
       status: 'above',
       percentage: Math.round(((value - max) / max) * 100),
