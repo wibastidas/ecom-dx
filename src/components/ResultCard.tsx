@@ -7,6 +7,7 @@ import { financeLevel } from '@/lib/financeLevel'
 import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
 import { formatCurrency } from '@/lib/formatters'
 import useTranslations from '@/hooks/useTranslations'
+import { CTA_WHATSAPP_URL } from '@/lib/constants'
 import Tooltip from './Tooltip'
 // MVP: Guardado e historial comentados. Más adelante remover comentarios para restaurar.
 // import SaveModal from './SaveModal'
@@ -104,31 +105,13 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
     return insights[dx as keyof typeof insights] || t('result.commTraffic')
   }
 
-  // Obtener acciones básicas según el diagnóstico
-  const getBasicActions = (dx: string) => {
-    const actions = {
-      trafico: [
-        'Pausá lo que no vende: dejá solo el mejor anuncio por ángulo durante 72h.',
-        'Arreglá la PDP: reescribí el hero en 1 línea y sumá 3 beneficios + 3 reseñas.',
-        'Mostrá costos totales y políticas antes del pago para bajar abandono.'
-      ],
-      pagina_oferta: [
-        'Subí el ATC: clarificá valor en la PDP y agregá prueba social arriba.',
-        'Bajá fricción de checkout: menos campos, costos sin sorpresa, contacto visible.',
-        'Mejorá calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.'
-      ],
-      checkout_confianza: [
-        'Aumentá AOV: bundling, packs y envío gratis desde umbral.',
-        'Mejorá conversión (CR): ajustá mensaje del anuncio para alinear con la PDP.',
-        'Negociá costos logísticos o medios de pago para mejorar margen efectivo.'
-      ],
-      escalar: [
-        'Duplicá creatividades manteniendo el claim ganador.',
-        'Abrí audiencias lookalike sin tocar la promesa central.',
-        'Sumá remarketing con prueba social y objeciones resueltas.'
-      ]
+  // Próximos pasos desde i18n (result.actionsByDiagnosis.{dx}, una acción por línea)
+  const getBasicActions = (dx: string): string[] => {
+    const raw = t(`result.actionsByDiagnosis.${dx}`)
+    if (typeof raw === 'string' && raw && !raw.startsWith('result.actionsByDiagnosis.')) {
+      return raw.split('\n').filter(Boolean)
     }
-    return actions[dx as keyof typeof actions] || actions.trafico
+    return ['Revisá tu embudo de ventas.', 'Optimizá página y checkout.', 'Medí y repetí lo que funciona.']
   }
 
   // Evaluar finanzas si hay datos
@@ -261,6 +244,23 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             {getCommunicationInsight(result.dx)}
           </p>
         </div>
+
+        {/* Dónde se rompe el proceso (solo cuando hay datos de checkouts) */}
+        {result.checkoutInsight && (result.checkoutInsight === 'logistica' || result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos') && (
+          <div className="mb-8 p-6 bg-amber-50 rounded-xl border border-amber-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              {t('result.checkoutInsightTitle')}
+            </h3>
+            <div className="space-y-2 text-sm text-gray-700">
+              {(result.checkoutInsight === 'logistica' || result.checkoutInsight === 'ambos') && (
+                <p>{t('result.checkoutInsightLogistica')}</p>
+              )}
+              {(result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos') && (
+                <p>{t('result.checkoutInsightPago')}</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Plan de 3 acciones básicas */}
         <div>
@@ -411,19 +411,21 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
 
       {/* Tarjeta 3: CTAs y Acciones */}
       <div className="card-elevated">
-        {/* CTA al microcurso */}
+        {/* CTA principal: Ver solución para [Diagnóstico] → WhatsApp o agendar */}
         <div className="text-center mb-8">
-            <a
-            href="#"
-              target="_blank"
-              rel="noopener noreferrer"
+          <a
+            href={CTA_WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-primary-gradient text-lg px-8 py-4 inline-flex items-center justify-center"
           >
-            {getMicrocourseCta(result.dx)}
+            {t(`cta.primary.${result.dx}`)}
           </a>
+          {/* Texto "WhatsApp o agendar consultoría" — comentado por ahora
           <p className="text-sm text-gray-600 mt-2">
-            {t('cta.sub')}
+            {t('cta.primarySub')}
           </p>
+          */}
         </div>
 
         {/* Acciones secundarias */}

@@ -7,6 +7,7 @@
   "labels": {
     "visits": "Visitas únicas",
     "carts": "Carritos iniciados",
+    "checkouts": "Llegaron a la pantalla de pago",
     "orders": "Compras completadas",
     "sales": "Ventas totales (USD)",
     "adspend": "Gasto en publicidad (USD)",
@@ -16,7 +17,8 @@
     "basicMetrics": "Métricas básicas",
     "identity": "Identidad",
     "improvePrecision": "Mejorá la precisión (opcional)",
-    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles."
+    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles.",
+    "ordersFromComprasHint": "Si lo dejás vacío, usamos tus compras completadas para ROAS/AOV/CAC."
   },
   "platforms": {
     "label": "Plataforma",
@@ -30,19 +32,24 @@
       "vtex": "Vtex",
       "custom": "Otra"
     },
+    "whereToFind": {
+      "shopify": "Buscá en Shopify: Informes y estadísticas → Desglose de la tasa de conversión (ahí están las 4 métricas para el periodo que elijas).",
+      "general": "Buscá estas métricas en la plataforma que usás (tu tienda); no en Analytics ni en el administrador de anuncios."
+    },
+    "checkoutsOptionalInfo": "Opcional: Si lo agregas, el Radar detectará si tu problema es el costo de envío o la confianza en el pago.",
     "helpers": {
       "shopify": {
         "storeUrl": "Tu dominio principal (ej: mitienda.com)",
         "visits": "Panel > Informes > Sesiones",
         "carts": "Métrica: Añadido al carrito (Added to cart)",
-        "checkouts": "Métrica: Llegaron al pago (Reached checkout)",
+        "checkouts": "Métrica: Llegaron a la pantalla de pago (Reached checkout)",
         "orders": "Total de pedidos procesados / Sesiones convertidas. Solo órdenes pagas."
       },
       "general": {
         "storeUrl": "Tu dominio principal",
         "visits": "Sesiones únicas o usuarios en el periodo.",
         "carts": "Añadidos al carrito (Add to Cart).",
-        "checkouts": "Inicios de pago o llegadas a la caja. (Opcional)",
+        "checkouts": "Inicios de pago o checkout. (Opcional)",
         "orders": "Pedidos totales pagados o sesiones convertidas. Solo órdenes pagas."
       }
     }
@@ -72,10 +79,13 @@
   "validation": {
     "required": "Ingresá un número.",
     "urlRequired": "Ingresá la URL de tu tienda.",
+    "urlInvalid": "Ingresá un dominio válido (ej: mitienda.com).",
     "platformRequired": "Seleccioná una plataforma.",
     "numeric": "Usá solo números (sin puntos ni comas).",
     "cartsGtVisits": "Carritos no puede ser mayor a visitas.",
     "ordersGtCarts": "Compras no puede ser mayor a carritos.",
+    "checkoutsGtCarts": "Llegaron al pago no puede ser mayor a carritos.",
+    "ordersGtCheckouts": "Compras no puede ser mayor a llegaron al pago.",
     "outlier": "Valores inusuales: revisá si estás usando el mes actual."
   },
   "coach": {
@@ -114,6 +124,9 @@
   "result": {
     "bottleneck": "Tu cuello principal: {{bottleneck}}",
     "sub": "Tu tienda {{msg}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
+    "checkoutInsightTitle": "Dónde se rompe el proceso",
+    "checkoutInsightLogistica": "Tu fuga está en la logística (costos de envío o tiempos). Revisá costos, plazos y umbral de envío gratis.",
+    "checkoutInsightPago": "Tu fuga está en la pasarela o falta de cuotas. Revisá métodos de pago, cuotas y mensajes de confianza.",
     "commTitle": "Interpretación de comunicación",
     "commLead": "Lo que te dicen tus números sobre tus palabras.",
     "commATC": "ATC bajo → No lo están entendiendo/queriendo: falta propuesta clara, beneficios en su lenguaje y prueba social visible.",
@@ -121,9 +134,23 @@
     "commTraffic": "Tasas sanas pero pocas visitas → Tu mensaje no llega afuera: probá 3 ángulos (dolor/beneficio/prueba).",
     "commScale": "Todo sano → Escalá manteniendo la promesa central.",
     "financeEmptyTitle": "Finanzas rápidas (opcional)",
-    "financeEmptyText": "Sumá 3 datos y descubrí si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones."
+    "financeEmptyText": "Sumá 3 datos y descubrí si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones.",
+    "actionsByDiagnosis": {
+      "trafico": "Pausá lo que no vende: dejá solo el mejor anuncio por ángulo durante 72h.\nArreglá la PDP: reescribí el hero en 1 línea y sumá 3 beneficios + 3 reseñas.\nMostrá costos totales y políticas antes del pago para bajar abandono.",
+      "pagina_oferta": "Subí el ATC: clarificá valor en la PDP y agregá prueba social arriba.\nBajá fricción de checkout: menos campos, costos sin sorpresa, contacto visible.\nMejorá calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.",
+      "checkout_confianza": "Reducí campos del checkout a los indispensables.\nMostrá costos de envío antes del último paso.\nAñadí badge de pago seguro y políticas claras.",
+      "escalar": "Duplicá creatividades manteniendo el claim ganador.\nAbrí audiencias lookalike sin tocar la promesa central.\nSumá remarketing con prueba social y objeciones resueltas."
+    }
   },
   "cta": {
+    "prefix": "Ver solución para",
+    "primarySub": "WhatsApp o agendar consultoría",
+    "primary": {
+      "trafico": "Atraer clientes calificados a mi tienda",
+      "pagina_oferta": "Dominar mi Arquitectura de Conversión",
+      "checkout_confianza": "Recuperar mis ventas abandonadas hoy",
+      "escalar": "Escalar mi facturación con el método AD"
+    },
     "mcTraffic": "Encender tráfico con criterio (USD 27)",
     "mcPdp": "Armar mi PDP 80/20 (USD 27)",
     "mcCheckout": "Checkout sin fricción (USD 27)",

@@ -30,9 +30,9 @@ export default function Home() {
     }
   }, [result])
 
-  const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string) => {
+  const handleDiagnosis = (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string, checkouts?: number) => {
     try {
-      const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount)
+      const diagnosis = diagnose(visits, carts, purchases, sales, adspend, ordersCount, checkouts)
       setResult(diagnosis)
 
       // Guardar datos de diagnóstico para el modal de guardar
@@ -53,13 +53,15 @@ export default function Home() {
         cr: diagnosis.cr
       })
 
-      // Log de uso en leads_analizados (sin login, fire-and-forget)
+      // Log de uso en leads_analizados (sin login, fire-and-forget).
+      // Se envían identidad, métricas básicas, opcionales y resultado del diagnóstico.
       if (storeUrl != null && platform != null) {
         logLeadAnalizado({
           storeUrl,
           platform,
           visits,
           carts,
+          checkouts: checkouts ?? null,
           orders: purchases,
           sales: sales ?? null,
           adspend: adspend ?? null,
@@ -70,7 +72,10 @@ export default function Home() {
           cr: diagnosis.cr,
           aov: diagnosis.aov ?? null,
           roas: diagnosis.roas ?? null,
-          cac: diagnosis.cac ?? null
+          cac: diagnosis.cac ?? null,
+          cartToCheckout: diagnosis.cartToCheckout ?? null,
+          checkoutToBuy: diagnosis.checkoutToBuy ?? null,
+          checkoutInsight: diagnosis.checkoutInsight ?? null
         }).catch(() => {}) // fire-and-forget, no bloquear UI
       }
     } catch (error) {

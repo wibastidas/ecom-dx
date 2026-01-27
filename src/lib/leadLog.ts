@@ -1,12 +1,13 @@
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from './firebase'
-import type { Diagnosis } from './diagnosis'
+import type { Diagnosis, CheckoutInsight } from './diagnosis'
 
 export interface LeadAnalizadoPayload {
   storeUrl: string
   platform: string
   visits: number
   carts: number
+  checkouts?: number | null
   orders: number
   sales?: number | null
   adspend?: number | null
@@ -18,6 +19,9 @@ export interface LeadAnalizadoPayload {
   aov?: number | null
   roas?: number | null
   cac?: number | null
+  cartToCheckout?: number | null
+  checkoutToBuy?: number | null
+  checkoutInsight?: CheckoutInsight
 }
 
 /**

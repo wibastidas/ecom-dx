@@ -2,6 +2,8 @@
 
 Una aplicación web para diagnosticar problemas de conversión en tiendas online con marca propia, con análisis financiero opcional para screening de leads.
 
+**Modo actual:** Lead Magnet (Uruguay/Argentina). Sin historial ni guardado; CTA principal «Ver solución para [Diagnóstico]» → WhatsApp o agendar. URL del CTA: `NEXT_PUBLIC_CTA_WHATSAPP_URL`.
+
 ## 🚀 Características
 
 ### Capa 1 - Diagnóstico Core (Obligatorio)

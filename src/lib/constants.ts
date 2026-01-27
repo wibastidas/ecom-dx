@@ -16,3 +16,6 @@ export const PLATFORM_OPTIONS: { value: Platform; labelKey: string }[] = [
 export function getHelpMode(platform: Platform): 'shopify' | 'general' {
   return platform === 'shopify' ? 'shopify' : 'general'
 }
+
+/** URL del CTA principal "Ver solución para [Diagnóstico]" → WhatsApp o agendar. Env: NEXT_PUBLIC_CTA_WHATSAPP_URL */
+export const CTA_WHATSAPP_URL = process.env.NEXT_PUBLIC_CTA_WHATSAPP_URL ?? 'https://wa.me/'

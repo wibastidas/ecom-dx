@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { trackDiagnosisStart, trackDiagnosisSubmit } from '@/lib/analytics'
 import useTranslations from '@/hooks/useTranslations'
 import Tooltip from './Tooltip'
-import { PLATFORM_OPTIONS, type Platform } from '@/lib/constants'
+import { PLATFORM_OPTIONS, getHelpMode, type Platform } from '@/lib/constants'
 
 interface MetricsFormData {
   visits: string
@@ -16,7 +16,7 @@ interface MetricsFormData {
 }
 
 interface MetricsFormProps {
-  onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string) => void
+  onDiagnosis: (visits: number, carts: number, purchases: number, sales?: number, adspend?: number, ordersCount?: number, storeUrl?: string, platform?: string, checkouts?: number) => void
   openAccordion?: boolean
 }
 
@@ -29,6 +29,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   const [formData, setFormData] = useState({
     visits: '',
     carts: '',
+    checkouts: '',
     purchases: '',
     sales_total: '',
     ad_spend: '',
@@ -41,6 +42,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   })
   const { t } = useTranslations()
 
+  // Modo de ayuda para helper texts: Shopify (rutas exactas) vs General (cualquier otra plataforma)
+  const helpMode = platform ? getHelpMode(platform) : 'general'
+
   // Función simple para manejar cambios en los inputs
   const handleInputChange = (field: string, value: string) => {
     if (field === 'storeUrl') {
@@ -48,7 +52,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
       return
     }
     // Para campos numéricos, solo permitir números
-    if (['visits', 'carts', 'purchases', 'orders'].includes(field)) {
+    if (['visits', 'carts', 'checkouts', 'purchases', 'orders'].includes(field)) {
       const numericValue = value.replace(/[^0-9]/g, '')
       
       // Si el valor empieza con 0 y tiene más de un dígito, limpiar el 0
@@ -107,16 +111,35 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   const visits = Number(formData.visits) || 0
   const carts = Number(formData.carts) || 0
   const purchases = Number(formData.purchases) || 0
+  const checkoutsNum = formData.checkouts.trim() ? Number(formData.checkouts) : 0
+
+  // Fase 5: Si el acordeón está abierto y ya hay Compras, pre-rellenar Número de pedidos
+  useEffect(() => {
+    if (openAccordion && purchases > 0) {
+      setFormData(prev => (prev.orders === '' ? { ...prev, orders: String(purchases) } : prev))
+    }
+  }, [openAccordion, purchases])
+
+  // URL debe ser dominio válido: al menos un TLD (ej .com, .com.ar, .ar, .uy)
+  const isValidStoreUrl = (url: string) => {
+    const s = url.trim().replace(/^https?:\/\//i, '').split('/')[0] || ''
+    return /^[a-z0-9.-]+\.[a-z]{2,6}$/i.test(s)
+  }
+  const storeUrlValid = storeUrl.trim() !== '' && isValidStoreUrl(storeUrl.trim())
+
+  // Con checkouts opcional: carritos >= checkouts >= compras
+  const checkoutsValid = !checkoutsNum || (checkoutsNum <= carts && purchases <= checkoutsNum)
   
   // Identidad y métricas: URL y plataforma requeridos; métricas válidas
   const isFormValid =
-    storeUrl.trim() !== '' &&
+    storeUrlValid &&
     platform !== '' &&
     visits > 0 &&
     carts > 0 &&
     purchases > 0 &&
     carts <= visits &&
-    purchases <= carts
+    purchases <= carts &&
+    checkoutsValid
   
 
 
@@ -125,22 +148,24 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     setIsSubmitting(true)
     
     try {
-      // Preparar datos para el diagnóstico
+      // Preparar datos para el diagnóstico. Fase 5: ordersCount = Compras cuando N.º pedidos está vacío
+      const ordersCountVal = formData.orders.trim() ? Number(formData.orders) : purchases
       const diagnosisData = {
         visits,
         carts,
         purchases,
         sales_total: Number(formData.sales_total) || undefined,
         ad_spend: Number(formData.ad_spend) || undefined,
-        orders: Number(formData.orders) || undefined
+        orders: ordersCountVal
       }
       
       // Track form submission
       trackDiagnosisStart()
       trackDiagnosisSubmit(visits, carts, purchases)
       
-      // Trigger diagnosis con todos los datos + identidad para log de uso (leads_analizados)
-      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, diagnosisData.orders, storeUrl.trim(), platform || undefined)
+      // Trigger diagnosis con todos los datos + identidad y checkouts (opcional) para log de uso
+      const checkoutsVal = formData.checkouts.trim() ? Number(formData.checkouts) : undefined
+      onDiagnosis(visits, carts, purchases, diagnosisData.sales_total, diagnosisData.ad_spend, ordersCountVal, storeUrl.trim(), platform || undefined, checkoutsVal)
     } catch (error) {
       console.error('Error submitting form:', error)
     } finally {
@@ -174,17 +199,19 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 value={storeUrl}
                 onChange={(e) => handleInputChange('storeUrl', e.target.value)}
                 onBlur={() => setStoreUrlTouched(true)}
-                className={`input-field ${storeUrlTouched && !storeUrl.trim() ? 'border-red-300 focus:border-red-500' : ''}`}
+                className={`input-field ${storeUrlTouched && !storeUrlValid ? 'border-red-300 focus:border-red-500' : ''}`}
                 placeholder={t('platforms.storeUrlPlaceholder')}
+                inputMode="url"
+                autoComplete="off"
                 required
                 aria-required="true"
               />
-              {storeUrlTouched && !storeUrl.trim() && (
+              {storeUrlTouched && !storeUrlValid && (
                 <p className="mt-1 text-sm text-red-600 flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
-                  {t('validation.urlRequired')}
+                  {!storeUrl.trim() ? t('validation.urlRequired') : t('validation.urlInvalid')}
                 </p>
               )}
             </div>
@@ -232,11 +259,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             </div>
             <h3 className="section-title mb-0">{t('sections.basicMetrics')}</h3>
           </div>
+          <p className="text-sm text-gray-600 -mt-1 mb-4">
+            {t(`platforms.whereToFind.${helpMode}`)}
+          </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="form-group">
               <label htmlFor="visits" className="form-label">
-                <Tooltip content={t('descriptions.visits')}>
+                <Tooltip content={t(`platforms.helpers.${helpMode}.visits`)}>
                   <span className="cursor-help whitespace-nowrap">👥 {t('labels.visits')} ⓘ</span>
                 </Tooltip>
               </label>
@@ -256,6 +286,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 placeholder="1200"
                 min="1"
                 step="1"
+                inputMode="numeric"
+                autoComplete="off"
+                pattern="[0-9]*"
               />
               {getFieldValidation('visits').status === 'error' && (
                 <p className="mt-1 text-sm text-red-600 flex items-center">
@@ -269,7 +302,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
 
             <div className="form-group">
               <label htmlFor="carts" className="form-label">
-                <Tooltip content={t('descriptions.carts')}>
+                <Tooltip content={t(`platforms.helpers.${helpMode}.carts`)}>
                   <span className="cursor-help whitespace-nowrap">🛒 {t('labels.carts')} ⓘ</span>
                 </Tooltip>
               </label>
@@ -289,6 +322,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 placeholder="90"
                 min="1"
                 step="1"
+                inputMode="numeric"
+                autoComplete="off"
+                pattern="[0-9]*"
               />
               {getFieldValidation('carts').status === 'error' && (
                 <p className="mt-1 text-sm text-red-600 flex items-center">
@@ -301,8 +337,35 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             </div>
 
             <div className="form-group">
+              <label htmlFor="checkouts" className="form-label">
+                <Tooltip content={t(`platforms.helpers.${helpMode}.checkouts`)}>
+                  <span className="cursor-help whitespace-nowrap">💳 {t('labels.checkouts')} ⓘ</span>
+                </Tooltip>
+              </label>
+              <input
+                type="number"
+                id="checkouts"
+                value={formData.checkouts}
+                onChange={(e) => handleInputChange('checkouts', e.target.value)}
+                className={`input-field border-dashed ${checkoutsNum > 0 && !checkoutsValid ? 'border-red-300 focus:border-red-500' : ''}`}
+                placeholder="—"
+                min="0"
+                step="1"
+                inputMode="numeric"
+                autoComplete="off"
+                pattern="[0-9]*"
+              />
+              {checkoutsNum > 0 && !checkoutsValid && (
+                <p className="mt-1 text-sm text-red-600">
+                  {checkoutsNum > carts ? t('validation.checkoutsGtCarts') : t('validation.ordersGtCheckouts')}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-500">{t('platforms.checkoutsOptionalInfo')}</p>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="purchases" className="form-label">
-                <Tooltip content={t('descriptions.orders')}>
+                <Tooltip content={t(`platforms.helpers.${helpMode}.orders`)}>
                   <span className="cursor-help whitespace-nowrap">✅ {t('labels.orders')} ⓘ</span>
                 </Tooltip>
               </label>
@@ -322,6 +385,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 placeholder="24"
                 min="1"
                 step="1"
+                inputMode="numeric"
+                autoComplete="off"
+                pattern="[0-9]*"
               />
               {getFieldValidation('purchases').status === 'error' && (
                 <p className="mt-1 text-sm text-red-600 flex items-center">
@@ -379,6 +445,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                     placeholder="5000"
                     min="0"
                     step="0.01"
+                    inputMode="decimal"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -397,6 +465,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                     placeholder="1000"
                     min="0"
                     step="0.01"
+                    inputMode="decimal"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -412,10 +482,16 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                     value={formData.orders}
                     onChange={(e) => handleInputChange('orders', e.target.value)}
                     className="input-field"
-                    placeholder="25"
+                    placeholder={purchases > 0 ? String(purchases) : '25'}
                     min="0"
                     step="1"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    pattern="[0-9]*"
                   />
+                  {purchases > 0 && (
+                    <p className="mt-1 text-xs text-gray-500">{t('sections.ordersFromComprasHint')}</p>
+                  )}
                 </div>
               </div>
 
@@ -470,13 +546,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
           {!isFormValid && (
             <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
               <p className="text-yellow-800 text-sm text-center whitespace-pre-line">
-                {!storeUrl.trim() && '🌐 Ingresá la URL de tu tienda\n'}
+                {!storeUrlValid && '🌐 Ingresá un dominio válido (ej: mitienda.com)\n'}
                 {platform === '' && '📦 Seleccioná una plataforma\n'}
                 {visits <= 0 && '👥 Ingresá las visitas únicas\n'}
                 {carts <= 0 && '🛒 Ingresá los carritos iniciados\n'}
                 {purchases <= 0 && '✅ Ingresá las compras completadas\n'}
                 {visits > 0 && carts > 0 && purchases > 0 && carts > visits && '⚠️ Los carritos no pueden ser más que las visitas\n'}
-                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && '⚠️ Las compras no pueden ser más que los carritos'}
+                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && '⚠️ Las compras no pueden ser más que los carritos\n'}
+                {checkoutsNum > 0 && !checkoutsValid && '💳 Llegaron al pago debe estar entre carritos y compras'}
               </p>
             </div>
           )}
