@@ -1,11 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { DiagnosisResult } from '@/lib/diagnosis'
-import { evaluateFinance, FinanceInsight } from '@/lib/finance'
-import { financeLevel } from '@/lib/financeLevel'
 import { getATCComparison, getCBComparison, getCRComparison } from '@/lib/metricsHelpers'
-import { formatCurrency } from '@/lib/formatters'
 import useTranslations from '@/hooks/useTranslations'
 import { CTA_WHATSAPP_URL } from '@/lib/constants'
 import Tooltip from './Tooltip'
@@ -30,9 +27,6 @@ interface ResultCardProps {
   onResultChange?: (result: DiagnosisResult) => void
   onDiagnosisDataChange?: (data: any) => void
 }
-
-// Mostrar tarjeta "Finanzas rápidas (opcional)" en el resultado. false = oculta.
-const showFinanceCard = false
 
 export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData, onResultChange, onDiagnosisDataChange }: ResultCardProps) {
   const { t } = useTranslations()
@@ -75,407 +69,160 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
   // }
 
 
-  // Determinar el mensaje según el diagnóstico
-  const getMessage = (dx: string) => {
-    const messages = {
-      trafico: 'necesita más visitantes',
-      pagina_oferta: 'convierte bien pero pocos llegan al carrito',
-      checkout_confianza: 'tiene muchos carritos pero pocos se completan',
-      escalar: 'está lista para crecer'
-    }
-    return messages[dx as keyof typeof messages] || 'necesita optimización'
-  }
-
-  // Obtener el CTA del microcurso según el diagnóstico
-  const getMicrocourseCta = (dx: string) => {
-    const ctas = {
-      trafico: t('cta.mcTraffic'),
-      pagina_oferta: t('cta.mcPdp'),
-      checkout_confianza: t('cta.mcCheckout'),
-      escalar: t('cta.mcScale')
-    }
-    return ctas[dx as keyof typeof ctas] || t('cta.mcTraffic')
-  }
-
-  // Obtener la interpretación de comunicación según el diagnóstico
-  const getCommunicationInsight = (dx: string) => {
-    const insights = {
-      trafico: t('result.commTraffic'),
-      pagina_oferta: t('result.commATC'),
-      checkout_confianza: t('result.commCB'),
-      escalar: t('result.commScale')
-    }
-    return insights[dx as keyof typeof insights] || t('result.commTraffic')
-  }
-
   // Próximos pasos desde i18n (result.actionsByDiagnosis.{dx}, una acción por línea)
   const getBasicActions = (dx: string): string[] => {
     const raw = t(`result.actionsByDiagnosis.${dx}`)
     if (typeof raw === 'string' && raw && !raw.startsWith('result.actionsByDiagnosis.')) {
       return raw.split('\n').filter(Boolean)
     }
-    return ['Revisá tu embudo de ventas.', 'Optimizá página y checkout.', 'Medí y repetí lo que funciona.']
+    return ['Revisa tu embudo de ventas.', 'Optimiza página y checkout.', 'Mide y repite lo que funciona.']
   }
 
-  // Evaluar finanzas si hay datos
-  let hasFinanceData = false
-  let financialLevel: 'critical' | 'fragile' | 'strong' | null = null
-  let cacRatio = 0
-
-  if (result.aov && result.roas && result.cac) {
-    hasFinanceData = true
-    financialLevel = financeLevel(result.roas)
-    cacRatio = Math.round((result.cac / result.aov) * 100)
+  const getStatusLabel = (status: 'above' | 'equal' | 'below') => {
+    if (status === 'above') return t('result.statusAlto')
+    if (status === 'equal') return t('result.statusEnRango')
+    return t('result.statusBajo')
   }
+
+  const hasCheckoutInsight = result.checkoutInsight && (result.checkoutInsight === 'logistica' || result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos')
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Tarjeta 1: Datos Básicos */}
-      <div className="card-elevated">
-        {/* Título y subtítulo */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            {result.dx === 'escalar' ? (
-              <>
-                ¡Excelente!{' '}
-                <span className="text-green-600">
-                  Todo está funcionando bien
-                </span>
-              </>
-            ) : (
-              <>
-                Tu cuello principal:{' '}
-                <span className="text-blue-600">
-                  {t(`bottlenecks.${result.dx}`)}
-                </span>
-              </>
-            )}
-          </h1>
-          <p className="text-xl text-gray-600">
-            {t('result.sub', { msg: getMessage(result.dx) })}
+    <div className="max-w-2xl mx-auto space-y-8">
+      {/* Above the fold: título + sub + CTA WhatsApp */}
+      <div className="card-elevated text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+          {t('result.heroTitle', { dx: t(`bottlenecks.${result.dx}`) })}
+        </h1>
+        <p className="text-gray-600 mb-4">
+          {t('result.heroSub')}
+        </p>
+        {result.quickBuyMode && (
+          <p className="text-sm text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 inline-block mb-4">
+            ⚡ {t('result.quickBuyHint')}
           </p>
-          {result.quickBuyMode && (
-            <p className="mt-3 text-sm text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 inline-block">
-              ⚡ {t('result.quickBuyHint')}
-            </p>
-          )}
-        </div>
+        )}
+        <a
+          href={CTA_WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg transition-all hover:shadow-xl"
+        >
+          <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          {t('result.ctaWhatsApp')}
+        </a>
+        <p className="text-sm text-gray-500 mt-3">
+          {t('result.ctaMicrocopy')}
+        </p>
+      </div>
 
-        {/* KPIs con tooltips y comparación vs promedio */}
-        <div className="grid grid-cols-3 gap-1 mb-8">
-          {/* ATC */}
+      {/* Tus tasas clave: 3 cards, valor + estado corto, rango solo en tooltip */}
+      <div className="card-elevated">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('result.tasasKey')}</h2>
+        <div className="grid grid-cols-3 gap-4">
           {(() => {
             const atcComparison = getATCComparison(result.atc * 100)
             return (
-              <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
-                <Tooltip content={t('tooltips.ATC')}>
-                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.atcTitle')} ⓘ</div>
+              <div className={`text-center p-4 ${atcComparison.bgColorClass} rounded-xl min-w-0`}>
+                <Tooltip content={`${t('tooltips.ATC')} ${t('metrics.atcNormal')}`}>
+                  <div className="text-sm text-gray-600 cursor-help mb-1">{t('metrics.atcTitle')} ⓘ</div>
                 </Tooltip>
-                <div className={`text-2xl font-bold ${atcComparison.colorClass} mb-2`}>
+                <div className={`text-xl font-bold ${atcComparison.colorClass}`}>
                   {(result.atc * 100).toFixed(1)}%
                 </div>
-                <div className={`text-xs font-medium ${atcComparison.colorClass} mb-1`}>
-                  {atcComparison.normalRange}
-                </div>
-                <div className="mt-auto">
-                  <div className={`text-xs sm:text-sm font-bold ${atcComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${atcComparison.status === 'above' ? 'border-green-300' : atcComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                    <span className="leading-tight">{atcComparison.statusMessage}</span>
-                  </div>
+                <div className={`text-sm font-semibold ${atcComparison.colorClass} mt-1`}>
+                  {getStatusLabel(atcComparison.status)}
                 </div>
               </div>
             )
           })()}
-          
-          {/* Cart→Buy */}
           {(() => {
             const cbComparison = getCBComparison(result.cb * 100)
             return (
-              <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
-                <Tooltip content={t('tooltips.CB')}>
-                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.cbTitle')} ⓘ</div>
+              <div className={`text-center p-4 ${cbComparison.bgColorClass} rounded-xl min-w-0`}>
+                <Tooltip content={`${t('tooltips.CB')} ${t('metrics.cbNormal')}`}>
+                  <div className="text-sm text-gray-600 cursor-help mb-1">{t('metrics.cbTitle')} ⓘ</div>
                 </Tooltip>
-                <div className={`text-2xl font-bold ${cbComparison.colorClass} mb-2`}>
+                <div className={`text-xl font-bold ${cbComparison.colorClass}`}>
                   {(result.cb * 100).toFixed(1)}%
                 </div>
-                <div className={`text-xs font-medium ${cbComparison.colorClass} mb-1`}>
-                  {cbComparison.normalRange}
-                </div>
-                <div className="mt-auto">
-                  <div className={`text-xs sm:text-sm font-bold ${cbComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${cbComparison.status === 'above' ? 'border-green-300' : cbComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                    <span className="leading-tight">{cbComparison.statusMessage}</span>
-                  </div>
+                <div className={`text-sm font-semibold ${cbComparison.colorClass} mt-1`}>
+                  {getStatusLabel(cbComparison.status)}
                 </div>
               </div>
             )
           })()}
-          
-          {/* CR */}
           {(() => {
             const crComparison = getCRComparison(result.cr * 100)
             return (
-              <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-lg min-w-0 flex flex-col h-full`}>
-                <Tooltip content={t('tooltips.CR')}>
-                  <div className="text-xs sm:text-sm text-gray-600 cursor-help mb-2 leading-tight">{t('metrics.crTitle')} ⓘ</div>
+              <div className={`text-center p-4 ${crComparison.bgColorClass} rounded-xl min-w-0`}>
+                <Tooltip content={`${t('tooltips.CR')} ${t('metrics.crNormal')}`}>
+                  <div className="text-sm text-gray-600 cursor-help mb-1">{t('metrics.crTitle')} ⓘ</div>
                 </Tooltip>
-                <div className={`text-2xl font-bold ${crComparison.colorClass} mb-2`}>
+                <div className={`text-xl font-bold ${crComparison.colorClass}`}>
                   {(result.cr * 100).toFixed(1)}%
                 </div>
-                <div className={`text-xs font-medium ${crComparison.colorClass} mb-1`}>
-                  {crComparison.normalRange}
-                </div>
-                <div className="mt-auto">
-                  <div className={`text-xs sm:text-sm font-bold ${crComparison.colorClass} bg-white px-2 py-1 sm:px-3 sm:py-2 rounded-md border-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center text-center ${crComparison.status === 'above' ? 'border-green-300' : crComparison.status === 'below' ? 'border-red-300' : 'border-blue-300'}`}>
-                    <span className="leading-tight">{crComparison.statusMessage}</span>
-                  </div>
+                <div className={`text-sm font-semibold ${crComparison.colorClass} mt-1`}>
+                  {getStatusLabel(crComparison.status)}
                 </div>
               </div>
             )
           })()}
         </div>
-
-        {/* Banda de referencias */}
-        <div className="text-center mb-8">
-          <p className="text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-lg inline-block">
-            {t('notes.refs')}
-          </p>
-        </div>
-
-        {/* Interpretación de comunicación */}
-        <div className="mb-8 p-6 bg-yellow-50 rounded-xl border border-yellow-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            {t('result.commTitle')}
-          </h3>
-          <p className="text-gray-700 mb-4">
-            {t('result.commLead')}
-          </p>
-          <p className={`text-sm ${result.dx === 'escalar' ? 'text-green-700 font-semibold bg-white px-3 py-2 rounded-lg border border-green-300' : 'text-gray-600'}`}>
-            {getCommunicationInsight(result.dx)}
-          </p>
-        </div>
-
-        {/* Dónde se rompe el proceso (solo cuando hay datos de checkouts) */}
-        {result.checkoutInsight && (result.checkoutInsight === 'logistica' || result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos') && (
-          <div className="mb-8 p-6 bg-amber-50 rounded-xl border border-amber-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              {t('result.checkoutInsightTitle')}
-            </h3>
-            <div className="space-y-2 text-sm text-gray-700">
-              {(result.checkoutInsight === 'logistica' || result.checkoutInsight === 'ambos') && (
-                <p>{t('result.checkoutInsightLogistica')}</p>
-              )}
-              {(result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos') && (
-                <p>{t('result.checkoutInsightPago')}</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Plan de 3 acciones básicas */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            {t('finance.actionsTitleBasic')}
-          </h3>
-          <div className="space-y-3">
-            {getBasicActions(result.dx).map((action, index) => (
-              <div key={index} className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-blue-600 text-sm font-semibold">{index + 1}</span>
-                </div>
-                <p className="text-gray-700">{action}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
-      {/* Tarjeta 2: Finanzas (condicional) — oculta si showFinanceCard === false */}
-      {showFinanceCard && (hasFinanceData ? (
-        <div className="card-elevated">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {t('finance.title')}
-          </h2>
-          
-          {/* Stats financieras */}
-          <div className="space-y-4 mb-8">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-700">
-                <Tooltip content="AOV (Ticket Promedio): ventas/pedidos">
-                  <span className="cursor-help">{t('finance.aov')} ⓘ</span>
-                </Tooltip>
+      {/* Tus 3 próximos pasos */}
+      <div className="card-elevated">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('result.proximosPasos')}</h2>
+        <ul className="space-y-2 list-none">
+          {getBasicActions(result.dx).map((action, index) => (
+            <li key={index} className="flex items-start gap-3">
+              <span className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-semibold">
+                {index + 1}
               </span>
-              <span className="text-xl font-bold text-gray-900">${formatCurrency(result.aov || 0)}</span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-700">
-                <Tooltip content="ROAS (Retorno de Ads): ventas/gasto en ads">
-                  <span className="cursor-help">{t('finance.roas')} ⓘ</span>
-                </Tooltip>
-              </span>
-              <span className="text-xl font-bold text-gray-900">{result.roas?.toFixed(2)}</span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-700">
-                <Tooltip content="CAC (Costo por Cliente): gasto en ads/pedidos">
-                  <span className="cursor-help">{t('finance.cac')} ⓘ</span>
-                </Tooltip>
-              </span>
-              <span className="text-xl font-bold text-gray-900">${formatCurrency(result.cac || 0)}</span>
-            </div>
-          </div>
+              <span className="text-gray-700">{action}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-          {/* Resumen */}
-          <div className={`p-6 rounded-xl border-2 mb-6 ${
-            financialLevel === 'critical' ? 'bg-red-50 border-red-200' :
-            financialLevel === 'fragile' ? 'bg-yellow-50 border-yellow-200' :
-            'bg-green-50 border-green-200'
-          }`}>
-            <div className="flex items-center mb-4">
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                financialLevel === 'critical' ? 'bg-red-100 text-red-800' :
-                financialLevel === 'fragile' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-green-100 text-green-800'
-              }`}>
-                {t(`finance.level.${financialLevel}`)}
-              </span>
-            </div>
-            <div className="mb-4">
-              <p className="text-gray-700">
-                {t(`finance.copy.${financialLevel}`)}
-              </p>
-            </div>
-            
-            {/* Contexto CAC/AOV */}
-            <p className="text-sm text-gray-600 mb-2">
-              {t('finance.copy.ratio', { ratio: cacRatio })}
-            </p>
-            
-            <p className="text-xs text-gray-500">
-              {t('finance.copy.caveat')}
-            </p>
-            
-            {/* Muestra chica */}
-            {(diagnosisData.ordersCount && diagnosisData.ordersCount < 10) && (
-              <p className="text-xs text-gray-500 mt-2">
-                {t('finance.notes.smallSample')}
-              </p>
+      {/* Señal extra: solo si hay datos de checkouts */}
+      {hasCheckoutInsight && (
+        <div className="card-elevated bg-amber-50 border border-amber-200">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">{t('result.senalExtra')}</h3>
+          <div className="text-sm text-gray-700 space-y-1">
+            {(result.checkoutInsight === 'logistica' || result.checkoutInsight === 'ambos') && (
+              <p><strong>{t('result.fugaEnvio')}</strong> {t('result.fugaEnvioRec')}</p>
+            )}
+            {(result.checkoutInsight === 'pago' || result.checkoutInsight === 'ambos') && (
+              <p><strong>{t('result.fugaPago')}</strong> {t('result.fugaPagoRec')}</p>
             )}
           </div>
-
-          {/* Acciones financieras - Simplificadas */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {t('finance.actionsTitleFinance')}
-            </h3>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-blue-600 text-sm font-semibold">1</span>
-                </div>
-                <p className="text-gray-700">Mejorá tu página de producto: clarificá valor y agregá prueba social</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-blue-600 text-sm font-semibold">2</span>
-                </div>
-                <p className="text-gray-700">Optimizá el checkout: menos campos, costos claros, contacto visible</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-blue-600 text-sm font-semibold">3</span>
-                </div>
-                <p className="text-gray-700">Subí el ticket promedio: packs, envío gratis, upsells</p>
-              </div>
-            </div>
-          </div>
-
-          {/* MVP: Botón guardar / Iniciar sesión y guardar – comentado */}
-          {/* <div className="text-center">
-            <button 
-              onClick={handleSaveClick}
-              className="btn-outline"
-            >
-              {user ? t('buttons.saveDiagnosis') : t('buttons.loginSave')}
-            </button>
-          </div> */}
         </div>
-      ) : (
-        <div className="card-elevated">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              {t('result.financeEmptyTitle')}
-            </h2>
-            <p className="text-gray-600 mb-6 whitespace-pre-line">
-              {t('result.financeEmptyText')}
-            </p>
-            <button
-              onClick={onEditData}
-              className="btn-outline"
-            >
-              {t('buttons.editData')}
-            </button>
-          </div>
-        </div>
-      ))}
+      )}
 
-      {/* Tarjeta 3: CTAs y Acciones */}
-      <div className="card-elevated">
-        {/* CTA venta por diagnóstico — comentado; por ahora usamos bloque webinar + WhatsApp */}
-        {/* <div className="text-center mb-8">
-          <a href={CTA_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-primary-gradient text-lg px-8 py-4 inline-flex items-center justify-center">
-            {t(`cta.primary.${result.dx}`)}
-          </a>
-        </div> */}
-
-        {/* Bloque webinar + Unirme al grupo de WhatsApp */}
-        <div className="text-center mb-8">
-          <p className="text-gray-700 text-base mb-4 max-w-xl mx-auto">
-            {t('cta.webinarLead1')}
-          </p>
-          <p className="text-gray-600 text-sm mb-6 max-w-xl mx-auto">
-            {t('cta.webinarLead2')}
-          </p>
-          <a
-            href={CTA_WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5"
-          >
-            <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            {t('cta.joinWhatsAppGroup')}
-          </a>
-        </div>
-
-        {/* Acciones secundarias */}
-        <div className="flex flex-col gap-3 justify-center max-w-sm mx-auto">
-          {/* MVP: Ver historial – comentado */}
-          {/* {user && (
-            <button 
-              onClick={() => setShowHistoryModal(true)}
-              className="btn-outline"
-            >
-              📊 Ver historial
-            </button>
-          )} */}
-          <button 
-            onClick={onNewDiagnosis}
-            className="btn-outline"
-          >
-            🔄 Hacer nuevo diagnóstico
+      {/* CTA WhatsApp repetido + links secundarios */}
+      <div className="card-elevated text-center">
+        <p className="text-gray-700 mb-2">{t('result.ctaFinalLine1')}</p>
+        <p className="text-gray-600 text-sm mb-6">{t('result.ctaFinalLine2')}</p>
+        <a
+          href={CTA_WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg transition-all hover:shadow-xl"
+        >
+          <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          {t('result.ctaWhatsApp')}
+        </a>
+        <div className="flex flex-wrap justify-center gap-4 mt-6 pt-4 border-t border-gray-100">
+          <button type="button" onClick={onNewDiagnosis} className="text-sm text-gray-500 hover:text-gray-700 underline">
+            {t('result.newDiagLink')}
           </button>
-        </div>
-
-        {/* Link discreto para compartir */}
-        <div className="text-center mt-8 pt-6 border-t border-gray-200">
-          <button
-            onClick={() => setShowShareModal(true)}
-            className="text-sm text-gray-500 hover:text-gray-700 underline"
-          >
-            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-            </svg>
-            Compartir esta herramienta con un amigo
+          <button type="button" onClick={() => setShowShareModal(true)} className="text-sm text-gray-500 hover:text-gray-700 underline">
+            {t('result.shareLink')}
           </button>
         </div>
       </div>
