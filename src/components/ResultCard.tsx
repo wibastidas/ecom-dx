@@ -31,6 +31,9 @@ interface ResultCardProps {
   onDiagnosisDataChange?: (data: any) => void
 }
 
+// Mostrar tarjeta "Finanzas rápidas (opcional)" en el resultado. false = oculta.
+const showFinanceCard = false
+
 export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnosisData, onResultChange, onDiagnosisDataChange }: ResultCardProps) {
   const { t } = useTranslations()
   // const { user, signIn } = useAuth()
@@ -285,8 +288,8 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         </div>
       </div>
 
-      {/* Tarjeta 2: Finanzas (condicional) */}
-      {hasFinanceData ? (
+      {/* Tarjeta 2: Finanzas (condicional) — oculta si showFinanceCard === false */}
+      {showFinanceCard && (hasFinanceData ? (
         <div className="card-elevated">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             {t('finance.title')}
@@ -412,7 +415,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
             </button>
           </div>
         </div>
-      )}
+      ))}
 
       {/* Tarjeta 3: CTAs y Acciones */}
       <div className="card-elevated">

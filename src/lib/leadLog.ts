@@ -3,8 +3,8 @@ import { db } from './firebase'
 import type { Diagnosis, CheckoutInsight } from './diagnosis'
 
 export interface LeadAnalizadoPayload {
-  storeUrl: string
-  platform: string
+  storeUrl?: string
+  platform?: string
   visits: number
   carts: number
   checkouts?: number | null

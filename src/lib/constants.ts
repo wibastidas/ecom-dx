@@ -8,7 +8,6 @@ export const PLATFORM_OPTIONS: { value: Platform; labelKey: string }[] = [
   { value: 'shopify', labelKey: 'platforms.options.shopify' },
   { value: 'woocommerce', labelKey: 'platforms.options.woocommerce' },
   { value: 'tiendanube', labelKey: 'platforms.options.tiendanube' },
-  { value: 'vtex', labelKey: 'platforms.options.vtex' },
   { value: 'custom', labelKey: 'platforms.options.custom' },
 ]
 

@@ -40,6 +40,9 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   })
   const { t } = useTranslations()
 
+  // Acordeón "Mejorá la precisión" (ventas, ads): oculto para simplificar; cambiar a true para mostrarlo
+  const showImprovePrecisionAccordion = false
+
   // Modo de ayuda para helper texts: Shopify (rutas exactas) vs General (cualquier otra plataforma)
   const helpMode = platform ? getHelpMode(platform) : 'general'
 
@@ -116,7 +119,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     const s = url.trim().replace(/^https?:\/\//i, '').split('/')[0] || ''
     return /^[a-z0-9.-]+\.[a-z]{2,6}$/i.test(s)
   }
-  const storeUrlValid = storeUrl.trim() !== '' && isValidStoreUrl(storeUrl.trim())
+  // URL opcional: vacío = válido; si hay texto, debe tener formato de dominio válido
+  const storeUrlValid = storeUrl.trim() === '' || isValidStoreUrl(storeUrl.trim())
 
   // Con checkouts opcional: compras <= checkouts. Si checkouts > carritos → Compra Rápida (no se bloquea)
   const checkoutsValid = !checkoutsNum || purchases <= checkoutsNum
@@ -126,10 +130,8 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
   const hasSalesOrAdspend = (formData.sales_total?.trim() ?? '') !== '' || (formData.ad_spend?.trim() ?? '') !== ''
   const financialBlockOk = !hasSalesOrAdspend || purchases > 0  // si hay datos fin., basta con tener Compras
   
-  // Identidad y métricas: URL y plataforma requeridos; métricas válidas
+  // Identidad (URL y plataforma) opcional; métricas requeridas
   const isFormValid =
-    storeUrlValid &&
-    platform !== '' &&
     visits > 0 &&
     carts > 0 &&
     purchases > 0 &&
@@ -171,19 +173,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
 
   return (
     <div className="max-w-2xl mx-auto">
-      <form onSubmit={onSubmit} className="space-y-6">
-        {/* Identidad: URL + Plataforma — primer bloque con fondo indigo para que se vea arriba de todo */}
-        <div className="rounded-2xl border-2 border-indigo-200 bg-indigo-50/90 p-6 shadow-sm">
-          {/* Icono + título "Identidad" — comentado para ir directo al grano (URL + plataforma)
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-              </svg>
-            </div>
-            <h3 className="section-title mb-0">{t('sections.identity')}</h3>
-          </div>
-          */}
+      <form onSubmit={onSubmit} className="space-y-0">
+        {/* Panel único: intro + URL/Plataforma + Métricas + CTA */}
+        <div className="card-elevated rounded-2xl border border-gray-200 bg-white shadow-lg p-6 sm:p-8 space-y-8">
+          <p className="text-gray-700 text-center sm:text-left">
+            {t('app.formIntro')}
+          </p>
+
+          {/* URL + Plataforma — 2 cols desktop, 1 móvil */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="form-group">
               <label htmlFor="storeUrl" className="form-label">
@@ -199,15 +196,15 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 placeholder={t('platforms.storeUrlPlaceholder')}
                 inputMode="url"
                 autoComplete="off"
-                required
-                aria-required="true"
+                aria-required="false"
               />
-              {storeUrlTouched && !storeUrlValid && (
+              <p className="mt-1 text-xs text-gray-500">{t('app.formUrlHelper')}</p>
+              {storeUrlTouched && !storeUrlValid && storeUrl.trim() !== '' && (
                 <p className="mt-1 text-sm text-red-600 flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
-                  {!storeUrl.trim() ? t('validation.urlRequired') : t('validation.urlInvalid')}
+                  {t('validation.urlInvalid')}
                 </p>
               )}
             </div>
@@ -220,9 +217,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value as Platform | '')}
                 onBlur={() => setPlatformTouched(true)}
-                className={`input-field ${platformTouched && platform === '' ? 'border-red-300 focus:border-red-500' : ''}`}
-                required
-                aria-required="true"
+                className="input-field"
               >
                 <option value="">{t('platforms.placeholder')}</option>
                 {PLATFORM_OPTIONS.map((opt) => (
@@ -231,33 +226,11 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                   </option>
                 ))}
               </select>
-              {platformTouched && platform === '' && (
-                <p className="mt-1 text-sm text-red-600 flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                  {t('validation.platformRequired')}
-                </p>
-              )}
             </div>
           </div>
-        </div>
 
-        {/* Métricas básicas — card blanca */}
-        <div className="card-elevated space-y-8">
-        {/* Métricas básicas */}
-        <div className="space-y-6">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h3 className="section-title mb-0">{t('sections.basicMetrics')}</h3>
-          </div>
-          <p className="text-sm text-gray-600 -mt-1 mb-4">
-            {t(`platforms.whereToFind.${helpMode}`)}
-          </p>
+          {/* Métricas: Visitas, Carritos, Checkouts (opcional), Compras */}
+          <div className="space-y-6">
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="form-group">
@@ -265,6 +238,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 <Tooltip content={t(`platforms.helpers.${helpMode}.visits`)}>
                   <span className="cursor-help whitespace-nowrap">👥 {t('labels.visits')} ⓘ</span>
                 </Tooltip>
+                <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
               <input
                 type="number"
@@ -301,6 +275,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 <Tooltip content={t(`platforms.helpers.${helpMode}.carts`)}>
                   <span className="cursor-help whitespace-nowrap">🛒 {t('labels.carts')} ⓘ</span>
                 </Tooltip>
+                <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
               <input
                 type="number"
@@ -333,37 +308,11 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             </div>
 
             <div className="form-group">
-              <label htmlFor="checkouts" className="form-label">
-                <Tooltip content={t(`platforms.helpers.${helpMode}.checkouts`)}>
-                  <span className="cursor-help whitespace-nowrap">💳 {t('labels.checkouts')} ⓘ</span>
-                </Tooltip>
-              </label>
-              <input
-                type="number"
-                id="checkouts"
-                value={formData.checkouts}
-                onChange={(e) => handleInputChange('checkouts', e.target.value)}
-                className={`input-field border-dashed ${checkoutsNum > 0 && !checkoutsValid ? 'border-red-300 focus:border-red-500' : ''}`}
-                placeholder="—"
-                min="0"
-                step="1"
-                inputMode="numeric"
-                autoComplete="off"
-                pattern="[0-9]*"
-              />
-              {checkoutsNum > 0 && !checkoutsValid && (
-                <p className="mt-1 text-sm text-red-600">
-                  {t('validation.ordersGtCheckouts')}
-                </p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">{t('platforms.checkoutsOptionalInfo')}</p>
-            </div>
-
-            <div className="form-group">
               <label htmlFor="purchases" className="form-label">
                 <Tooltip content={t(`platforms.helpers.${helpMode}.orders`)}>
                   <span className="cursor-help whitespace-nowrap">✅ {t('labels.orders')} ⓘ</span>
                 </Tooltip>
+                <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
               <input
                 type="number"
@@ -394,11 +343,39 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
                 </p>
               )}
             </div>
+
+            <div className="form-group">
+              <label htmlFor="checkouts" className="form-label">
+                <Tooltip content={t(`platforms.helpers.${helpMode}.checkouts`)}>
+                  <span className="cursor-help whitespace-nowrap">💳 {t('labels.checkouts')} ⓘ</span>
+                </Tooltip>
+              </label>
+              <input
+                type="number"
+                id="checkouts"
+                value={formData.checkouts}
+                onChange={(e) => handleInputChange('checkouts', e.target.value)}
+                className={`input-field border-dashed ${checkoutsNum > 0 && !checkoutsValid ? 'border-red-300 focus:border-red-500' : ''}`}
+                placeholder="—"
+                min="0"
+                step="1"
+                inputMode="numeric"
+                autoComplete="off"
+                pattern="[0-9]*"
+              />
+              {checkoutsNum > 0 && !checkoutsValid && (
+                <p className="mt-1 text-sm text-red-600">
+                  {t('validation.ordersGtCheckouts')}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-gray-500">{t('platforms.checkoutsOptionalInfo')}</p>
+            </div>
           </div>
         </div>
 
 
-        {/* Acordeón opcional - Mejorar precisión */}
+        {/* Acordeón opcional - Mejorar precisión (ventas, gasto en ads) */}
+        {showImprovePrecisionAccordion && (
         <div className="space-y-4">
           <div className="divider"></div>
           
@@ -474,65 +451,49 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             </div>
           </details>
         </div>
+        )}
 
-        {/* CTA Principal */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl">
-          <div className="text-center mb-4">
-            <h3 className="text-lg font-bold text-white mb-2">🎯 ¿Listo para tu diagnóstico?</h3>
-            <p className="text-blue-100 text-sm">
-              {formData.sales_total || formData.ad_spend
-                ? t('sections.ctaWithFinance')
-                : t('sections.ctaWithoutFinance')
-              }
+          {/* CTA Principal */}
+          <div className="pt-4 border-t border-gray-100">
+            <button
+              type="submit"
+              disabled={!isFormValid || isSubmitting}
+              className={`w-full font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center space-x-3 ${
+                isFormValid
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-xl'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              } ${isSubmitting ? 'opacity-75' : ''}`}
+            >
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span className="text-lg">Analizando...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-lg">{t('app.formCta')}</span>
+                </>
+              )}
+            </button>
+            <p className="text-center text-gray-500 text-xs mt-3">
+              {t('app.formMicrocopy')}
             </p>
-          </div>
-
-          {/* Lo que falta — arriba del botón, integrado en la tarjeta */}
-          {!isFormValid && (
-            <div className="mb-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 px-4 py-3">
-              <p className="text-white/95 text-sm font-medium mb-2">{t('sections.ctaCompleteToContinue')}</p>
-              <ul className="text-blue-50 text-sm space-y-1 list-none">
-                {!storeUrlValid && <li className="flex items-center gap-2">🌐 {t('validation.urlInvalid')}</li>}
-                {platform === '' && <li className="flex items-center gap-2">📦 {t('validation.platformRequired')}</li>}
-                {(visits <= 0 || carts <= 0 || purchases <= 0) && <li className="flex items-center gap-2">📊 {t('sections.ctaBasicMetricsMissing')}</li>}
-                {visits > 0 && carts > 0 && purchases > 0 && carts > visits && <li className="flex items-center gap-2">⚠️ {t('validation.cartsGtVisits')}</li>}
-                {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && <li className="flex items-center gap-2">⚠️ {t('validation.ordersGtCarts')}</li>}
-                {checkoutsNum > 0 && !checkoutsValid && <li className="flex items-center gap-2">💳 {t('validation.ordersGtCheckouts')}</li>}
-              </ul>
-            </div>
-          )}
-          
-          <button
-            type="submit"
-            disabled={!isFormValid || isSubmitting}
-            className={`w-full font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg transform flex items-center justify-center space-x-3 ${
-              isFormValid 
-                ? 'bg-white hover:bg-gray-50 text-blue-600 hover:shadow-xl hover:-translate-y-0.5' 
-                : 'bg-white/20 text-white/80 cursor-not-allowed border border-white/30'
-            } ${isSubmitting ? 'opacity-75' : ''}`}
-          >
-            {isSubmitting ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span className="text-lg">Analizando...</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <span className="text-lg">{t('buttons.getDiag')}</span>
-              </>
+            {!isFormValid && (
+              <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+                <p className="text-amber-800 text-sm font-medium mb-2">{t('sections.ctaCompleteToContinue')}</p>
+                <ul className="text-amber-700 text-sm space-y-1 list-none">
+                  {!storeUrlValid && storeUrl.trim() !== '' && <li className="flex items-center gap-2">🌐 {t('validation.urlInvalid')}</li>}
+                  {(visits <= 0 || carts <= 0 || purchases <= 0) && <li className="flex items-center gap-2">📊 {t('sections.ctaBasicMetricsMissing')}</li>}
+                  {visits > 0 && carts > 0 && purchases > 0 && carts > visits && <li className="flex items-center gap-2">⚠️ {t('validation.cartsGtVisits')}</li>}
+                  {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && <li className="flex items-center gap-2">⚠️ {t('validation.ordersGtCarts')}</li>}
+                  {checkoutsNum > 0 && !checkoutsValid && <li className="flex items-center gap-2">💳 {t('validation.ordersGtCheckouts')}</li>}
+                </ul>
+              </div>
             )}
-          </button>
-          
-          <p className="text-center text-blue-100 text-xs mt-3">
-            {t('notes.fast')}
-          </p>
-        </div>
+          </div>
         </div>
       </form>
     </div>

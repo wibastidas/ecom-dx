@@ -2,13 +2,22 @@
   "app": {
     "title": "Diagnóstico E-commerce",
     "subtitle": "Tus números son síntomas. Las palabras correctas los cambian.",
-    "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable."
+    "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable.",
+    "heroH1": "No adivines dónde se te escapa la venta.",
+    "heroSub": "Cargá tus métricas del último mes y detectá tu cuello de botella en 60 segundos (con 3 acciones para esta semana).",
+    "heroMicro": "Buscá estos datos en tu panel de tienda.",
+    "heroCta": "Hacer diagnóstico",
+    "videoPie": "👇 Usá el Radar acá abajo y llevate tu plan de acción.",
+    "formIntro": "Buscá estas métricas en tu plataforma del último mes.",
+    "formUrlHelper": "Opcional. Solo para contextualizar tu caso.",
+    "formCta": "DETECTAR MI CUELLO DE BOTELLA ⚡",
+    "formMicrocopy": "Diagnóstico instantáneo · Sin costo · 100% privado"
   },
   "labels": {
-    "visits": "Visitas únicas",
-    "carts": "Carritos iniciados",
-    "checkouts": "Llegaron a la pantalla de pago",
-    "orders": "Compras completadas",
+    "visits": "Visitas (Sesiones)",
+    "carts": "Carritos agregados",
+    "checkouts": "Pagos iniciados (Checkout)",
+    "orders": "Compras totales",
     "sales": "Ventas totales (USD)",
     "adspend": "Gasto en publicidad (USD)",
     "ordersCount": "Número de pedidos"
@@ -28,7 +37,7 @@
     "label": "Plataforma",
     "placeholder": "Seleccioná plataforma",
     "storeUrlLabel": "URL de la tienda",
-    "storeUrlPlaceholder": "Ej: https://mitienda.com",
+    "storeUrlPlaceholder": "mitienda.com",
     "options": {
       "shopify": "Shopify",
       "woocommerce": "WooCommerce",
@@ -38,7 +47,7 @@
     },
     "whereToFind": {
       "shopify": "Buscá en Shopify: Informes y estadísticas → Desglose de la tasa de conversión (ahí están las 4 métricas para el periodo que elijas).",
-      "general": "Buscá estas métricas en la plataforma que usás (tu tienda); no en Analytics ni en el administrador de anuncios."
+      "general": "Buscá estas métricas en tu plataforma del último mes completo."
     },
     "checkoutsOptionalInfo": "Opcional: Si lo agregas, el Radar detectará si tu problema es el costo de envío o la confianza en el pago.",
     "helpers": {
