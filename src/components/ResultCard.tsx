@@ -91,10 +91,12 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
       {/* Above the fold: título + sub + CTA WhatsApp */}
       <div className="card-elevated text-center">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-          {t('result.heroTitle', { dx: t(`bottlenecks.${result.dx}`) })}
+          {result.dx === 'escalar'
+            ? t('result.heroTitleReady')
+            : t('result.heroTitle', { dx: t(`bottlenecks.${result.dx}`) })}
         </h1>
         <p className="text-gray-600 mb-4">
-          {t('result.heroSub')}
+          {t(`result.heroSubByDx.${result.dx}`)}
         </p>
         {result.quickBuyMode && (
           <p className="text-sm text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 inline-block mb-4">
