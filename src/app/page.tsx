@@ -130,7 +130,7 @@ export default function Home() {
                     allowFullScreen
                   />
                 ) : (
-                  <p className="text-gray-400 text-sm p-4 text-center">Agregá <code className="bg-gray-200 px-1 rounded">NEXT_PUBLIC_VIDEO_EMBED_URL</code> en .env para mostrar el video</p>
+                  <p className="text-gray-400 text-sm p-4 text-center">Agrega <code className="bg-gray-200 px-1 rounded">NEXT_PUBLIC_VIDEO_EMBED_URL</code> en .env para mostrar el video</p>
                 )}
               </div>
               <p className="text-center text-gray-600 text-sm mt-4">

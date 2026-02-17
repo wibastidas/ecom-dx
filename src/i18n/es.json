@@ -2,13 +2,13 @@
   "app": {
     "title": "Diagnóstico E-commerce",
     "subtitle": "Tus números son síntomas. Las palabras correctas los cambian.",
-    "help": "Ingresá tus métricas del mes actual y obtené un diagnóstico claro y accionable.",
+    "help": "Ingresa tus métricas del mes actual y obtén un diagnóstico claro y accionable.",
     "heroH1": "No adivines dónde se te escapa la venta.",
-    "heroSub": "Cargá tus métricas del último mes y detectá tu cuello de botella en 60 segundos (con 3 acciones para esta semana).",
-    "heroMicro": "Buscá estos datos en tu panel de tienda.",
+    "heroSub": "Carga tus métricas del último mes y detecta tu cuello de botella en 60 segundos (con 3 acciones para esta semana).",
+    "heroMicro": "Busca estos datos en tu panel de tienda.",
     "heroCta": "Hacer diagnóstico",
-    "videoPie": "👇 Usá el Radar acá abajo y llevate tu plan de acción.",
-    "formIntro": "Buscá estas métricas en tu plataforma del último mes.",
+    "videoPie": "👇 Usa el Radar aquí abajo y llévate tu plan de acción.",
+    "formIntro": "Busca estas métricas en tu plataforma del último mes.",
     "formUrlHelper": "Opcional. Solo para contextualizar tu caso.",
     "formCta": "DETECTAR MI CUELLO DE BOTELLA ⚡",
     "formMicrocopy": "Diagnóstico instantáneo · Sin costo · 100% privado"
@@ -25,17 +25,17 @@
   "sections": {
     "basicMetrics": "Métricas básicas",
     "identity": "Identidad",
-    "improvePrecision": "Mejorá la precisión (opcional)",
-    "improvePrecisionDesc": "Si completás estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles.",
+    "improvePrecision": "Mejora la precisión (opcional)",
+    "improvePrecisionDesc": "Si completas estos datos, te calculamos ROAS, ticket medio y CAC para ver si tus anuncios son sostenibles.",
     "financeUsesCompras": "Para AOV, ROAS y CAC usamos tu número de Compras completadas del bloque anterior.",
     "ctaWithFinance": "Diagnóstico completo con métricas financieras",
     "ctaWithoutFinance": "Obtén recomendaciones personalizadas en segundos",
-    "ctaCompleteToContinue": "Completá esto para continuar:",
-    "ctaBasicMetricsMissing": "Ingresá las métricas básicas (visitas, carritos, compras) en el formulario de arriba para continuar"
+    "ctaCompleteToContinue": "Completa esto para continuar:",
+    "ctaBasicMetricsMissing": "Ingresa las métricas básicas (visitas, carritos, compras) en el formulario de arriba para continuar"
   },
   "platforms": {
     "label": "Plataforma",
-    "placeholder": "Seleccioná plataforma",
+    "placeholder": "Selecciona plataforma",
     "storeUrlLabel": "URL de la tienda",
     "storeUrlPlaceholder": "mitienda.com",
     "options": {
@@ -46,8 +46,8 @@
       "custom": "Otra"
     },
     "whereToFind": {
-      "shopify": "Buscá en Shopify: Informes y estadísticas → Desglose de la tasa de conversión (ahí están las 4 métricas para el periodo que elijas).",
-      "general": "Buscá estas métricas en tu plataforma del último mes completo."
+      "shopify": "Busca en Shopify: Informes y estadísticas → Desglose de la tasa de conversión (ahí están las 4 métricas para el periodo que elijas).",
+      "general": "Busca estas métricas en tu plataforma del último mes completo."
     },
     "checkoutsOptionalInfo": "Opcional: Si lo agregas, el Radar detectará si tu problema es el costo de envío o la confianza en el pago.",
     "helpers": {
@@ -90,29 +90,29 @@
     "refs": "Estos son los valores normales de la industria: 4-6% de visitantes agregan al carrito, 15-25% de carritos se convierten en compra, y 1% de visitantes compran directamente."
   },
   "validation": {
-    "required": "Ingresá un número.",
+    "required": "Ingresa un número.",
     "fieldRequired": "Campo obligatorio",
-    "urlRequired": "Ingresá la URL de tu tienda.",
-    "urlInvalid": "Ingresá la URL de tu tienda",
-    "platformRequired": "Seleccioná una plataforma.",
-    "numeric": "Usá solo números (sin puntos ni comas).",
+    "urlRequired": "Ingresa la URL de tu tienda.",
+    "urlInvalid": "Ingresa la URL de tu tienda",
+    "platformRequired": "Selecciona una plataforma.",
+    "numeric": "Usa solo números (sin puntos ni comas).",
     "cartsGtVisits": "Los carritos no pueden ser mayores a las visitas",
     "ordersGtCarts": "Las compras no pueden ser mayores a los carritos",
     "checkoutsGtCarts": "Los checkouts no pueden ser mayores a los carritos",
     "ordersGtCheckouts": "Las compras no pueden ser mayores a los checkouts iniciados",
-    "outlier": "Valores inusuales: revisá si estás usando el mes actual."
+    "outlier": "Valores inusuales: revisa si estás usando el mes actual."
   },
   "coach": {
     "title": "Cómo leer tus números",
-    "a": "ATC (Agregar al Carrito) = ¿interesa lo que prometés?",
+    "a": "ATC (Agregar al Carrito) = ¿interesa lo que prometes?",
     "b": "Cart→Buy (Carrito a Compra) = ¿confían para pagar?",
-    "c": "CR (Conversión Total) = ¿convencés de punta a punta?",
+    "c": "CR (Conversión Total) = ¿convences de punta a punta?",
     "foot": "Los números dicen dónde. Tus palabras corrigen el por qué."
   },
   "tooltips": {
-    "ATC": "ATC (Agregar al Carrito) = ¿interesa lo que prometés?",
+    "ATC": "ATC (Agregar al Carrito) = ¿interesa lo que prometes?",
     "CB": "Cart→Buy (Carrito a Compra) = ¿confían para pagar?",
-    "CR": "CR (Conversión Total) = ¿convencés de punta a punta?",
+    "CR": "CR (Conversión Total) = ¿convences de punta a punta?",
     "AOV": "AOV (Average Order Value) = Valor promedio por pedido",
     "ROAS": "ROAS (Return on Ad Spend) = Retorno de inversión publicitaria",
     "CAC": "CAC (Customer Acquisition Cost) = Costo de adquirir un cliente"
@@ -137,31 +137,31 @@
   },
   "result": {
     "bottleneck": "Tu cuello principal: {{bottleneck}}",
-    "sub": "Tu tienda {{msg}}. Abajo tenés 3 acciones simples para mover la aguja esta semana.",
+    "sub": "Tu tienda {{msg}}. Abajo tienes 3 acciones simples para mover la aguja esta semana.",
     "quickBuyHint": "Compra Rápida detectada: tasas calculadas sobre llegadas a pago (no sobre carritos).",
     "checkoutInsightTitle": "Dónde se rompe el proceso",
-    "checkoutInsightLogistica": "Tu fuga está en la logística (costos de envío o tiempos). Revisá costos, plazos y umbral de envío gratis.",
-    "checkoutInsightPago": "Tu fuga está en la pasarela o falta de cuotas. Revisá métodos de pago, cuotas y mensajes de confianza.",
+    "checkoutInsightLogistica": "Tu fuga está en la logística (costos de envío o tiempos). Revisa costos, plazos y umbral de envío gratis.",
+    "checkoutInsightPago": "Tu fuga está en la pasarela o falta de cuotas. Revisa métodos de pago, cuotas y mensajes de confianza.",
     "commTitle": "Interpretación de comunicación",
     "commLead": "Lo que te dicen tus números sobre tus palabras.",
     "commATC": "ATC bajo → No lo están entendiendo/queriendo: falta propuesta clara, beneficios en su lenguaje y prueba social visible.",
     "commCB": "Cart→Buy bajo → No te creen o se traban: dudas de logística/seguridad o fricción en formularios.",
-    "commTraffic": "Tasas sanas pero pocas visitas → Tu mensaje no llega afuera: probá 3 ángulos (dolor/beneficio/prueba).",
-    "commScale": "Todo sano → Escalá manteniendo la promesa central.",
+    "commTraffic": "Tasas sanas pero pocas visitas → Tu mensaje no llega afuera: prueba 3 ángulos (dolor/beneficio/prueba).",
+    "commScale": "Todo sano → Escala manteniendo la promesa central.",
     "financeEmptyTitle": "Finanzas rápidas (opcional)",
-    "financeEmptyText": "Sumá 3 datos y descubrí si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones.",
+    "financeEmptyText": "Suma 3 datos y descubre si tus anuncios se pagan solos.\nTe mostramos tu Ticket Promedio, Retorno de Ads y Costo por Cliente, en palabras simples y con 3 próximos pasos.\n📊 Más claridad = mejores decisiones.",
     "actionsByDiagnosis": {
-      "trafico": "Pausá lo que no vende: dejá solo el mejor anuncio por ángulo durante 72h.\nArreglá la PDP: reescribí el hero en 1 línea y sumá 3 beneficios + 3 reseñas.\nMostrá costos totales y políticas antes del pago para bajar abandono.",
-      "pagina_oferta": "Subí el ATC: clarificá valor en la PDP y agregá prueba social arriba.\nBajá fricción de checkout: menos campos, costos sin sorpresa, contacto visible.\nMejorá calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.",
-      "checkout_confianza": "Reducí campos del checkout a los indispensables.\nMostrá costos de envío antes del último paso.\nAñadí badge de pago seguro y políticas claras.",
-      "escalar": "Duplicá creatividades manteniendo el claim ganador.\nAbrí audiencias lookalike sin tocar la promesa central.\nSumá remarketing con prueba social y objeciones resueltas."
+      "trafico": "Pausa lo que no vende: deja solo el mejor anuncio por ángulo durante 72h.\nArregla la PDP: reescribe el hero en 1 línea y suma 3 beneficios + 3 reseñas.\nMuestra costos totales y políticas antes del pago para bajar abandono.",
+      "pagina_oferta": "Sube el ATC: clarifica valor en la PDP y agrega prueba social arriba.\nBaja fricción de checkout: menos campos, costos sin sorpresa, contacto visible.\nMejora calidad de tráfico: 3 creatividades (dolor/beneficio/prueba) a PDP exacta.",
+      "checkout_confianza": "Reduce campos del checkout a los indispensables.\nMuestra costos de envío antes del último paso.\nAñade badge de pago seguro y políticas claras.",
+      "escalar": "Duplica creatividades manteniendo el claim ganador.\nAbre audiencias lookalike sin tocar la promesa central.\nSuma remarketing con prueba social y objeciones resueltas."
     }
   },
   "cta": {
     "prefix": "Ver solución para",
     "primarySub": "WhatsApp o agendar consultoría",
-    "webinarLead1": "Si el diagnóstico del Radar te deja pensando y querés llevar tu tienda al siguiente nivel, quiero invitarte a una formación en vivo totalmente gratuita.",
-    "webinarLead2": "Ahí te voy a enseñar la \"Arquitectura de Conversión\": el sistema paso a paso que usamos para que la web explique, convenza y cierre sola, sin que vos tengas que estar pegado al celular 24/7.",
+    "webinarLead1": "Si el diagnóstico del Radar te deja pensando y quieres llevar tu tienda al siguiente nivel, quiero invitarte a una formación en vivo totalmente gratuita.",
+    "webinarLead2": "Ahí te voy a enseñar la \"Arquitectura de Conversión\": el sistema paso a paso que usamos para que la web explique, convenza y cierre sola, sin que tengas que estar pegado al celular 24/7.",
     "joinWhatsAppGroup": "Unirme al grupo de WhatsApp",
     "primary": {
       "trafico": "Atraer clientes calificados a mi tienda",
@@ -183,22 +183,22 @@
     "roas": "ROAS (Retorno de Ads)",
     "cac": "CAC (Costo por Cliente)",
     "emptyTitle": "Finanzas rápidas (opcional)",
-    "emptyText": "No completaste los campos opcionales. Si los agregás, te mostramos ROAS (Retorno de Ads), AOV (Ticket Promedio) y CAC (Costo por Cliente).",
+    "emptyText": "No completaste los campos opcionales. Si los agregas, te mostramos ROAS (Retorno de Ads), AOV (Ticket Promedio) y CAC (Costo por Cliente).",
     "level": {
       "critical": "Crítico",
       "fragile": "Frágil",
       "strong": "Sólido"
     },
     "copy": {
-      "critical": "Hoy tus anuncios no se pagan solos. Pausá lo que no vende y mejorá página/checkout antes de invertir.",
-      "fragile": "Tus anuncios cubren costo, pero sin colchón. Enfocate 7 días en una palanca (ATC o Checkout) o subí el ticket.",
-      "strong": "Buen trabajo: tus anuncios dejan margen. Escalá de a poco y vigilá que las tasas se mantengan estables.",
-      "caveat": "Sin margen bruto, esto es orientación. Tomalo como señal, no como contabilidad.",
+      "critical": "Hoy tus anuncios no se pagan solos. Pausa lo que no vende y mejora página/checkout antes de invertir.",
+      "fragile": "Tus anuncios cubren costo, pero sin colchón. Enfócate 7 días en una palanca (ATC o Checkout) o sube el ticket.",
+      "strong": "Buen trabajo: tus anuncios dejan margen. Escala de a poco y vigila que las tasas se mantengan estables.",
+      "caveat": "Sin margen bruto, esto es orientación. Tómalo como señal, no como contabilidad.",
       "ratio": "CAC = {{ratio}}% del ticket."
     },
     "notes": {
       "caveatMargin": "Nota: sin margen bruto no podemos calcular rentabilidad exacta. Esto es una orientación.",
-      "smallSample": "Muestra chica: con menos de 10 pedidos, tomá estas señales con cautela."
+      "smallSample": "Muestra chica: con menos de 10 pedidos, toma estas señales con cautela."
     },
     "actionsTitle": "Tus 3 próximos pasos",
     "actionsTitleBasic": "Tus 3 próximos pasos",
@@ -208,23 +208,23 @@
   "save": {
     "openTitle": "Guardar diagnóstico",
     "monthLabel": "Mes a guardar",
-    "monthHelp": "Elegí el mes al que corresponden estos datos.",
+    "monthHelp": "Elige el mes al que corresponden estos datos.",
     "monthDefaultHint": "Por defecto usamos el mes actual (según tu zona horaria).",
     "noteLabel": "Nota (opcional)",
     "notePlaceholder": "Ej.: Campaña primavera, suba de precios, etc.",
     "saveBtn": "Guardar",
     "cancelBtn": "Cancelar",
-    "existsTitle": "Ya tenés un diagnóstico guardado para este mes",
-    "existsText": "Si continuás, vamos a actualizar el registro de {{monthLabel}} con estos valores.",
+    "existsTitle": "Ya tienes un diagnóstico guardado para este mes",
+    "existsText": "Si continuas, vamos a actualizar el registro de {{monthLabel}} con estos valores.",
     "overwriteBtn": "Actualizar registro",
     "backBtn": "Volver",
     "success": "Guardamos {{monthLabel}} en tu historial.",
-    "error": "No pudimos guardar. Probá de nuevo.",
-    "privacy": "Solo vos podés ver tus datos. Podés borrarlos cuando quieras."
+    "error": "No pudimos guardar. Prueba de nuevo.",
+    "privacy": "Solo tú puedes ver tus datos. Puedes borrarlos cuando quieras."
   },
   "history": {
     "title": "Tu historial",
-    "empty": "Aún no guardaste meses. Hacé tu diagnóstico y guardalo para ver la evolución.",
+    "empty": "Aún no guardaste meses. Haz tu diagnóstico y guárdalo para ver la evolución.",
     "row": "{{monthShort}} — ATC {{atc}}% · Cart→Buy {{cb}}% · CR {{cr}}% — Ver · Nota",
     "newDiag": "Hacer nuevo diagnóstico"
   }
