@@ -16,5 +16,5 @@ export function getHelpMode(platform: Platform): 'shopify' | 'general' {
   return platform === 'shopify' ? 'shopify' : 'general'
 }
 
-/** URL del CTA principal "Ver solución para [Diagnóstico]" → WhatsApp o agendar. Env: NEXT_PUBLIC_CTA_WHATSAPP_URL */
-export const CTA_WHATSAPP_URL = process.env.NEXT_PUBLIC_CTA_WHATSAPP_URL ?? 'https://wa.me/'
+/** URL del CTA principal "Entrar al entrenamiento" → siempre el grupo WhatsApp Radar eCommerce */
+export const CTA_WHATSAPP_URL = 'https://chat.whatsapp.com/Bn6QyyZwvmVFFcsL0Kb9jj'
