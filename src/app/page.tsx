@@ -118,20 +118,17 @@ export default function Home() {
               </p>
             </section>
 
-            {/* Video embed (2 min) — definí NEXT_PUBLIC_VIDEO_EMBED_URL en .env para mostrar tu video (ej. https://www.youtube.com/embed/VIDEO_ID) */}
+            {/* Video Vimeo — ID 1166770480 (leadmagnetwil) */}
             <section className="mb-10 md:mb-12 max-w-3xl mx-auto">
-              <div className="aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-lg flex items-center justify-center">
-                {process.env.NEXT_PUBLIC_VIDEO_EMBED_URL ? (
-                  <iframe
-                    title="Radar - Cómo detectar tu cuello de botella"
-                    className="w-full h-full"
-                    src={process.env.NEXT_PUBLIC_VIDEO_EMBED_URL}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <p className="text-gray-400 text-sm p-4 text-center">Agrega <code className="bg-gray-200 px-1 rounded">NEXT_PUBLIC_VIDEO_EMBED_URL</code> en .env para mostrar el video</p>
-                )}
+              <div className="relative rounded-2xl overflow-hidden bg-gray-100 shadow-lg" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src="https://player.vimeo.com/video/1166770480?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0"
+                  className="absolute top-0 left-0 w-full h-full"
+                  frameBorder="0"
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="leadmagnetwil"
+                />
               </div>
               <p className="text-center text-gray-600 text-sm mt-4">
                 {t('app.videoPie')}
