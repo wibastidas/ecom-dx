@@ -118,16 +118,16 @@ export default function Home() {
               </p>
             </section>
 
-            {/* Video Vimeo — ID 1167472915 (RADAR) */}
+            {/* Video Vimeo — ID 1167485245 (vsl3, con subtítulos) */}
             <section className="mb-10 md:mb-12 max-w-3xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden bg-gray-100 shadow-lg" style={{ paddingBottom: '56.25%' }}>
+              <div className="relative rounded-2xl overflow-hidden bg-gray-100 shadow-lg" style={{ paddingBottom: '75%' }}>
                 <iframe
-                  src="https://player.vimeo.com/video/1167472915?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0"
+                  src="https://player.vimeo.com/video/1167485245?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0"
                   className="absolute top-0 left-0 w-full h-full"
                   frameBorder="0"
                   allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
-                  title="RADAR"
+                  title="vsl3"
                 />
               </div>
               <p className="text-center text-gray-600 text-sm mt-4">
