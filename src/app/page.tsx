@@ -99,28 +99,35 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <main className="min-h-screen">
       <Header />
       <div className="container-responsive py-8">
         {/* Content */}
         {!result ? (
           <>
-            {/* Hero — logo comentado para reducir scroll */}
+            {/* Hero */}
             <section className="text-center mb-10 md:mb-12">
-              {/* <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-6">
-                <img src="/logo.svg" alt="Radar E-commerce" className="w-16 h-16 sm:w-20 sm:h-20" />
-              </div> */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight max-w-3xl mx-auto">
+              {/* Badge de credibilidad */}
+              <div className="inline-flex items-center gap-2 border border-amber-200/60 text-amber-800 text-sm font-medium px-4 py-1.5 rounded-full mb-5" style={{background:'rgba(255,255,255,0.80)', backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)', boxShadow:'0 2px 12px rgba(202,138,4,0.12)'}}>
+                <span className="relative flex-shrink-0 w-4 h-4">
+                  <span className="absolute inset-0 rounded-full bg-green-400" style={{ animation: 'pulse-ring 2s ease-out infinite' }} />
+                  <svg className="w-4 h-4 text-green-500 relative" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </span>
+                Gratis · Sin registro · Resultados en 30 segundos
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight max-w-3xl mx-auto">
                 {t('app.heroH1')}
               </h1>
-              <p className="text-lg sm:text-xl text-gray-700 mb-2 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-slate-600 mb-2 max-w-2xl mx-auto">
                 {t('app.heroSub')}
               </p>
             </section>
 
             {/* Video Vimeo — ID 1167485245 (vsl3, con subtítulos) */}
             <section className="mb-10 md:mb-12 max-w-3xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden bg-gray-100 shadow-lg" style={{ paddingBottom: '75%' }}>
+              <div className="relative rounded-2xl overflow-hidden shadow-xl shadow-amber-100/60" style={{ paddingBottom: '75%', background: 'rgba(241,245,249,0.8)' }}>
                 <iframe
                   src="https://player.vimeo.com/video/1167485245?badge=0&autopause=0&player_id=0&app_id=58479&byline=0&title=0&portrait=0"
                   className="absolute top-0 left-0 w-full h-full"
@@ -136,12 +143,15 @@ export default function Home() {
               <div className="text-center mt-6">
                 <a
                   href="#diagnostico-form"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold bg-amber-600 text-white hover:bg-amber-700 transition-colors shadow-md hover:shadow-lg cursor-pointer"
                   onClick={(e) => {
                     e.preventDefault()
                     document.getElementById('diagnostico-form')?.scrollIntoView({ behavior: 'smooth' })
                   }}
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+                  </svg>
                   {t('app.heroCta')}
                 </a>
               </div>

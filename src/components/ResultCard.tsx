@@ -99,8 +99,11 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
           {t(`result.heroSubByDx.${result.dx}`)}
         </p>
         {result.quickBuyMode && (
-          <p className="text-sm text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 inline-block mb-4">
-            ⚡ {t('result.quickBuyHint')}
+          <p className="text-sm text-amber-800 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 inline-flex items-center gap-1.5 mb-4">
+            <svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+            {t('result.quickBuyHint')}
           </p>
         )}
         <a
@@ -180,7 +183,7 @@ export default function ResultCard({ result, onNewDiagnosis, onEditData, diagnos
         <ul className="space-y-2 list-none">
           {getBasicActions(result.dx).map((action, index) => (
             <li key={index} className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-semibold">
+              <span className="flex-shrink-0 w-6 h-6 bg-stone-100 rounded-full flex items-center justify-center text-stone-700 text-sm font-semibold">
                 {index + 1}
               </span>
               <span className="text-gray-700">{action}</span>

@@ -175,7 +175,7 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
     <div className="max-w-2xl mx-auto">
       <form onSubmit={onSubmit} className="space-y-0">
         {/* Panel único: intro + URL/Plataforma + Métricas + CTA */}
-        <div className="card-elevated rounded-2xl border border-gray-200 bg-white shadow-lg p-6 sm:p-8 space-y-8">
+        <div className="card-elevated space-y-8">
           <p className="text-gray-700 text-center sm:text-left">
             {t('app.formIntro')}
           </p>
@@ -183,8 +183,13 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
           {/* URL + Plataforma — 2 cols desktop, 1 móvil */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="form-group">
-              <label htmlFor="storeUrl" className="form-label">
-                🌐 {t('platforms.storeUrlLabel')}
+              <label htmlFor="storeUrl" className="form-label flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 flex-shrink-0">
+                  <svg className="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                  </svg>
+                </span>
+                {t('platforms.storeUrlLabel')}
               </label>
               <input
                 type="text"
@@ -209,8 +214,13 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               )}
             </div>
             <div className="form-group">
-              <label htmlFor="platform" className="form-label">
-                📦 {t('platforms.label')}
+              <label htmlFor="platform" className="form-label flex items-center gap-2">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 flex-shrink-0">
+                  <svg className="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                  </svg>
+                </span>
+                {t('platforms.label')}
               </label>
               <select
                 id="platform"
@@ -236,7 +246,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             <div className="form-group">
               <label htmlFor="visits" className="form-label">
                 <Tooltip content={t(`platforms.helpers.${helpMode}.visits`)}>
-                  <span className="cursor-help whitespace-nowrap">👥 {t('labels.visits')} ⓘ</span>
+                  <span className="cursor-help flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 flex-shrink-0">
+                      <svg className="w-3 h-3 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                      </svg>
+                    </span>
+                    {t('labels.visits')} ⓘ
+                  </span>
                 </Tooltip>
                 <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
@@ -273,7 +290,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             <div className="form-group">
               <label htmlFor="carts" className="form-label">
                 <Tooltip content={t(`platforms.helpers.${helpMode}.carts`)}>
-                  <span className="cursor-help whitespace-nowrap">🛒 {t('labels.carts')} ⓘ</span>
+                  <span className="cursor-help flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-stone-100 flex-shrink-0">
+                      <svg className="w-3 h-3 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                      </svg>
+                    </span>
+                    {t('labels.carts')} ⓘ
+                  </span>
                 </Tooltip>
                 <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
@@ -310,7 +334,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             <div className="form-group">
               <label htmlFor="purchases" className="form-label">
                 <Tooltip content={t(`platforms.helpers.${helpMode}.orders`)}>
-                  <span className="cursor-help whitespace-nowrap">✅ {t('labels.orders')} ⓘ</span>
+                  <span className="cursor-help flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 flex-shrink-0">
+                      <svg className="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </span>
+                    {t('labels.orders')} ⓘ
+                  </span>
                 </Tooltip>
                 <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>
               </label>
@@ -347,7 +378,14 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
             <div className="form-group">
               <label htmlFor="checkouts" className="form-label">
                 <Tooltip content={t(`platforms.helpers.${helpMode}.checkouts`)}>
-                  <span className="cursor-help whitespace-nowrap">💳 {t('labels.checkouts')} ⓘ</span>
+                  <span className="cursor-help flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-violet-100 flex-shrink-0">
+                      <svg className="w-3 h-3 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                      </svg>
+                    </span>
+                    {t('labels.checkouts')} ⓘ
+                  </span>
                 </Tooltip>
               </label>
               <input
@@ -460,16 +498,17 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               disabled={!isFormValid || isSubmitting}
               className={`w-full font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center space-x-3 ${
                 isFormValid
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-xl'
+                  ? 'bg-[#1C1917] hover:bg-stone-800 text-white hover:shadow-xl btn-ai-glow'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               } ${isSubmitting ? 'opacity-75' : ''}`}
             >
               {isSubmitting ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                  <span className="flex items-end gap-1 mr-2">
+                    <span className="typing-dot" style={{ animationDelay: '0ms' }} />
+                    <span className="typing-dot" style={{ animationDelay: '150ms' }} />
+                    <span className="typing-dot" style={{ animationDelay: '300ms' }} />
+                  </span>
                   <span className="text-lg">Analizando...</span>
                 </>
               ) : (
@@ -485,11 +524,11 @@ export default function MetricsForm({ onDiagnosis, openAccordion = false }: Metr
               <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
                 <p className="text-amber-800 text-sm font-medium mb-2">{t('sections.ctaCompleteToContinue')}</p>
                 <ul className="text-amber-700 text-sm space-y-1 list-none">
-                  {!storeUrlValid && storeUrl.trim() !== '' && <li className="flex items-center gap-2">🌐 {t('validation.urlInvalid')}</li>}
-                  {(visits <= 0 || carts <= 0 || purchases <= 0) && <li className="flex items-center gap-2">📊 {t('sections.ctaBasicMetricsMissing')}</li>}
-                  {visits > 0 && carts > 0 && purchases > 0 && carts > visits && <li className="flex items-center gap-2">⚠️ {t('validation.cartsGtVisits')}</li>}
-                  {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && <li className="flex items-center gap-2">⚠️ {t('validation.ordersGtCarts')}</li>}
-                  {checkoutsNum > 0 && !checkoutsValid && <li className="flex items-center gap-2">💳 {t('validation.ordersGtCheckouts')}</li>}
+                  {!storeUrlValid && storeUrl.trim() !== '' && <li className="flex items-center gap-2"><svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> {t('validation.urlInvalid')}</li>}
+                  {(visits <= 0 || carts <= 0 || purchases <= 0) && <li className="flex items-center gap-2"><svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg> {t('sections.ctaBasicMetricsMissing')}</li>}
+                  {visits > 0 && carts > 0 && purchases > 0 && carts > visits && <li className="flex items-center gap-2"><svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> {t('validation.cartsGtVisits')}</li>}
+                  {visits > 0 && carts > 0 && purchases > 0 && purchases > carts && <li className="flex items-center gap-2"><svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> {t('validation.ordersGtCarts')}</li>}
+                  {checkoutsNum > 0 && !checkoutsValid && <li className="flex items-center gap-2"><svg className="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> {t('validation.ordersGtCheckouts')}</li>}
                 </ul>
               </div>
             )}

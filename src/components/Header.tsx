@@ -40,24 +40,29 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="glass-nav sticky top-0 z-50">
         <div className="container-responsive py-4">
           <div className="flex items-center justify-between">
             {/* Logo/Título */}
-            <button 
+            <button
               onClick={handleLogoClick}
-              className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200"
+              className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200 cursor-pointer"
             >
-              <div className="w-8 h-8 flex items-center justify-center">
-                <img 
-                  src="/logo.svg" 
-                  alt="Radar E-commerce" 
-                  className="w-8 h-8"
+              <div className="w-9 h-9 flex items-center justify-center rounded-xl bg-amber-50 border border-amber-200 shadow-sm">
+                <img
+                  src="/logo.svg"
+                  alt="Radar E-commerce"
+                  className="w-6 h-6"
                 />
               </div>
-              <h1 className="text-xl font-bold text-gray-900">
-                Radar E-commerce
-              </h1>
+              <div className="flex flex-col items-start">
+                <span className="text-xl font-bold bg-gradient-to-r from-stone-900 to-amber-700 bg-clip-text text-transparent leading-tight">
+                  Radar E-commerce
+                </span>
+                <span className="text-xs text-slate-400 font-normal leading-tight tracking-wide">
+                  Diagnóstico de conversión
+                </span>
+              </div>
             </button>
 
             {/* MVP: Botón Iniciar sesión DESACTIVADO – comentado. Solo logo visible. */}
